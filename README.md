@@ -4,8 +4,11 @@
 BonDriver_BDA.iniでDefaultNetwork="4KBS/CS"と記述すると、ISDB-S3に対応します。
 チューナーはTBS6812/PT4K。
 
+
 [Tuner]
+
 UseSpecial="TBS" ;ここでTBS.dll読み込む
+
 Guid=
 FriendlyName0=
 Name="ISDB-S"
