@@ -1,4 +1,4 @@
-// BonTuner.cpp: CBonTuner ƒNƒ‰ƒX‚ÌƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// BonTuner.cpp: CBonTuner ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -40,19 +40,19 @@
 FILE *g_fpLog = NULL;
 
 //////////////////////////////////////////////////////////////////////
-// Ã“Iƒƒ“ƒo•Ï”
+// é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
 //////////////////////////////////////////////////////////////////////
 
-// Dll‚Ìƒ‚ƒWƒ…[ƒ‹ƒnƒ“ƒhƒ‹
+// Dllã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒãƒ³ãƒ‰ãƒ«
 HMODULE CBonTuner::st_hModule = NULL;
 
-// ì¬‚³‚ê‚½CBontunerƒCƒ“ƒXƒ^ƒ“ƒX‚Ìˆê——
+// ä½œæˆã•ã‚ŒãŸCBontunerã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ä¸€è¦§
 std::list<CBonTuner*> CBonTuner::st_InstanceList;
 
-// st_InstanceList‘€ì—p
+// st_InstanceListæ“ä½œç”¨
 CRITICAL_SECTION CBonTuner::st_LockInstanceList;
 
-// •K—v‚ÈÃ“I•Ï”‰Šú‰»
+// å¿…è¦ãªé™çš„å¤‰æ•°åˆæœŸåŒ–
 void CBonTuner::Init(HMODULE hModule)
 {
 	st_hModule = hModule;
@@ -60,10 +60,10 @@ void CBonTuner::Init(HMODULE hModule)
 	return;
 }
 
-// Ã“I•Ï”‚Ì‰ğ•ú
+// é™çš„å¤‰æ•°ã®è§£æ”¾
 void CBonTuner::Finalize(void)
 {
-	// –¢‰ğ•ú‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ªc‚Á‚Ä‚¢‚ê‚Î‰ğ•ú
+	// æœªè§£æ”¾ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæ®‹ã£ã¦ã„ã‚Œã°è§£æ”¾
 	for (auto it = st_InstanceList.begin(); it != st_InstanceList.end();) {
 		SAFE_RELEASE(*it);
 		it = st_InstanceList.erase(it);
@@ -71,13 +71,13 @@ void CBonTuner::Finalize(void)
 
 	::DeleteCriticalSection(&CBonTuner::st_LockInstanceList);
 
-	// ƒfƒoƒbƒOƒƒOƒtƒ@ƒCƒ‹‚ÌƒNƒ[ƒY
+	// ãƒ‡ãƒãƒƒã‚°ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¯ãƒ­ãƒ¼ã‚º
 	CloseDebugLog();
 	return;
 }
 
 //////////////////////////////////////////////////////////////////////
-// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬ƒƒ\ƒbƒh
+// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆãƒ¡ã‚½ãƒƒãƒ‰
 //////////////////////////////////////////////////////////////////////
 #pragma warning(disable : 4273)
 extern "C" __declspec(dllexport) IBonDriver * CreateBonDriver()
@@ -87,7 +87,7 @@ extern "C" __declspec(dllexport) IBonDriver * CreateBonDriver()
 #pragma warning(default : 4273)
 
 //////////////////////////////////////////////////////////////////////
-// \’z/Á–Å
+// æ§‹ç¯‰/æ¶ˆæ»…
 //////////////////////////////////////////////////////////////////////
 CBonTuner::CBonTuner()
 	: m_nToneWait(100),
@@ -150,7 +150,7 @@ CBonTuner::CBonTuner()
 	m_pIBdaSpecials(NULL),
 	m_pIBdaSpecials2(NULL)
 {
-	// ƒCƒ“ƒXƒ^ƒ“ƒXƒŠƒXƒg‚É©g‚ğ“o˜^
+	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒªã‚¹ãƒˆã«è‡ªèº«ã‚’ç™»éŒ²
 	::EnterCriticalSection(&st_LockInstanceList);
 	st_InstanceList.push_back(this);
 	::LeaveCriticalSection(&st_LockInstanceList);
@@ -165,15 +165,15 @@ CBonTuner::CBonTuner()
 	m_TsBuff.SetSize(m_nBuffSize, m_nMaxBuffCount);
 	m_DecodedTsBuff.SetSize(0, m_nMaxBuffCount);
 
-	// COMˆ—ê—pƒXƒŒƒbƒh‹N“®
+	// COMå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰èµ·å‹•
 	m_aCOMProc.hThread = ::CreateThread(NULL, 0, CBonTuner::COMProcThread, this, 0, NULL);
 
-	// ƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	if (m_aCOMProc.hThread != NULL && m_nThreadPriorityCOM != THREAD_PRIORITY_ERROR_RETURN) {
 		::SetThreadPriority(m_aCOMProc.hThread, m_nThreadPriorityCOM);
 	}
 
-	// timeBeginPeriod()‚Åİ’è‚·‚éWindows‚ÌÅ¬ƒ^ƒCƒ}•ª‰ğ”\(msec)
+	// timeBeginPeriod()ã§è¨­å®šã™ã‚‹Windowsã®æœ€å°ã‚¿ã‚¤ãƒåˆ†è§£èƒ½(msec)
 	if (m_nPeriodicTimer != 0) {
 		if (timeBeginPeriod(m_nPeriodicTimer) == TIMERR_NOCANDO) {
 			m_nPeriodicTimer = 0;
@@ -186,12 +186,12 @@ CBonTuner::~CBonTuner()
 	OutputDebug(L"~CBonTuner called.\n");
 	CloseTuner();
 
-	// timeBeginPeriod()‚ÌŒãn––
+	// timeBeginPeriod()ã®å¾Œå§‹æœ«
 	if (m_nPeriodicTimer != 0) {
 		timeEndPeriod(m_nPeriodicTimer);
 	}
 
-	// COMˆ—ê—pƒXƒŒƒbƒhI—¹
+	// COMå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†
 	if (m_aCOMProc.hThread) {
 		::SetEvent(m_aCOMProc.hTerminateRequest);
 		::WaitForSingleObject(m_aCOMProc.hThread, INFINITE);
@@ -201,7 +201,7 @@ CBonTuner::~CBonTuner()
 	SAFE_CLOSE_HANDLE(m_hStreamThread);
 	SAFE_CLOSE_HANDLE(m_hProcess);
 
-	// ƒCƒ“ƒXƒ^ƒ“ƒXƒŠƒXƒg‚©‚ç©g‚ğíœ
+	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒªã‚¹ãƒˆã‹ã‚‰è‡ªèº«ã‚’å‰Šé™¤
 	::EnterCriticalSection(&st_LockInstanceList);
 	st_InstanceList.remove(this);
 	::LeaveCriticalSection(&st_LockInstanceList);
@@ -246,33 +246,33 @@ const BOOL CBonTuner::_OpenTuner(void)
 	HRESULT hr;
 
 	do {
-		// ƒtƒBƒ‹ƒ^ƒOƒ‰ƒt‚Ìì¬
+		// ãƒ•ã‚£ãƒ«ã‚¿ã‚°ãƒ©ãƒ•ã®ä½œæˆ
 		if (FAILED(hr = InitializeGraphBuilder()))
 			break;
 
-		// ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX‚Ì“Ç
+		// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ã®èª­è¾¼
 		if (FAILED(hr = CreateTuningSpace()))
 			break;
 
-		// ƒlƒbƒgƒ[ƒNƒvƒƒoƒCƒ_
+		// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ—ãƒ­ãƒã‚¤ãƒ€
 		if (FAILED(hr = LoadNetworkProvider()))
 			break;
 
-		// ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX‰Šú‰»
+		// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹åˆæœŸåŒ–
 		if (FAILED(hr = InitTuningSpace()))
 			break;
 
-		// ƒ[ƒh‚·‚×‚«ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒ‚ÌƒŠƒXƒgì¬
+		// ãƒ­ãƒ¼ãƒ‰ã™ã¹ããƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ã®ãƒªã‚¹ãƒˆä½œæˆ
 		if (m_UsableTunerCaptureList.empty() && FAILED(hr = InitDSFilterEnum()))
 			break;
 
-		// ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒˆÈŒã‚Ì\’z‚ÆÀs
+		// ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ä»¥å¾Œã®æ§‹ç¯‰ã¨å®Ÿè¡Œ
 		if (FAILED(hr = LoadAndConnectDevice()))
 			break;
 
 		OutputDebug(L"Build graph Successfully.\n");
 
-		// ƒ`ƒ…[ƒi‚ÌM†ó‘Ôæ“¾—pƒCƒ“ƒ^[ƒtƒF[ƒX‚Ìæ“¾i¸”s‚µ‚Ä‚à‘±sj
+		// ãƒãƒ¥ãƒ¼ãƒŠã®ä¿¡å·çŠ¶æ…‹å–å¾—ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å–å¾—ï¼ˆå¤±æ•—ã—ã¦ã‚‚ç¶šè¡Œï¼‰
 		if (m_bSignalLockedJudgeTypeSS || m_bSignalLevelGetTypeSS) {
 			hr = LoadTunerSignalStatisticsTunerNode();
 		}
@@ -280,21 +280,21 @@ const BOOL CBonTuner::_OpenTuner(void)
 			hr = LoadTunerSignalStatisticsDemodNode();
 		}
 
-		// TSóMƒCƒxƒ“ƒgì¬
+		// TSå—ä¿¡ã‚¤ãƒ™ãƒ³ãƒˆä½œæˆ
 		m_hOnStreamEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 
-		// DecodeƒCƒxƒ“ƒgì¬
+		// Decodeã‚¤ãƒ™ãƒ³ãƒˆä½œæˆ
 		m_hOnDecodeEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 
-		// Decodeˆ—ê—pƒXƒŒƒbƒh‹N“®
+		// Decodeå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰èµ·å‹•
 		m_aDecodeProc.hThread = ::CreateThread(NULL, 0, CBonTuner::DecodeProcThread, this, 0, NULL);
 
-		// ƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+		// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 		if (m_aDecodeProc.hThread != NULL && m_nThreadPriorityDecode != THREAD_PRIORITY_ERROR_RETURN) {
 			::SetThreadPriority(m_aDecodeProc.hThread, m_nThreadPriorityDecode);
 		}
 
-		// ƒR[ƒ‹ƒoƒbƒNŠÖ”ƒZƒbƒg
+		// ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚»ãƒƒãƒˆ
 		StartRecv();
 
 		m_bOpened = TRUE;
@@ -303,7 +303,7 @@ const BOOL CBonTuner::_OpenTuner(void)
 
 	} while(0);
 
-	// ‚±‚±‚É“’B‚µ‚½‚Æ‚¢‚¤‚±‚Æ‚Í‰½‚ç‚©‚ÌƒGƒ‰[‚Å¸”s‚µ‚½
+	// ã“ã“ã«åˆ°é”ã—ãŸã¨ã„ã†ã“ã¨ã¯ä½•ã‚‰ã‹ã®ã‚¨ãƒ©ãƒ¼ã§å¤±æ•—ã—ãŸ
 	_CloseTuner();
 
 	return FALSE;
@@ -334,33 +334,33 @@ void CBonTuner::_CloseTuner(void)
 {
 	m_bOpened = FALSE;
 
-	// ƒOƒ‰ƒt’â~
+	// ã‚°ãƒ©ãƒ•åœæ­¢
 	StopGraph();
 
-	// ƒR[ƒ‹ƒoƒbƒNŠÖ”’â~
+	// ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°åœæ­¢
 	StopRecv();
 
-	// Decodeˆ—ê—pƒXƒŒƒbƒhI—¹
+	// Decodeå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†
 	if (m_aDecodeProc.hThread) {
 		::SetEvent(m_aDecodeProc.hTerminateRequest);
 		WaitForSingleObjectWithMessageLoop(m_aDecodeProc.hThread, INFINITE);
 		SAFE_CLOSE_HANDLE(m_aDecodeProc.hThread);
 	}
 
-	// DecodeƒCƒxƒ“ƒgŠJ•ú
+	// Decodeã‚¤ãƒ™ãƒ³ãƒˆé–‹æ”¾
 	SAFE_CLOSE_HANDLE(m_hOnDecodeEvent);
 
-	// TSóMƒCƒxƒ“ƒg‰ğ•ú
+	// TSå—ä¿¡ã‚¤ãƒ™ãƒ³ãƒˆè§£æ”¾
 	SAFE_CLOSE_HANDLE(m_hOnStreamEvent);
 
-	// ƒoƒbƒtƒ@‰ğ•ú
+	// ãƒãƒƒãƒ•ã‚¡è§£æ”¾
 	PurgeTsStream();
 	SAFE_DELETE(m_LastBuff);
 
-	// ƒ`ƒ…[ƒi‚ÌM†ó‘Ôæ“¾—pƒCƒ“ƒ^[ƒtƒF[ƒX‰ğ•ú
+	// ãƒãƒ¥ãƒ¼ãƒŠã®ä¿¡å·çŠ¶æ…‹å–å¾—ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹è§£æ”¾
 	UnloadTunerSignalStatistics();
 
-	// ƒOƒ‰ƒt‰ğ•ú
+	// ã‚°ãƒ©ãƒ•è§£æ”¾
 	CleanupGraph();
 
 	m_dwTargetSpace = m_dwCurSpace = CBonTuner::SPACE_INVALID;
@@ -381,7 +381,7 @@ void CBonTuner::_CloseTuner(void)
 
 const BOOL CBonTuner::SetChannel(const BYTE byCh)
 {
-	// IBonDriver (not IBonDriver2) —pƒCƒ“ƒ^[ƒtƒF[ƒX; obsolete?
+	// IBonDriver (not IBonDriver2) ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹; obsolete?
 	return SetChannel(0UL, DWORD(byCh));
 }
 
@@ -418,32 +418,32 @@ const float CBonTuner::_GetSignalLevel(void)
 	HRESULT hr;
 	float f = 0.0F;
 
-	// ƒrƒbƒgƒŒ[ƒg‚ğ•Ô‚·ê‡
+	// ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆã‚’è¿”ã™å ´åˆ
 	if (m_bSignalLevelGetTypeBR) {
 		return (float)m_BitRate.GetRate();
 	}
 
-	// IBdaSpecials2ŒÅ—LŠÖ”‚ª‚ ‚ê‚ÎŠÛ“Š‚°
+	// IBdaSpecials2å›ºæœ‰é–¢æ•°ãŒã‚ã‚Œã°ä¸¸æŠ•ã’
 	if (m_pIBdaSpecials2 && (hr = m_pIBdaSpecials2->GetSignalStrength(&f)) != E_NOINTERFACE) {
 		return f;
 	}
 
-	//   get_SignalQuality M†‚Ì•i¿‚ğ¦‚· 1 ` 100 ‚Ì’l‚ğæ“¾‚·‚éB
-	//   get_SignalStrength ƒfƒVƒxƒ‹’PˆÊ‚ÌM†‚Ì‹­“x‚ğ¦‚·’l‚ğæ“¾‚·‚éB 
+	//   get_SignalQuality ä¿¡å·ã®å“è³ªã‚’ç¤ºã™ 1 ï½ 100 ã®å€¤ã‚’å–å¾—ã™ã‚‹ã€‚
+	//   get_SignalStrength ãƒ‡ã‚·ãƒ™ãƒ«å˜ä½ã®ä¿¡å·ã®å¼·åº¦ã‚’ç¤ºã™å€¤ã‚’å–å¾—ã™ã‚‹ã€‚ 
 	int nStrength;
 	int nQuality;
 	int nLock;
 
 	if (m_dwTargetChannel == CBonTuner::CHANNEL_INVALID)
-		// SetChannel()‚ªˆê“x‚àŒÄ‚Î‚ê‚Ä‚¢‚È‚¢ê‡‚Í0‚ğ•Ô‚·
+		// SetChannel()ãŒä¸€åº¦ã‚‚å‘¼ã°ã‚Œã¦ã„ãªã„å ´åˆã¯0ã‚’è¿”ã™
 		return 0.0F;
 
 	GetSignalState(&nStrength, &nQuality, &nLock);
 	if (!nLock)
-		// Locko—ˆ‚Ä‚¢‚È‚¢ê‡‚Í0‚ğ•Ô‚·
+		// Lockå‡ºæ¥ã¦ã„ãªã„å ´åˆã¯0ã‚’è¿”ã™
 		return 0.0F;
 	if (nStrength < 0 && m_bSignalLevelNeedStrength)
-		// Strength‚Í-1‚ğ•Ô‚·ê‡‚ª‚ ‚é
+		// Strengthã¯-1ã‚’è¿”ã™å ´åˆãŒã‚ã‚‹
 		return (float)nStrength;
 
 	m_fStrength = (double)nStrength;
@@ -465,16 +465,16 @@ const DWORD CBonTuner::WaitTsStream(const DWORD dwTimeOut)
 
 	DWORD dwRet;
 	if (m_nWaitTsSleep) {
-		// WaitTsSleep ‚ªw’è‚³‚ê‚Ä‚¢‚éê‡
+		// WaitTsSleep ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆ
 		dwRet = ::WaitForSingleObject(m_hOnDecodeEvent, 0);
-		// ƒCƒxƒ“ƒg‚ªƒVƒOƒiƒ‹ó‘Ô‚Å‚È‚¯‚ê‚Îw’èŠÔ‘Ò‹@‚·‚é
+		// ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚·ã‚°ãƒŠãƒ«çŠ¶æ…‹ã§ãªã‘ã‚Œã°æŒ‡å®šæ™‚é–“å¾…æ©Ÿã™ã‚‹
 		if (dwRet != WAIT_TIMEOUT)
 			return dwRet;
 
 		::Sleep(m_nWaitTsSleep);
 	}
 
-	// ƒCƒxƒ“ƒg‚ªƒVƒOƒiƒ‹ó‘Ô‚É‚È‚é‚Ì‚ğ‘Ò‚Â
+	// ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚·ã‚°ãƒŠãƒ«çŠ¶æ…‹ã«ãªã‚‹ã®ã‚’å¾…ã¤
 	dwRet = ::WaitForSingleObject(m_hOnDecodeEvent, (dwTimeOut)? dwTimeOut : INFINITE);
 	return dwRet;
 }
@@ -516,15 +516,15 @@ const BOOL CBonTuner::GetTsStream(BYTE **ppDst, DWORD *pdwSize, DWORD *pdwRemain
 
 void CBonTuner::PurgeTsStream(void)
 {
-	// m_LastBuff ‚ÍQÆ‚³‚ê‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚Ì‚Å delete ‚µ‚È‚¢
+	// m_LastBuff ã¯å‚ç…§ã•ã‚Œã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã®ã§ delete ã—ãªã„
 
-	// óMTSƒoƒbƒtƒ@
+	// å—ä¿¡TSãƒãƒƒãƒ•ã‚¡
 	m_TsBuff.Purge();
 
-	// ƒfƒR[ƒhŒãTSƒoƒbƒtƒ@
+	// ãƒ‡ã‚³ãƒ¼ãƒ‰å¾ŒTSãƒãƒƒãƒ•ã‚¡
 	m_DecodedTsBuff.Purge();
 
-	// ƒrƒbƒgƒŒ[ƒgŒvZ—pƒNƒ‰ƒX
+	// ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆè¨ˆç®—ç”¨ã‚¯ãƒ©ã‚¹
 	m_BitRate.Clear();
 }
 
@@ -652,32 +652,32 @@ const BOOL CBonTuner::_SetChannel(const DWORD dwSpace, const DWORD dwChannel)
 	PurgeTsStream();
 	TuningSpaceData * TuningSpace = &itSpace->second;
 	ChData * Ch = &itCh->second;
-	m_LastTuningParam.Frequency = Ch->Frequency + TuningSpace->FrequencyOffset;					// ü”g”(MHz)
-	m_LastTuningParam.Polarisation = PolarisationMapping[Ch->Polarisation];						// M†‚Ì•Î”g
-	m_LastTuningParam.Antenna = m_aSatellite[Ch->Satellite].Polarisation[Ch->Polarisation];		// ƒAƒ“ƒeƒiİ’èƒf[ƒ^
-	m_LastTuningParam.Modulation = m_aModulationType[Ch->ModulationType];						// •Ï’²•û®İ’èƒf[ƒ^
-	m_LastTuningParam.ONID = Ch->ONID;															// ƒIƒŠƒWƒiƒ‹ƒlƒbƒgƒ[ƒNID / PhysicalChannel (ATSC / Digital Cable)
-	m_LastTuningParam.TSID = Ch->TSID;															// ƒgƒ‰ƒ“ƒXƒ|[ƒgƒXƒgƒŠ[ƒ€ID / Channel (ATSC / Digital Cable)
-	m_LastTuningParam.SID = Ch->SID;															// ƒT[ƒrƒXID / MinorChannel (ATSC / Digital Cable)
+	m_LastTuningParam.Frequency = Ch->Frequency + TuningSpace->FrequencyOffset;					// å‘¨æ³¢æ•°(MHz)
+	m_LastTuningParam.Polarisation = PolarisationMapping[Ch->Polarisation];						// ä¿¡å·ã®åæ³¢
+	m_LastTuningParam.Antenna = m_aSatellite[Ch->Satellite].Polarisation[Ch->Polarisation];		// ã‚¢ãƒ³ãƒ†ãƒŠè¨­å®šãƒ‡ãƒ¼ã‚¿
+	m_LastTuningParam.Modulation = m_aModulationType[Ch->ModulationType];						// å¤‰èª¿æ–¹å¼è¨­å®šãƒ‡ãƒ¼ã‚¿
+	m_LastTuningParam.ONID = Ch->ONID;															// ã‚ªãƒªã‚¸ãƒŠãƒ«ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ID / PhysicalChannel (ATSC / Digital Cable)
+	m_LastTuningParam.TSID = Ch->TSID;															// ãƒˆãƒ©ãƒ³ã‚¹ãƒãƒ¼ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ ID / Channel (ATSC / Digital Cable)
+	m_LastTuningParam.SID = Ch->SID;															// ã‚µãƒ¼ãƒ“ã‚¹ID / MinorChannel (ATSC / Digital Cable)
 	m_LastTuningParam.MajorChannel = Ch->MajorChannel;											// MajorChannel (Digital Cable)
 	m_LastTuningParam.SourceID = Ch->SourceID;													// SourceID (Digital Cable)
-	m_LastTuningParam.IniSpaceID = dwSpace;														// iniƒtƒ@ƒCƒ‹‚Å“Ç‚Ü‚ê‚½ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†
-	m_LastTuningParam.IniChannelID = dwChannel;													// iniƒtƒ@ƒCƒ‹‚Å“Ç‚Ü‚ê‚½ƒ`ƒƒƒ“ƒlƒ‹”Ô†
+	m_LastTuningParam.IniSpaceID = dwSpace;														// iniãƒ•ã‚¡ã‚¤ãƒ«ã§èª­è¾¼ã¾ã‚ŒãŸãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·
+	m_LastTuningParam.IniChannelID = dwChannel;													// iniãƒ•ã‚¡ã‚¤ãƒ«ã§èª­è¾¼ã¾ã‚ŒãŸãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
 
-	// IBdaSpecials‚Å–‘O‚Ìˆ—‚ª•K—v‚È‚çs‚¤
+	// IBdaSpecialsã§äº‹å‰ã®å‡¦ç†ãŒå¿…è¦ãªã‚‰è¡Œã†
 	if (m_pIBdaSpecials2)
 		hr = m_pIBdaSpecials2->PreLockChannel(&m_LastTuningParam);
 
 	BOOL bRet = LockChannel(&m_LastTuningParam, m_bLockTwice && Ch->LockTwiceTarget);
 
-	// IBdaSpecials‚Å’Ç‰Á‚Ìˆ—‚ª•K—v‚È‚çs‚¤
+	// IBdaSpecialsã§è¿½åŠ ã®å‡¦ç†ãŒå¿…è¦ãªã‚‰è¡Œã†
 	if (m_pIBdaSpecials2)
 		hr = m_pIBdaSpecials2->PostLockChannel(&m_LastTuningParam);
 
 	SleepWithMessageLoop(100);
 	PurgeTsStream();
 
-	// TSMFˆ—İ’è
+	// TSMFå‡¦ç†è¨­å®š
 	switch (itSpace->second.TSMFMode) {
 	case 0:		// OFF
 		m_TSMFParser.Disable();
@@ -695,7 +695,7 @@ const BOOL CBonTuner::_SetChannel(const DWORD dwSpace, const DWORD dwChannel)
 
 	m_bRecvStarted = TRUE;
 
-	// SetChannel()‚ğ‚İ‚½ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†‚Æƒ`ƒƒƒ“ƒlƒ‹”Ô†
+	// SetChannel()ã‚’è©¦ã¿ãŸãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·ã¨ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
 	m_dwTargetSpace = dwSpace;
 	m_dwTargetChannel = dwChannel;
 
@@ -795,7 +795,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 
 	OutputDebug(L"COMProcThread: Thread created.\n");
 
-	// COM‰Šú‰»
+	// COMåˆæœŸåŒ–
 	hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE | COINIT_SPEED_OVER_MEMORY);
 
 	HANDLE h[2] = {
@@ -821,7 +821,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 				break;
 
 			case eCOMReqCloseTuner:
-				// OpenTunerELockChannel‚ÌÄs’†‚È‚ç’†~
+				// OpenTunerãƒ»LockChannelã®å†è©¦è¡Œä¸­ãªã‚‰ä¸­æ­¢
 				pCOMProc->ResetReOpenTuner();
 				pCOMProc->ResetReLockChannel();
 
@@ -830,13 +830,13 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 				break;
 
 			case eCOMReqSetChannel:
-				// ˆÙíŒŸ’mŠÄ‹ƒ^ƒCƒ}[‰Šú‰»
+				// ç•°å¸¸æ¤œçŸ¥ç›£è¦–ã‚¿ã‚¤ãƒãƒ¼åˆæœŸåŒ–
 				pCOMProc->ResetWatchDog();
 
-				// LockChannel‚ÌÄs’†‚È‚ç’†~
+				// LockChannelã®å†è©¦è¡Œä¸­ãªã‚‰ä¸­æ­¢
 				pCOMProc->ResetReLockChannel();
 
-				// OpenTuner‚ÌÄs’†‚È‚çFALSE‚ğ•Ô‚·
+				// OpenTunerã®å†è©¦è¡Œä¸­ãªã‚‰FALSEã‚’è¿”ã™
 				if (pCOMProc->bDoReOpenTuner) {
 					pCOMProc->ClearReOpenChannel();
 					pCOMProc->uRetVal.SetChannel = FALSE;
@@ -848,7 +848,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 				break;
 
 			case eCOMReqGetSignalLevel:
-				// OpenTuner‚ÌÄs’†‚È‚ç0‚ğ•Ô‚·
+				// OpenTunerã®å†è©¦è¡Œä¸­ãªã‚‰0ã‚’è¿”ã™
 				if (pCOMProc->bDoReOpenTuner) {
 					pCOMProc->uRetVal.GetSignalLevel = 0.0F;
 				}
@@ -859,7 +859,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 				break;
 
 			case eCOMReqIsTunerOpening:
-				// OpenTuner‚ÌÄs’†‚È‚çTRUE‚ğ•Ô‚·
+				// OpenTunerã®å†è©¦è¡Œä¸­ãªã‚‰TRUEã‚’è¿”ã™
 				if (pCOMProc->bDoReOpenTuner) {
 					pCOMProc->uRetVal.IsTunerOpening = TRUE;
 				}
@@ -870,7 +870,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 				break;
 
 			case eCOMReqGetCurSpace:
-				// OpenTuner‚ÌÄs’†‚È‚ç‘Ş”ğ’l‚ğ•Ô‚·
+				// OpenTunerã®å†è©¦è¡Œä¸­ãªã‚‰é€€é¿å€¤ã‚’è¿”ã™
 				if (pCOMProc->bDoReOpenTuner) {
 					pCOMProc->uRetVal.GetCurSpace = pCOMProc->dwReOpenSpace;
 				}
@@ -881,7 +881,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 				break;
 
 			case eCOMReqGetCurChannel:
-				// OpenTuner‚ÌÄs’†‚È‚ç‘Ş”ğ’l‚ğ•Ô‚·
+				// OpenTunerã®å†è©¦è¡Œä¸­ãªã‚‰é€€é¿å€¤ã‚’è¿”ã™
 				if (pCOMProc->bDoReOpenTuner) {
 					pCOMProc->uRetVal.GetCurChannel = pCOMProc->dwReOpenChannel;
 				}
@@ -910,7 +910,7 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 		if (terminate)
 			break;
 
-		// ƒXƒgƒŠ[ƒ€ƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB‚Ì•ÏX
+		// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£ã®å¤‰æ›´
 		if (pSys->m_bIsSetStreamThread) {
 			if (pSys->m_nThreadPriorityStream != THREAD_PRIORITY_ERROR_RETURN) {
 				OutputDebug(L"COMProcThread: Current stream Thread priority = %d.\n", ::GetThreadPriority(pSys->m_hStreamThread));
@@ -920,84 +920,84 @@ DWORD WINAPI CBonTuner::COMProcThread(LPVOID lpParameter)
 			pSys->m_bIsSetStreamThread = FALSE;
 		}
 
-		// ˆÙíŒŸ’m•ƒŠƒJƒoƒŠ[
-		// 1000ms–ˆˆ—
+		// ç•°å¸¸æ¤œçŸ¥ï¼†ãƒªã‚«ãƒãƒªãƒ¼
+		// 1000msæ¯å‡¦ç†
 		if (pCOMProc->CheckTick()) {
 
-			// SetChannel()¸”s‚ÌƒoƒbƒNƒOƒ‰ƒ“ƒhCHØ‘ÖŠJn
+			// SetChannel()å¤±æ•—æ™‚ã®ãƒãƒƒã‚¯ã‚°ãƒ©ãƒ³ãƒ‰CHåˆ‡æ›¿é–‹å§‹
 			if (pSys->m_bBackgroundChannelLock && pSys->m_dwCurChannel == CBonTuner::CHANNEL_INVALID && pSys->m_dwTargetChannel != CBonTuner::CHANNEL_INVALID) {
 				OutputDebug(L"COMProcThread: Background retry.\n");
 				pCOMProc->SetReLockChannel();
 			}
 
-			// ˆÙíŒŸ’m
+			// ç•°å¸¸æ¤œçŸ¥
 			if (!pCOMProc->bDoReLockChannel && !pCOMProc->bDoReOpenTuner && pSys->m_dwCurChannel != CBonTuner::CHANNEL_INVALID) {
 
-				// SignalLock‚Ìó‘ÔŠm”F
+				// SignalLockã®çŠ¶æ…‹ç¢ºèª
 				if (pSys->m_nWatchDogSignalLocked != 0) {
 					int lock = 0;
 					pSys->GetSignalState(NULL, NULL, &lock);
 					if (pCOMProc->CheckSignalLockErr(lock, pSys->m_nWatchDogSignalLocked * 1000)) {
-						// ƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒNÄÀs
+						// ãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯å†å®Ÿè¡Œ
 						OutputDebug(L"COMProcThread: WatchDogSignalLocked time is up.\n");
 						pCOMProc->SetReLockChannel();
 					}
-				} // SignalLock‚Ìó‘ÔŠm”F
+				} // SignalLockã®çŠ¶æ…‹ç¢ºèª
 
-				// BitRateŠm”F
+				// BitRateç¢ºèª
 				if (pSys->m_nWatchDogBitRate != 0) {
 					if (pCOMProc->CheckBitRateErr((pSys->m_BitRate.GetRate() > 0.0), pSys->m_nWatchDogBitRate * 1000)) {
-						// ƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒNÄÀs
+						// ãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯å†å®Ÿè¡Œ
 						OutputDebug(L"COMProcThread: WatchDogBitRate time is up.\n");
 						pCOMProc->SetReLockChannel();
 					}
-				} // BitRateŠm”F
-			} // ˆÙíŒŸ’m
+				} // BitRateç¢ºèª
+			} // ç•°å¸¸æ¤œçŸ¥
 
-			// CHØ‘Ö“®ìsŒã‚ÌOpenTunerÄÀs
+			// CHåˆ‡æ›¿å‹•ä½œè©¦è¡Œå¾Œã®OpenTunerå†å®Ÿè¡Œ
 			if (pCOMProc->bDoReOpenTuner) {
-				// OpenTunerÄÀs
+				// OpenTunerå†å®Ÿè¡Œ
 				pSys->_CloseTuner();
 				if (pSys->_OpenTuner() && (!pCOMProc->CheckReOpenChannel() || pSys->_SetChannel(pCOMProc->dwReOpenSpace, pCOMProc->dwReOpenChannel))) {
-					// OpenTuner‚É¬Œ÷‚µASetChannnel‚É¬Œ÷‚à‚µ‚­‚Í•K—v‚È‚¢
+					// OpenTunerã«æˆåŠŸã—ã€SetChannnelã«æˆåŠŸã‚‚ã—ãã¯å¿…è¦ãªã„
 					OutputDebug(L"COMProcThread: Re-OpenTuner SUCCESS.\n");
 					pCOMProc->ResetReOpenTuner();
 				}
 				else {
-					// ¸”s...‚»‚Ì‚Ü‚ÜŸ‰ñ‚àƒ`ƒƒƒŒƒ“ƒW‚·‚é
+					// å¤±æ•—...ãã®ã¾ã¾æ¬¡å›ã‚‚ãƒãƒ£ãƒ¬ãƒ³ã‚¸ã™ã‚‹
 					OutputDebug(L"COMProcThread: Re-OpenTuner FAILED.\n");
 				}
-			} // CHØ‘Ö“®ìsŒã‚ÌOpenTunerÄÀs
+			} // CHåˆ‡æ›¿å‹•ä½œè©¦è¡Œå¾Œã®OpenTunerå†å®Ÿè¡Œ
 
-			// ˆÙíŒŸ’mŒãƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒNÄÀs
+			// ç•°å¸¸æ¤œçŸ¥å¾Œãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯å†å®Ÿè¡Œ
 			if (!pCOMProc->bDoReOpenTuner && pCOMProc->bDoReLockChannel) {
-				// ƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒNÄÀs
+				// ãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯å†å®Ÿè¡Œ
 				if (pSys->LockChannel(&pSys->m_LastTuningParam, FALSE)) {
-					// LockChannel‚É¬Œ÷‚µ‚½
+					// LockChannelã«æˆåŠŸã—ãŸ
 					OutputDebug(L"COMProcThread: Re-LockChannel SUCCESS.\n");
 					pCOMProc->ResetReLockChannel();
 				}
 				else {
-					// LockChannel¸”s
+					// LockChannelå¤±æ•—
 					OutputDebug(L"COMProcThread: Re-LockChannel FAILED.\n");
 					if (pSys->m_nReOpenWhenGiveUpReLock != 0) {
-						// CHØ‘Ö“®ìs‰ñ”İ’è’l‚ª0ˆÈŠO
+						// CHåˆ‡æ›¿å‹•ä½œè©¦è¡Œå›æ•°è¨­å®šå€¤ãŒ0ä»¥å¤–
 						if (pCOMProc->CheckReLockFailCount(pSys->m_nReOpenWhenGiveUpReLock)) {
-							// CHØ‘Ö“®ìs‰ñ”‚ğ’´‚¦‚½‚Ì‚ÅOpenTunerÄÀs
+							// CHåˆ‡æ›¿å‹•ä½œè©¦è¡Œå›æ•°ã‚’è¶…ãˆãŸã®ã§OpenTunerå†å®Ÿè¡Œ
 							OutputDebug(L"COMProcThread: ReOpenWhenGiveUpReLock count is up.\n");
 							pCOMProc->SetReOpenTuner(pSys->m_dwTargetSpace, pSys->m_dwTargetChannel);
 							pCOMProc->ResetReLockChannel();
 						}
 					}
 				}
-			} // ˆÙíŒŸ’mŒãƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒNÄÀs
-		} // 1000ms–ˆˆ—
+			} // ç•°å¸¸æ¤œçŸ¥å¾Œãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯å†å®Ÿè¡Œ
+		} // 1000msæ¯å‡¦ç†
 	} // while (!terminate)
 
-	// ƒOƒ‰ƒtŠÖŒW‚Ì‰ğ•ú
+	// ã‚°ãƒ©ãƒ•é–¢ä¿‚ã®è§£æ”¾
 	pSys->_CloseTuner();
 
-	// DSƒtƒBƒ‹ƒ^[—ñ‹“‚Æƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒ‚ÌƒŠƒXƒg‚ğíœ
+	// DSãƒ•ã‚£ãƒ«ã‚¿ãƒ¼åˆ—æŒ™ã¨ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ã®ãƒªã‚¹ãƒˆã‚’å‰Šé™¤
 	SAFE_DELETE(pSys->m_pDSFilterEnumTuner);
 	SAFE_DELETE(pSys->m_pDSFilterEnumCapture);
 	pSys->m_UsableTunerCaptureList.clear();
@@ -1019,10 +1019,10 @@ DWORD WINAPI CBonTuner::DecodeProcThread(LPVOID lpParameter)
 
 	OutputDebug(L"DecodeProcThread: Thread created.\n");
 
-	// COM‰Šú‰»
+	// COMåˆæœŸåŒ–
 	hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE | COINIT_SPEED_OVER_MEMORY);
 
-	// IBdaSpecials‚É‚æ‚éƒfƒR[ƒhˆ—‚ª•K—v‚©‚Ç‚¤‚©
+	// IBdaSpecialsã«ã‚ˆã‚‹ãƒ‡ã‚³ãƒ¼ãƒ‰å‡¦ç†ãŒå¿…è¦ã‹ã©ã†ã‹
 	BOOL b = FALSE;
 	if (pSys->m_pIBdaSpecials2 && SUCCEEDED(hr = pSys->m_pIBdaSpecials2->IsDecodingNeeded(&b))) {
 		if (b)
@@ -1045,16 +1045,16 @@ DWORD WINAPI CBonTuner::DecodeProcThread(LPVOID lpParameter)
 			break;
 		case WAIT_OBJECT_0 + 1:
 			{
-				// TSƒoƒbƒtƒ@‚©‚ç‚Ìƒf[ƒ^æ“¾
+				// TSãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ã®ãƒ‡ãƒ¼ã‚¿å–å¾—
 				while (TS_DATA *pBuff = pSys->m_TsBuff.Get()) {
-					// •K—v‚È‚ç‚ÎIBdaSpecials‚É‚æ‚éƒfƒR[ƒhˆ—‚ğs‚¤
+					// å¿…è¦ãªã‚‰ã°IBdaSpecialsã«ã‚ˆã‚‹ãƒ‡ã‚³ãƒ¼ãƒ‰å‡¦ç†ã‚’è¡Œã†
 					if (bNeedDecode) {
 						pSys->m_pIBdaSpecials2->Decode(pBuff->pbyBuff, (DWORD)pBuff->Size);
 					}
 
-					// æ“¾‚µ‚½ƒoƒbƒtƒ@‚ğƒfƒR[ƒhÏ‚İƒoƒbƒtƒ@‚É’Ç‰Á
+					// å–å¾—ã—ãŸãƒãƒƒãƒ•ã‚¡ã‚’ãƒ‡ã‚³ãƒ¼ãƒ‰æ¸ˆã¿ãƒãƒƒãƒ•ã‚¡ã«è¿½åŠ 
 					if (pSys->m_bIsEnabledTSMF) {
-						// TSMF‚Ìˆ—‚ğs‚¤
+						// TSMFã®å‡¦ç†ã‚’è¡Œã†
 						BYTE * newBuf = NULL;
 						size_t newBufSize = 0;
 						pSys->m_TSMFParser.ParseTsBuffer(pBuff->pbyBuff, pBuff->Size, &newBuf, &newBufSize);
@@ -1065,11 +1065,11 @@ DWORD WINAPI CBonTuner::DecodeProcThread(LPVOID lpParameter)
 						SAFE_DELETE(pBuff);
 					}
 					else {
-						// TSMF‚Ìˆ—‚ğs‚í‚È‚¢ê‡‚Í‚»‚Ì‚Ü‚Ü’Ç‰Á
+						// TSMFã®å‡¦ç†ã‚’è¡Œã‚ãªã„å ´åˆã¯ãã®ã¾ã¾è¿½åŠ 
 						pSys->m_DecodedTsBuff.Add(pBuff);
 					}
 
-					// óMƒCƒxƒ“ƒgƒZƒbƒg
+					// å—ä¿¡ã‚¤ãƒ™ãƒ³ãƒˆã‚»ãƒƒãƒˆ
 					if (pSys->m_DecodedTsBuff.Size() >= pSys->m_nWaitTsCount)
 						::SetEvent(pSys->m_hOnDecodeEvent);
 				}
@@ -1286,6 +1286,7 @@ void CBonTuner::ReadIniFile(void)
 	const std::map<const std::wstring, const int, std::less<>> mapDefaultNetwork = {
 		{ L"NONE",     enumDefaultNetwork::eDefaultNetworkNone },
 		{ L"SPHD",     enumDefaultNetwork::eDefaultNetworkSPHD },
+		{ L"4KBS/CS", enumDefaultNetwork::eDefaultNetwork4KBSCS },
 		{ L"BS/CS110", enumDefaultNetwork::eDefaultNetworkBSCS },
 		{ L"BS",       enumDefaultNetwork::eDefaultNetworkBSCS },
 		{ L"CS110",    enumDefaultNetwork::eDefaultNetworkBSCS },
@@ -1335,28 +1336,28 @@ void CBonTuner::ReadIniFile(void)
 		{ L"RELATIVE", 2 },
 	};
 
-	// INIƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹–¼æ“¾
+	// INIãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«åå–å¾—
 	std::wstring tempPath = common::GetModuleName(st_hModule);
 	m_sIniFilePath = tempPath + L"ini";
 
 	CIniFileAccess IniFileAccess(m_sIniFilePath);
 	int val;
 
-	// DebugLog‚ğ‹L˜^‚·‚é‚©‚Ç‚¤‚©
+	// DebugLogã‚’è¨˜éŒ²ã™ã‚‹ã‹ã©ã†ã‹
 	if (IniFileAccess.ReadKeyB(L"BONDRIVER", L"DebugLog", FALSE)) {
 		SetDebugLog(tempPath + L"log");
 	}
 
 	//
-	// Tuner ƒZƒNƒVƒ‡ƒ“
+	// Tuner ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	//
 	IniFileAccess.ReadSection(L"TUNER");
 	IniFileAccess.CreateSectionData();
 
-	// GUID0 - GUID99: TunerƒfƒoƒCƒX‚ÌGUID ... w’è‚³‚ê‚È‚¯‚ê‚ÎŒ©‚Â‚©‚Á‚½‡‚Ég‚¤–‚ğˆÓ–¡‚·‚éB
-	// FriendlyName0 - FriendlyName99: TunerƒfƒoƒCƒX‚ÌFriendlyName ... w’è‚³‚ê‚È‚¯‚ê‚ÎŒ©‚Â‚©‚Á‚½‡‚Ég‚¤–‚ğˆÓ–¡‚·‚éB
-	// CaptureGUID0 - CaptureGUID99: CaptureƒfƒoƒCƒX‚ÌGUID ... w’è‚³‚ê‚È‚¯‚ê‚ÎÚ‘±‰Â”\‚ÈƒfƒoƒCƒX‚ğŒŸõ‚·‚éB
-	// CaptureFriendlyName0 - CaptureFriendlyName99: CaptureƒfƒoƒCƒX‚ÌFriendlyName ... w’è‚³‚ê‚È‚¯‚ê‚ÎÚ‘±‰Â”\‚ÈƒfƒoƒCƒX‚ğŒŸõ‚·‚éB
+	// GUID0 - GUID99: Tunerãƒ‡ãƒã‚¤ã‚¹ã®GUID ... æŒ‡å®šã•ã‚Œãªã‘ã‚Œã°è¦‹ã¤ã‹ã£ãŸé †ã«ä½¿ã†äº‹ã‚’æ„å‘³ã™ã‚‹ã€‚
+	// FriendlyName0 - FriendlyName99: Tunerãƒ‡ãƒã‚¤ã‚¹ã®FriendlyName ... æŒ‡å®šã•ã‚Œãªã‘ã‚Œã°è¦‹ã¤ã‹ã£ãŸé †ã«ä½¿ã†äº‹ã‚’æ„å‘³ã™ã‚‹ã€‚
+	// CaptureGUID0 - CaptureGUID99: Captureãƒ‡ãƒã‚¤ã‚¹ã®GUID ... æŒ‡å®šã•ã‚Œãªã‘ã‚Œã°æ¥ç¶šå¯èƒ½ãªãƒ‡ãƒã‚¤ã‚¹ã‚’æ¤œç´¢ã™ã‚‹ã€‚
+	// CaptureFriendlyName0 - CaptureFriendlyName99: Captureãƒ‡ãƒã‚¤ã‚¹ã®FriendlyName ... æŒ‡å®šã•ã‚Œãªã‘ã‚Œã°æ¥ç¶šå¯èƒ½ãªãƒ‡ãƒã‚¤ã‚¹ã‚’æ¤œç´¢ã™ã‚‹ã€‚
 	for (unsigned int i = 0; i < MAX_GUID; i++) {
 		std::wstring key;
 		key = L"GUID" + std::to_wstring(i);
@@ -1368,14 +1369,14 @@ void CBonTuner::ReadIniFile(void)
 		key = L"CaptureFriendlyName" + std::to_wstring(i);
 		std::wstring captureFriendlyName = IniFileAccess.ReadKeySSectionData(key, L"");
 		if (tunerGuid.length() == 0 && tunerFriendlyName.length() == 0 && captureGuid.length() == 0 && captureFriendlyName.length() == 0) {
-			// ‚Ç‚ê‚àw’è‚³‚ê‚Ä‚¢‚È‚¢
+			// ã©ã‚Œã‚‚æŒ‡å®šã•ã‚Œã¦ã„ãªã„
 			if (i == 0) {
-				// ”Ô†‚È‚µ‚ÌŒ^®‚Å“Ç‚Ş
+				// ç•ªå·ãªã—ã®å‹å¼ã§èª­è¾¼ã‚€
 				tunerGuid = IniFileAccess.ReadKeySSectionData(L"GUID", L"");
 				tunerFriendlyName = IniFileAccess.ReadKeySSectionData(L"FriendlyName", L"");
 				captureGuid = IniFileAccess.ReadKeySSectionData(L"CaptureGUID", L"");
 				captureFriendlyName = IniFileAccess.ReadKeySSectionData(L"CaptureFriendlyName", L"");
-				// ‚Ç‚ê‚àw’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Å‚à“o˜^
+				// ã©ã‚Œã‚‚æŒ‡å®šã•ã‚Œã¦ã„ãªã„å ´åˆã§ã‚‚ç™»éŒ²
 			}
 			else
 				break;
@@ -1383,59 +1384,59 @@ void CBonTuner::ReadIniFile(void)
 		m_aTunerParam.Tuner.emplace(i, TunerSearchData(tunerGuid, tunerFriendlyName, captureGuid, captureFriendlyName));
 	}
 
-	// TunerƒfƒoƒCƒX‚Ì‚İ‚ÅCaptureƒfƒoƒCƒX‚ª‘¶İ‚µ‚È‚¢
+	// Tunerãƒ‡ãƒã‚¤ã‚¹ã®ã¿ã§Captureãƒ‡ãƒã‚¤ã‚¹ãŒå­˜åœ¨ã—ãªã„
 	m_aTunerParam.bNotExistCaptureDevice = IniFileAccess.ReadKeyBSectionData(L"NotExistCaptureDevice", FALSE);
 
-	// Tuner‚ÆCapture‚ÌƒfƒoƒCƒXƒCƒ“ƒXƒ^ƒ“ƒXƒpƒX‚ªˆê’v‚µ‚Ä‚¢‚é‚©‚ÌŠm”F‚ğs‚¤‚©‚Ç‚¤‚©
+	// Tunerã¨Captureã®ãƒ‡ãƒã‚¤ã‚¹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ‘ã‚¹ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹ã®ç¢ºèªã‚’è¡Œã†ã‹ã©ã†ã‹
 	m_aTunerParam.bCheckDeviceInstancePath = IniFileAccess.ReadKeyBSectionData(L"CheckDeviceInstancePath", TRUE);
 
-	// Tuner–¼: GetTunerName‚Å•Ô‚·ƒ`ƒ…[ƒi–¼ ... w’è‚³‚ê‚È‚¯‚ê‚ÎƒfƒtƒHƒ‹ƒg–¼‚ª
-	//   g‚í‚ê‚éB‚±‚Ìê‡A•¡”ƒ`ƒ…[ƒi‚ğ–¼‘O‚Å‹æ•Ê‚·‚é–‚Í‚Å‚«‚È‚¢
+	// Tunerå: GetTunerNameã§è¿”ã™ãƒãƒ¥ãƒ¼ãƒŠå ... æŒ‡å®šã•ã‚Œãªã‘ã‚Œã°ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆåãŒ
+	//   ä½¿ã‚ã‚Œã‚‹ã€‚ã“ã®å ´åˆã€è¤‡æ•°ãƒãƒ¥ãƒ¼ãƒŠã‚’åå‰ã§åŒºåˆ¥ã™ã‚‹äº‹ã¯ã§ããªã„
 	m_aTunerParam.sTunerName = common::WStringToTString(IniFileAccess.ReadKeySSectionData(L"Name", L"DVB-S2"));
 
-	// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚ğg—p‚·‚é‚©‚Ç‚¤‚©B
-	//   ˆÈ‰º‚ğ INI ƒtƒ@ƒCƒ‹‚Åw’è‰Â”\
-	//     "" ... g—p‚µ‚È‚¢(default); "AUTO" ... AUTO
-	//     "DLLName" ... ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚Ì“ü‚Á‚½DLL–¼‚ğ’¼Úw’è
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã‚’ä½¿ç”¨ã™ã‚‹ã‹ã©ã†ã‹ã€‚
+	//   ä»¥ä¸‹ã‚’ INI ãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šå¯èƒ½
+	//     "" ... ä½¿ç”¨ã—ãªã„(default); "AUTO" ... AUTO
+	//     "DLLName" ... ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã®å…¥ã£ãŸDLLåã‚’ç›´æ¥æŒ‡å®š
 	m_aTunerParam.sDLLBaseName = IniFileAccess.ReadKeySSectionData(L"UseSpecial", L"");
 
-	// ToneM†Ø‘Ö‚ÌWaitŠÔ
+	// Toneä¿¡å·åˆ‡æ›¿æ™‚ã®Waitæ™‚é–“
 	m_nToneWait = IniFileAccess.ReadKeyISectionData(L"ToneSignalWait", 100);
 
-	// CHØ‘ÖŒã‚ÌLockŠm”FŠÔ
+	// CHåˆ‡æ›¿å¾Œã®Lockç¢ºèªæ™‚é–“
 	m_nLockWait = IniFileAccess.ReadKeyISectionData(L"ChannelLockWait", 2000);
 
-	// CHØ‘ÖŒã‚ÌLockŠm”FDelayŠÔ
+	// CHåˆ‡æ›¿å¾Œã®Lockç¢ºèªDelayæ™‚é–“
 	m_nLockWaitDelay = IniFileAccess.ReadKeyISectionData(L"ChannelLockWaitDelay", 0);
 
-	// CHØ‘ÖŒã‚ÌLockŠm”FRetry‰ñ”
+	// CHåˆ‡æ›¿å¾Œã®Lockç¢ºèªRetryå›æ•°
 	m_nLockWaitRetry = IniFileAccess.ReadKeyISectionData(L"ChannelLockWaitRetry", 0);
 
-	// CHØ‘Ö“®ì‚ğ‹­§“I‚É2“xs‚¤‚©‚Ç‚¤‚©
+	// CHåˆ‡æ›¿å‹•ä½œã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†ã‹ã©ã†ã‹
 	m_bLockTwice = IniFileAccess.ReadKeyBSectionData(L"ChannelLockTwice", FALSE);
 
-	// CHØ‘Ö“®ì‚ğ‹­§“I‚É2“xs‚¤ê‡‚ÌDelayŠÔ
+	// CHåˆ‡æ›¿å‹•ä½œã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†å ´åˆã®Delayæ™‚é–“
 	m_nLockTwiceDelay = IniFileAccess.ReadKeyISectionData(L"ChannelLockTwiceDelay", 100);
 
-	// SignalLock‚ÌˆÙíŒŸ’mŠÔ(•b)
+	// SignalLockã®ç•°å¸¸æ¤œçŸ¥æ™‚é–“(ç§’)
 	m_nWatchDogSignalLocked = IniFileAccess.ReadKeyISectionData(L"WatchDogSignalLocked", 0);
 
-	// BitRate‚ÌˆÙíŒŸ’mŠÔ(•b)
+	// BitRateã®ç•°å¸¸æ¤œçŸ¥æ™‚é–“(ç§’)
 	m_nWatchDogBitRate = IniFileAccess.ReadKeyISectionData(L"WatchDogBitRate", 0);
 
-	// ˆÙíŒŸ’mAƒ`ƒ…[ƒi‚ÌÄƒI[ƒvƒ“‚ğ‚İ‚é‚Ü‚Å‚ÌCHØ‘Ö“®ìs‰ñ”
+	// ç•°å¸¸æ¤œçŸ¥æ™‚ã€ãƒãƒ¥ãƒ¼ãƒŠã®å†ã‚ªãƒ¼ãƒ—ãƒ³ã‚’è©¦ã¿ã‚‹ã¾ã§ã®CHåˆ‡æ›¿å‹•ä½œè©¦è¡Œå›æ•°
 	m_nReOpenWhenGiveUpReLock = IniFileAccess.ReadKeyISectionData(L"ReOpenWhenGiveUpReLock", 0);
 
-	// ƒ`ƒ…[ƒi‚ÌÄƒI[ƒvƒ“‚ğ‚İ‚éê‡‚É•Ê‚Ìƒ`ƒ…[ƒi‚ğ—Dæ‚µ‚ÄŒŸõ‚·‚é‚©‚Ç‚¤‚©
+	// ãƒãƒ¥ãƒ¼ãƒŠã®å†ã‚ªãƒ¼ãƒ—ãƒ³ã‚’è©¦ã¿ã‚‹å ´åˆã«åˆ¥ã®ãƒãƒ¥ãƒ¼ãƒŠã‚’å„ªå…ˆã—ã¦æ¤œç´¢ã™ã‚‹ã‹ã©ã†ã‹
 	m_bTryAnotherTuner = IniFileAccess.ReadKeyBSectionData(L"TryAnotherTuner", FALSE);
 
-	// CHØ‘Ö‚É¸”s‚µ‚½ê‡‚ÉAˆÙíŒŸ’m“¯—lƒoƒbƒNƒOƒ‰ƒ“ƒh‚ÅCHØ‘Ö“®ì‚ğs‚¤‚©‚Ç‚¤‚©
+	// CHåˆ‡æ›¿ã«å¤±æ•—ã—ãŸå ´åˆã«ã€ç•°å¸¸æ¤œçŸ¥æ™‚åŒæ§˜ãƒãƒƒã‚¯ã‚°ãƒ©ãƒ³ãƒ‰ã§CHåˆ‡æ›¿å‹•ä½œã‚’è¡Œã†ã‹ã©ã†ã‹
 	m_bBackgroundChannelLock = IniFileAccess.ReadKeyBSectionData(L"BackgroundChannelLock", FALSE);
 
-	// Tuning Space–¼iŒİŠ·—pj
-	std::wstring sTempTuningSpaceName = IniFileAccess.ReadKeySSectionData(L"TuningSpaceName", L"ƒXƒJƒp[");
+	// Tuning Spaceåï¼ˆäº’æ›ç”¨ï¼‰
+	std::wstring sTempTuningSpaceName = IniFileAccess.ReadKeySSectionData(L"TuningSpaceName", L"ã‚¹ã‚«ãƒ‘ãƒ¼");
 
-	// SignalLevel Zo•û–@
+	// SignalLevel ç®—å‡ºæ–¹æ³•
 	m_nSignalLevelCalcType = (enumSignalLevelCalcType)IniFileAccess.ReadKeyIValueMapSectionData(L"SignalLevelCalcType", enumSignalLevelCalcType::eSignalLevelCalcTypeSSStrength, mapSignalLevelCalcType);
 	if (m_nSignalLevelCalcType >= eSignalLevelCalcTypeSSMin && m_nSignalLevelCalcType <= eSignalLevelCalcTypeSSMax)
 		m_bSignalLevelGetTypeSS = TRUE;
@@ -1470,23 +1471,23 @@ void CBonTuner::ReadIniFile(void)
 		m_sSignalLevelCalcFormula = IniFileAccess.ReadKeySSectionData(L"SignalLevelCalcFormula", L"S / SC + SB");
 	}
 
-	// Strength ’l•â³ŒW”
+	// Strength å€¤è£œæ­£ä¿‚æ•°
 	m_fStrengthCoefficient = (double)IniFileAccess.ReadKeyFSectionData(L"StrengthCoefficient", 1.0);
 	if (m_fStrengthCoefficient == 0.0)
 		m_fStrengthCoefficient = 1.0;
 
-	// Quality ’l•â³ŒW”
+	// Quality å€¤è£œæ­£ä¿‚æ•°
 	m_fQualityCoefficient = (double)IniFileAccess.ReadKeyFSectionData(L"QualityCoefficient", 1.0);
 	if (m_fQualityCoefficient == 0.0)
 		m_fQualityCoefficient = 1.0;
 
-	// Strength ’l•â³ƒoƒCƒAƒX
+	// Strength å€¤è£œæ­£ãƒã‚¤ã‚¢ã‚¹
 	m_fStrengthBias = (double)IniFileAccess.ReadKeyFSectionData(L"StrengthBias", 0.0);
 
-	// Quality ’l•â³ƒoƒCƒAƒX
+	// Quality å€¤è£œæ­£ãƒã‚¤ã‚¢ã‚¹
 	m_fQualityBias = (double)IniFileAccess.ReadKeyFSectionData(L"QualityBias", 0.0);
 
-	// muparser‰Šú‰»
+	// muparseråˆæœŸåŒ–
 	try {
 		m_muParser.DefineVar(_T("S"), &m_fStrength);
 		m_muParser.DefineVar(_T("SC"), &m_fStrengthCoefficient);
@@ -1500,7 +1501,7 @@ void CBonTuner::ReadIniFile(void)
 		OutputDebug(L"muParser exception. Wrong formula format?\n");
 	}
 
-	// ƒ`ƒ…[ƒjƒ“ƒOó‘Ô‚Ì”»’f•û–@
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°çŠ¶æ…‹ã®åˆ¤æ–­æ–¹æ³•
 	m_nSignalLockedJudgeType = (enumSignalLockedJudgeType)IniFileAccess.ReadKeyIValueMapSectionData(L"SignalLockedJudgeType", enumSignalLockedJudgeType::eSignalLockedJudgeTypeSS, mapSignalLockedJudgeType);
 	if (m_nSignalLockedJudgeType == eSignalLockedJudgeTypeSS)
 		m_bSignalLockedJudgeTypeSS = TRUE;
@@ -1513,7 +1514,7 @@ void CBonTuner::ReadIniFile(void)
 		std::wstring key, prefix[2];
 		DVBSystemTypeData typeData;
 		if (i == 0) {
-			// ƒ`ƒ…[ƒi[‚Ìg—p‚·‚éTuningSpace‚Ìí—Ş
+			// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã®ä½¿ç”¨ã™ã‚‹TuningSpaceã®ç¨®é¡
 			typeData.nDVBSystemType = enumTunerType::eTunerTypeDVBS;
 		}
 
@@ -1521,27 +1522,27 @@ void CBonTuner::ReadIniFile(void)
 		prefix[0] = L"DVBSystemType";
 		prefix[1] = L"DVBSystemType" + std::to_wstring(i);
 		for (unsigned int j = st; j < 2; j++) {
-			// ƒ`ƒ…[ƒi[‚Ìg—p‚·‚éTuningSpace‚Ìí—Ş
+			// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã®ä½¿ç”¨ã™ã‚‹TuningSpaceã®ç¨®é¡
 			key = prefix[j];
 			typeData.nDVBSystemType = (enumTunerType)IniFileAccess.ReadKeyIValueMapSectionData(key, typeData.nDVBSystemType, mapTuningSpaceType);
 
-			// g—p‚·‚éITuningSpace interface
+			// ä½¿ç”¨ã™ã‚‹ITuningSpace interface
 			key = prefix[j] + L"TuningSpace";
 			typeData.nTuningSpace = (enumTuningSpace)IniFileAccess.ReadKeyIValueMapSectionData(key, typeData.nTuningSpace, mapSpecifyTuningSpace);
 
-			// g—p‚·‚éILocator interface
+			// ä½¿ç”¨ã™ã‚‹ILocator interface
 			key = prefix[j] + L"Locator";
 			typeData.nLocator = (enumLocator)IniFileAccess.ReadKeyIValueMapSectionData(key, typeData.nLocator, mapSpecifyLocator);
 
-			// ITuningSpace‚Éİ’è‚·‚éNetworkType
+			// ITuningSpaceã«è¨­å®šã™ã‚‹NetworkType
 			key = prefix[j] + L"ITuningSpaceNetworkType";
 			typeData.nITuningSpaceNetworkType = (enumNetworkType)IniFileAccess.ReadKeyIValueMapSectionData(key, typeData.nITuningSpaceNetworkType, mapSpecifyITuningSpaceNetworkType);
 
-			// IDVBTuningSpace‚Éİ’è‚·‚éSystemType
+			// IDVBTuningSpaceã«è¨­å®šã™ã‚‹SystemType
 			key = prefix[j] + L"IDVBTuningSpaceSystemType";
 			typeData.nIDVBTuningSpaceSystemType = (enumDVBSystemType)IniFileAccess.ReadKeyIValueMapSectionData(key, typeData.nIDVBTuningSpaceSystemType, mapSpecifyIDVBTuningSpaceSystemType);
 
-			// IAnalogTVTuningSpace‚Éİ’è‚·‚éInputType
+			// IAnalogTVTuningSpaceã«è¨­å®šã™ã‚‹InputType
 			key = prefix[j] + L"IAnalogTVTuningSpaceInputType";
 			typeData.nIAnalogTVTuningSpaceInputType = (enumTunerInputType)IniFileAccess.ReadKeyIValueMapSectionData(key, typeData.nIAnalogTVTuningSpaceInputType, mapSpecifyIAnalogTVTuningSpaceInputType);
 		}
@@ -1550,7 +1551,7 @@ void CBonTuner::ReadIniFile(void)
 			continue;
 		}
 
-		// DB‚É“o˜^
+		// DBã«ç™»éŒ²
 		auto it = m_DVBSystemTypeDB.SystemType.find(i);
 		if (it == m_DVBSystemTypeDB.SystemType.end()) {
 			it = m_DVBSystemTypeDB.SystemType.emplace(i, typeData).first;
@@ -1558,64 +1559,64 @@ void CBonTuner::ReadIniFile(void)
 		}
 	}
 
-	// ƒ`ƒ…[ƒi[‚Ég—p‚·‚éNetworkProvider
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã«ä½¿ç”¨ã™ã‚‹NetworkProvider
 	m_nNetworkProvider = (enumNetworkProvider)IniFileAccess.ReadKeyIValueMapSectionData(L"NetworkProvider", enumNetworkProvider::eNetworkProviderAuto, mapNetworkProvider);
 
-	// ‰q¯óMƒpƒ‰ƒ[ƒ^/•Ï’²•û®ƒpƒ‰ƒ[ƒ^‚ÌƒfƒtƒHƒ‹ƒg’l
+	// è¡›æ˜Ÿå—ä¿¡ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿/å¤‰èª¿æ–¹å¼ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
 	m_nDefaultNetwork = (enumDefaultNetwork)IniFileAccess.ReadKeyIValueMapSectionData(L"DefaultNetwork", enumDefaultNetwork::eDefaultNetworkSPHD, mapDefaultNetwork);
 
 	//
-	// BonDriver ƒZƒNƒVƒ‡ƒ“
+	// BonDriver ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	//
 	IniFileAccess.ReadSection(L"BONDRIVER");
 	IniFileAccess.CreateSectionData();
 
-	// ƒXƒgƒŠ[ƒ€ƒf[ƒ^ƒoƒbƒtƒ@1ŒÂ•ª‚ÌƒTƒCƒY
-	// 188~İ’è”(bytes)
+	// ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡1å€‹åˆ†ã®ã‚µã‚¤ã‚º
+	// 188Ã—è¨­å®šæ•°(bytes)
 	m_nBuffSize = 188 * (size_t)IniFileAccess.ReadKeyISectionData(L"BuffSize", 1024);
 
-	// ƒXƒgƒŠ[ƒ€ƒf[ƒ^ƒoƒbƒtƒ@‚ÌÅ‘åŒÂ”
+	// ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡ã®æœ€å¤§å€‹æ•°
 	m_nMaxBuffCount = (size_t)IniFileAccess.ReadKeyISectionData(L"MaxBuffCount", 512);
 
-	// WaitTsStreamAw’è‚³‚ê‚½ŒÂ”•ª‚ÌƒXƒgƒŠ[ƒ€ƒf[ƒ^ƒoƒbƒtƒ@‚ª’™‚Ü‚é‚Ü‚Å‘Ò‹@‚·‚é
-	// ƒ`ƒ…[ƒi‚ÌCPU•‰‰×‚ª‚‚¢‚Æ‚«‚Í”’l‚ğ‘å‚«–Ú‚É‚·‚é‚ÆŒø‰Ê‚ª‚ ‚éê‡‚à‚ ‚é
+	// WaitTsStreamæ™‚ã€æŒ‡å®šã•ã‚ŒãŸå€‹æ•°åˆ†ã®ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡ãŒè²¯ã¾ã‚‹ã¾ã§å¾…æ©Ÿã™ã‚‹
+	// ãƒãƒ¥ãƒ¼ãƒŠã®CPUè² è·ãŒé«˜ã„ã¨ãã¯æ•°å€¤ã‚’å¤§ãç›®ã«ã™ã‚‹ã¨åŠ¹æœãŒã‚ã‚‹å ´åˆã‚‚ã‚ã‚‹
 	m_nWaitTsCount = IniFileAccess.ReadKeyISectionData(L"WaitTsCount", 1);
 	if (m_nWaitTsCount < 1)
 		m_nWaitTsCount = 1;
 
-	// WaitTsStreamƒXƒgƒŠ[ƒ€ƒf[ƒ^ƒoƒbƒtƒ@‚ª’™‚Ü‚Á‚Ä‚¢‚È‚¢ê‡‚ÉÅ’áŒÀ‘Ò‹@‚·‚éŠÔ(msec)
-	// ƒ`ƒ…[ƒi‚ÌCPU•‰‰×‚ª‚‚¢‚Æ‚«‚Í100msec’ö“x‚ğw’è‚·‚é‚ÆŒø‰Ê‚ª‚ ‚éê‡‚à‚ ‚é
+	// WaitTsStreamæ™‚ã‚¹ãƒˆãƒªãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡ãŒè²¯ã¾ã£ã¦ã„ãªã„å ´åˆã«æœ€ä½é™å¾…æ©Ÿã™ã‚‹æ™‚é–“(msec)
+	// ãƒãƒ¥ãƒ¼ãƒŠã®CPUè² è·ãŒé«˜ã„ã¨ãã¯100msecç¨‹åº¦ã‚’æŒ‡å®šã™ã‚‹ã¨åŠ¹æœãŒã‚ã‚‹å ´åˆã‚‚ã‚ã‚‹
 	m_nWaitTsSleep = IniFileAccess.ReadKeyISectionData(L"WaitTsSleep", 100);
 
-	// SetChannel()‚Åƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒN‚É¸”s‚µ‚½ê‡‚Å‚àFALSE‚ğ•Ô‚³‚È‚¢‚æ‚¤‚É‚·‚é‚©‚Ç‚¤‚©
+	// SetChannel()ã§ãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯ã«å¤±æ•—ã—ãŸå ´åˆã§ã‚‚FALSEã‚’è¿”ã•ãªã„ã‚ˆã†ã«ã™ã‚‹ã‹ã©ã†ã‹
 	m_bAlwaysAnswerLocked = IniFileAccess.ReadKeyBSectionData(L"AlwaysAnswerLocked", FALSE);
 
-	// COMProcThread‚ÌƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// COMProcThreadã®ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	m_nThreadPriorityCOM = IniFileAccess.ReadKeyIValueMapSectionData(L"ThreadPriorityCOM", THREAD_PRIORITY_ERROR_RETURN, mapThreadPriority);
 
-	// DecodeProcThread‚ÌƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// DecodeProcThreadã®ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	m_nThreadPriorityDecode = IniFileAccess.ReadKeyIValueMapSectionData(L"ThreadPriorityDecode", THREAD_PRIORITY_ERROR_RETURN, mapThreadPriority);
 
-	// ƒXƒgƒŠ[ƒ€ƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	m_nThreadPriorityStream = IniFileAccess.ReadKeyIValueMapSectionData(L"ThreadPriorityStream", THREAD_PRIORITY_ERROR_RETURN, mapThreadPriority);
 
-	// timeBeginPeriod()‚Åİ’è‚·‚éWindows‚ÌÅ¬ƒ^ƒCƒ}•ª‰ğ”\(msec)
+	// timeBeginPeriod()ã§è¨­å®šã™ã‚‹Windowsã®æœ€å°ã‚¿ã‚¤ãƒåˆ†è§£èƒ½(msec)
 	m_nPeriodicTimer = IniFileAccess.ReadKeyISectionData(L"PeriodicTimer", 0);
 
 	//
-	// Satellite ƒZƒNƒVƒ‡ƒ“
+	// Satellite ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	//
 	IniFileAccess.ReadSection(L"SATELLITE");
 	IniFileAccess.CreateSectionData();
 
-	// ‰q¯•ÊóMƒpƒ‰ƒ[ƒ^
+	// è¡›æ˜Ÿåˆ¥å—ä¿¡ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	std::wstring sateliteSettingsAuto[MAX_SATELLITE];
 
-	// Satellite0`‚Í‰q¯İ’è–³‚µ—piiniƒtƒ@ƒCƒ‹‚©‚ç‚Ì“Ç‚Ís‚í‚È‚¢j
-	m_sSatelliteName[0] = L"not set";						// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p‰q¯–¼Ì
-	// –¼ÌˆÈŠO‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÌƒfƒtƒHƒ‹ƒg’lg—p
+	// Satellite0ï½ã¯è¡›æ˜Ÿè¨­å®šç„¡ã—ç”¨ï¼ˆiniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã®èª­è¾¼ã¯è¡Œã‚ãªã„ï¼‰
+	m_sSatelliteName[0] = L"not set";						// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨è¡›æ˜Ÿåç§°
+	// åç§°ä»¥å¤–ã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ä½¿ç”¨
 
-	// DefaultNetwork‚É‚æ‚éƒfƒtƒHƒ‹ƒg’lİ’è
+	// DefaultNetworkã«ã‚ˆã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
 	switch (m_nDefaultNetwork) {
 	case eDefaultNetworkSPHD:
 		// SPHD
@@ -1627,61 +1628,72 @@ void CBonTuner::ReadIniFile(void)
 	case eDefaultNetworkDual:
 		sateliteSettingsAuto[1] = L"BS/CS110";
 		break;
+	case eDefaultNetwork4KBSCS:
+		sateliteSettingsAuto[1] = L"4KBS/CS";
+		break;
 	}
 
-	// BS/CS110‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é‰q¯İ’è”Ô†
+	// BS/CS110ã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹è¡›æ˜Ÿè¨­å®šç•ªå·
 	unsigned int satelliteNumberBSCS110R = 1;
 
-	// SPHD‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é‰q¯İ’è”Ô†
+	// SPHDã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹è¡›æ˜Ÿè¨­å®šç•ªå·
 	unsigned int satelliteNumberJCSAT3 = 1;
 	unsigned int satelliteNumberJCSAT4 = 2;
 
-	// ‰q¯İ’è1`9‚Ìİ’è‚ğ“Ç
+	// è¡›æ˜Ÿè¨­å®š1ï½9ã®è¨­å®šã‚’èª­è¾¼
 	for (unsigned int satellite = 1; satellite < MAX_SATELLITE; satellite++) {
 		std::wstring key, prefix1, prefix2;
 		prefix1 = L"Satellite" + std::to_wstring(satellite);
 
-		// ‰q¯İ’è©“®¶¬
+		// è¡›æ˜Ÿè¨­å®šè‡ªå‹•ç”Ÿæˆ
 		key = prefix1 + L"SettingsAuto";
 		sateliteSettingsAuto[satellite] = common::WStringToUpperCase(IniFileAccess.ReadKeySSectionData(key, sateliteSettingsAuto[satellite]));
 
 		if (sateliteSettingsAuto[satellite] == L"JCSAT-3") {
 			// JCSAT-3A
 			satelliteNumberJCSAT3 = satellite;
-			m_sSatelliteName[satellite] = L"128.0E";																					// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p‰q¯–¼Ì
-			m_aSatellite[satellite].Polarisation[1].HighOscillator = m_aSatellite[satellite].Polarisation[1].LowOscillator = 11200000;	// ‚’¼•Î”gLNBü”g”
-			m_aSatellite[satellite].Polarisation[1].Tone = 0;																			// ‚’¼•Î”gƒg[ƒ“M†
-			m_aSatellite[satellite].Polarisation[2].HighOscillator = m_aSatellite[satellite].Polarisation[2].LowOscillator = 11200000;	// …•½•Î”gLNBü”g”
-			m_aSatellite[satellite].Polarisation[2].Tone = 0;																			// …•½•Î”gƒg[ƒ“M†
+			m_sSatelliteName[satellite] = L"128.0E";																					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨è¡›æ˜Ÿåç§°
+			m_aSatellite[satellite].Polarisation[1].HighOscillator = m_aSatellite[satellite].Polarisation[1].LowOscillator = 11200000;	// å‚ç›´åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[1].Tone = 0;																			// å‚ç›´åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
+			m_aSatellite[satellite].Polarisation[2].HighOscillator = m_aSatellite[satellite].Polarisation[2].LowOscillator = 11200000;	// æ°´å¹³åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[2].Tone = 0;																			// æ°´å¹³åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
 		}
 		else if (sateliteSettingsAuto[satellite] == L"JCSAT-4") {
 			// JCSAT-4B
 			satelliteNumberJCSAT4 = satellite;
-			m_sSatelliteName[satellite] = L"124.0E";																					// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p‰q¯–¼Ì
-			m_aSatellite[satellite].Polarisation[1].HighOscillator = m_aSatellite[satellite].Polarisation[1].LowOscillator = 11200000;	// ‚’¼•Î”gLNBü”g”
-			m_aSatellite[satellite].Polarisation[1].Tone = 1;																			// ‚’¼•Î”gƒg[ƒ“M†
-			m_aSatellite[satellite].Polarisation[2].HighOscillator = m_aSatellite[satellite].Polarisation[2].LowOscillator = 11200000;	// …•½•Î”gLNBü”g”
-			m_aSatellite[satellite].Polarisation[2].Tone = 1;																			// …•½•Î”gƒg[ƒ“M†
+			m_sSatelliteName[satellite] = L"124.0E";																					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨è¡›æ˜Ÿåç§°
+			m_aSatellite[satellite].Polarisation[1].HighOscillator = m_aSatellite[satellite].Polarisation[1].LowOscillator = 11200000;	// å‚ç›´åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[1].Tone = 1;																			// å‚ç›´åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
+			m_aSatellite[satellite].Polarisation[2].HighOscillator = m_aSatellite[satellite].Polarisation[2].LowOscillator = 11200000;	// æ°´å¹³åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[2].Tone = 1;																			// æ°´å¹³åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
 		}
 		else if (sateliteSettingsAuto[satellite] == L"BS/CS110") {
-			// BS/CS110 ‰Eù‰~•Î”g‚Æ¶ù‰~•Î”g
+			// BS/CS110 å³æ—‹å††åæ³¢ã¨å·¦æ—‹å††åæ³¢
 			satelliteNumberBSCS110R = satellite;
-			m_sSatelliteName[satellite] = L"BS/CS110";																					// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p‰q¯–¼Ì
-			m_aSatellite[satellite].Polarisation[3].HighOscillator = m_aSatellite[satellite].Polarisation[3].LowOscillator = 9505000;	// ¶ù‰~•Î”gLNBü”g”
-			m_aSatellite[satellite].Polarisation[3].Tone = 0;																			// ¶ù‰~•Î”g•Î”gƒg[ƒ“M†
-			m_aSatellite[satellite].Polarisation[4].HighOscillator = m_aSatellite[satellite].Polarisation[4].LowOscillator = 10678000;	// ‰Eù‰~•Î”gLNBü”g”
-			m_aSatellite[satellite].Polarisation[4].Tone = 0;																			// ‰Eù‰~•Î”g•Î”gƒg[ƒ“M†
+			m_sSatelliteName[satellite] = L"BS/CS110";																					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨è¡›æ˜Ÿåç§°
+			m_aSatellite[satellite].Polarisation[3].HighOscillator = m_aSatellite[satellite].Polarisation[3].LowOscillator = 9505000;	// å·¦æ—‹å††åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[3].Tone = 0;																			// å·¦æ—‹å††åæ³¢åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
+			m_aSatellite[satellite].Polarisation[4].HighOscillator = m_aSatellite[satellite].Polarisation[4].LowOscillator = 10678000;	// å³æ—‹å††åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[4].Tone = 0;																			// å³æ—‹å††åæ³¢åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
 		}
-
-		// ƒT[ƒrƒX•\¦—p‰q¯–¼Ì
+		else if (sateliteSettingsAuto[satellite] == L"4KBS/CS") {
+			// BS/CS110 å³æ—‹å††åæ³¢ã¨å·¦æ—‹å††åæ³¢
+			satelliteNumberBSCS110R = satellite;
+			m_sSatelliteName[satellite] = L"4KBS/CS";																					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨è¡›æ˜Ÿåç§°
+			m_aSatellite[satellite].Polarisation[3].HighOscillator = m_aSatellite[satellite].Polarisation[3].LowOscillator = 9505000;	// å·¦æ—‹å††åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[3].Tone = 0;																			// å·¦æ—‹å††åæ³¢åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
+			m_aSatellite[satellite].Polarisation[4].HighOscillator = m_aSatellite[satellite].Polarisation[4].LowOscillator = 10678000;	// å³æ—‹å††åæ³¢æ™‚LNBå‘¨æ³¢æ•°
+			m_aSatellite[satellite].Polarisation[4].Tone = 0;																			// å³æ—‹å††åæ³¢åæ³¢æ™‚ãƒˆãƒ¼ãƒ³ä¿¡å·
+		}
+		// ã‚µãƒ¼ãƒ“ã‚¹è¡¨ç¤ºç”¨è¡›æ˜Ÿåç§°
 		key = prefix1 + L"Name";
 		m_sSatelliteName[satellite] = IniFileAccess.ReadKeySSectionData(key, m_sSatelliteName[satellite]);
 
-		// •Î”gí—Ş1`4‚ÌƒAƒ“ƒeƒiİ’è‚ğ“Ç
+		// åæ³¢ç¨®é¡1ï½4ã®ã‚¢ãƒ³ãƒ†ãƒŠè¨­å®šã‚’èª­è¾¼
 		for (unsigned int polarisation = 1; polarisation < POLARISATION_SIZE; polarisation++) {
 			prefix2 = prefix1 + PolarisationChar[polarisation];
-			// ‹Ç”­ü”g” (KHz)
-			// ‘S•Î”g‹¤’Ê‚Å‚Ìİ’è‚ª‚ ‚ê‚Î“Ç‚İ‚Ş
+			// å±€ç™ºå‘¨æ³¢æ•° (KHz)
+			// å…¨åæ³¢å…±é€šã§ã®è¨­å®šãŒã‚ã‚Œã°èª­ã¿è¾¼ã‚€
 			key = prefix1 + L"Oscillator";
 			m_aSatellite[satellite].Polarisation[polarisation].LowOscillator = m_aSatellite[satellite].Polarisation[polarisation].HighOscillator
 				= (long)IniFileAccess.ReadKeyISectionData(key, m_aSatellite[satellite].Polarisation[polarisation].HighOscillator);
@@ -1691,7 +1703,7 @@ void CBonTuner::ReadIniFile(void)
 			key = prefix1 + L"LowOscillator";
 			m_aSatellite[satellite].Polarisation[polarisation].LowOscillator
 				= (long)IniFileAccess.ReadKeyISectionData(key, m_aSatellite[satellite].Polarisation[polarisation].LowOscillator);
-			// ŒÂ•Êİ’è‚ª‚ ‚ê‚Îã‘‚«‚Å“Ç‚İ‚Ş
+			// å€‹åˆ¥è¨­å®šãŒã‚ã‚Œã°ä¸Šæ›¸ãã§èª­ã¿è¾¼ã‚€
 			key = prefix2 + L"Oscillator";
 			m_aSatellite[satellite].Polarisation[polarisation].LowOscillator = m_aSatellite[satellite].Polarisation[polarisation].HighOscillator
 				= (long)IniFileAccess.ReadKeyISectionData(key, m_aSatellite[satellite].Polarisation[polarisation].HighOscillator);
@@ -1702,32 +1714,32 @@ void CBonTuner::ReadIniFile(void)
 			m_aSatellite[satellite].Polarisation[polarisation].LowOscillator
 				= (long)IniFileAccess.ReadKeyISectionData(key, m_aSatellite[satellite].Polarisation[polarisation].LowOscillator);
 
-			// LNBØ‘Öü”g” (KHz)
-			// ‘S•Î”g‹¤’Ê‚Å‚Ìİ’è‚ª‚ ‚ê‚Î“Ç‚İ‚Ş
+			// LNBåˆ‡æ›¿å‘¨æ³¢æ•° (KHz)
+			// å…¨åæ³¢å…±é€šã§ã®è¨­å®šãŒã‚ã‚Œã°èª­ã¿è¾¼ã‚€
 			key = prefix1 + L"LNBSwitch";
 			m_aSatellite[satellite].Polarisation[polarisation].LNBSwitch
 				= (long)IniFileAccess.ReadKeyISectionData(key, m_aSatellite[satellite].Polarisation[polarisation].LNBSwitch);
-			// ŒÂ•Êİ’è‚ª‚ ‚ê‚Îã‘‚«‚Å“Ç‚İ‚Ş
+			// å€‹åˆ¥è¨­å®šãŒã‚ã‚Œã°ä¸Šæ›¸ãã§èª­ã¿è¾¼ã‚€
 			key = prefix2 + L"LNBSwitch";
 			m_aSatellite[satellite].Polarisation[polarisation].LNBSwitch
 				= (long)IniFileAccess.ReadKeyISectionData(key, m_aSatellite[satellite].Polarisation[polarisation].LNBSwitch);
 
-			// ƒg[ƒ“M† (0 or 1)
-			// ‘S•Î”g‹¤’Ê‚Å‚Ìİ’è‚ª‚ ‚ê‚Î“Ç‚İ‚Ş
+			// ãƒˆãƒ¼ãƒ³ä¿¡å· (0 or 1)
+			// å…¨åæ³¢å…±é€šã§ã®è¨­å®šãŒã‚ã‚Œã°èª­ã¿è¾¼ã‚€
 			key = prefix1 + L"ToneSignal";
 			m_aSatellite[satellite].Polarisation[polarisation].Tone
 				= (long)IniFileAccess.ReadKeyBSectionData(key, m_aSatellite[satellite].Polarisation[polarisation].Tone);
-			// ŒÂ•Êİ’è‚ª‚ ‚ê‚Îã‘‚«‚Å“Ç‚İ‚Ş
+			// å€‹åˆ¥è¨­å®šãŒã‚ã‚Œã°ä¸Šæ›¸ãã§èª­ã¿è¾¼ã‚€
 			key = prefix2 + L"ToneSignal";
 			m_aSatellite[satellite].Polarisation[polarisation].Tone
 				= (long)IniFileAccess.ReadKeyBSectionData(key, m_aSatellite[satellite].Polarisation[polarisation].Tone);
 
 			// DiSEqC
-			// ‘S•Î”g‹¤’Ê‚Å‚Ìİ’è‚ª‚ ‚ê‚Î“Ç‚İ‚Ş
+			// å…¨åæ³¢å…±é€šã§ã®è¨­å®šãŒã‚ã‚Œã°èª­ã¿è¾¼ã‚€
 			key = prefix1 + L"DiSEqC";
 			m_aSatellite[satellite].Polarisation[polarisation].DiSEqC
 				= (long)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aSatellite[satellite].Polarisation[polarisation].DiSEqC, mapDiSEqC);
-			// ŒÂ•Êİ’è‚ª‚ ‚ê‚Îã‘‚«‚Å“Ç‚İ‚Ş
+			// å€‹åˆ¥è¨­å®šãŒã‚ã‚Œã°ä¸Šæ›¸ãã§èª­ã¿è¾¼ã‚€
 			key = prefix2 + L"DiSEqC";
 			m_aSatellite[satellite].Polarisation[polarisation].DiSEqC
 				= (long)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aSatellite[satellite].Polarisation[polarisation].DiSEqC, mapDiSEqC);
@@ -1735,15 +1747,15 @@ void CBonTuner::ReadIniFile(void)
 	}
 
 	//
-	// Modulation ƒZƒNƒVƒ‡ƒ“
+	// Modulation ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	//
 	IniFileAccess.ReadSection(L"MODULATION");
 	IniFileAccess.CreateSectionData();
 
-	// •Ï’²•û®•Êƒpƒ‰ƒ[ƒ^i0`9‚Ì‡‚È‚Ì‚Å’ˆÓj
+	// å¤‰èª¿æ–¹å¼åˆ¥ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆ0ï½9ã®é †ãªã®ã§æ³¨æ„ï¼‰
 	std::wstring modulationSettingsAuto[MAX_MODULATION];
 
-	// DefaultNetwork‚É‚æ‚éƒfƒtƒHƒ‹ƒg’lİ’è
+	// DefaultNetworkã«ã‚ˆã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
 	switch (m_nDefaultNetwork) {
 	case eDefaultNetworkSPHD:
 		//SPHD
@@ -1754,6 +1766,11 @@ void CBonTuner::ReadIniFile(void)
 	case eDefaultNetworkBSCS:
 		// BS/CS110
 		modulationSettingsAuto[0] = L"ISDB-S";
+		break;
+
+	case eDefaultNetwork4KBSCS:
+		// BS/CS110
+		modulationSettingsAuto[0] = L"ISDB-S3";
 		break;
 
 	case eDefaultNetworkUHF:
@@ -1767,191 +1784,202 @@ void CBonTuner::ReadIniFile(void)
 		break;
 	}
 
-	// UHF / CATV‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é•Ï’²•û®”Ô†
+	// UHF / CATVã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹å¤‰èª¿æ–¹å¼ç•ªå·
 	unsigned int modulationNumberISDBT = 0;
 
-	// BS/CS110‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é•Ï’²•û®”Ô†
+	// BS/CS110ã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹å¤‰èª¿æ–¹å¼ç•ªå·
 	unsigned int modulationNumberISDBS = 0;
 
-	// SPHD‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é•Ï’²•û®”Ô†
+	// SPHDã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹å¤‰èª¿æ–¹å¼ç•ªå·
 	unsigned int modulationNumberDVBS = 0;
 	unsigned int modulationNumberDVBS2 = 1;
 
-	// ISDB-Cƒgƒ‰ƒ“ƒXƒ‚ƒWƒ…ƒŒ[ƒVƒ‡ƒ“‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é•Ï’²•û®”Ô†
+	// ISDB-Cãƒˆãƒ©ãƒ³ã‚¹ãƒ¢ã‚¸ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹å¤‰èª¿æ–¹å¼ç•ªå·
 	unsigned int modulationNumberJ83C64QAM = 0;
 	unsigned int modulationNumberJ83C256QAM = 1;
 
-	// ƒXƒJƒp[!ƒvƒŒƒ~ƒAƒ€ƒT[ƒrƒXŒõ‚ÌCHİ’è©“®¶¬‚Ég—p‚·‚é•Ï’²•û®”Ô†
+	// ã‚¹ã‚«ãƒ‘ãƒ¼!ãƒ—ãƒ¬ãƒŸã‚¢ãƒ ã‚µãƒ¼ãƒ“ã‚¹å…‰ã®CHè¨­å®šè‡ªå‹•ç”Ÿæˆæ™‚ã«ä½¿ç”¨ã™ã‚‹å¤‰èª¿æ–¹å¼ç•ªå·
 	unsigned int modulationNumberOpticast = 0;
 
-	// •Ï’²•û®İ’è0`9‚Ì’l‚ğ“Ç
+	// å¤‰èª¿æ–¹å¼è¨­å®š0ï½9ã®å€¤ã‚’èª­è¾¼
 	for (unsigned int modulation = 0; modulation < MAX_MODULATION; modulation++) {
 		std::wstring key, prefix;
 		prefix = L"ModulationType" + std::to_wstring(modulation);
 
-		// •Ï’²•û®İ’è©“®¶¬
+		// å¤‰èª¿æ–¹å¼è¨­å®šè‡ªå‹•ç”Ÿæˆ
 		key = prefix + L"SettingsAuto";
 		modulationSettingsAuto[modulation] = common::WStringToUpperCase(IniFileAccess.ReadKeySSectionData(key, modulationSettingsAuto[modulation]));
 
 		if (modulationSettingsAuto[modulation] == L"DVB-S") {
 			// SPHD DVB-S
 			modulationNumberDVBS = modulation;
-			m_sModulationName[modulation] = L"DVB-S";							// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_QPSK;			// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_3_4;		// “à•”FECƒŒ[ƒg
-			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// ŠO•”FECƒŒ[ƒg
-			m_aModulationType[modulation].SymbolRate = 21096;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"DVB-S";							// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_QPSK;			// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_3_4;		// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = 21096;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"DVB-S2") {
 			// SPHD DVB-S2
 			modulationNumberDVBS2 = modulation;
-			m_sModulationName[modulation] = L"DVB-S2";							// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_NBC_8PSK;		// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFEC = BDA_FEC_LDPC;				// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_3_5;		// “à•”FECƒŒ[ƒg
-			m_aModulationType[modulation].OuterFEC = BDA_FEC_BCH;				// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// ŠO•”FECƒŒ[ƒg
-			m_aModulationType[modulation].SymbolRate = 23303;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"DVB-S2";							// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_NBC_8PSK;		// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_LDPC;				// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_3_5;		// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_BCH;				// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = 23303;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"ISDB-S") {
 			// BS/CS110
 			modulationNumberISDBS = modulation;
-			m_sModulationName[modulation] = L"ISDB-S";							// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_ISDB_S_TMCC;		// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_2_3;		// “à•”FECƒŒ[ƒg
-			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// ŠO•”FECƒŒ[ƒg
-			m_aModulationType[modulation].SymbolRate = 28860;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"ISDB-S";							// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_ISDB_S_TMCC;		// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_2_3;		// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = 28860;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
+		}
+		else if (modulationSettingsAuto[modulation] == L"ISDB-S3") {
+			// BS/CS110
+			modulationNumberISDBS = modulation;
+			m_sModulationName[modulation] = L"ISDB-S";							// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_ISDB_S_TMCC;		// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_2_3;		// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = 33756;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"ISDB-T") {
 			// UHF/CATV
 			modulationNumberISDBT = modulation;
-			m_sModulationName[modulation] = L"ISDB-T";							// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_ISDB_T_TMCC;		// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_3_4;		// “à•”FECƒŒ[ƒg
-			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// ŠO•”FECƒŒ[ƒg
-			m_aModulationType[modulation].SymbolRate = -1;						// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
-			m_aModulationType[modulation].BandWidth = 6;						// ‘Ñˆæ•(MHz)
+			m_sModulationName[modulation] = L"ISDB-T";							// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_ISDB_T_TMCC;		// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_VITERBI;			// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_3_4;		// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = -1;						// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].BandWidth = 6;						// å¸¯åŸŸå¹…(MHz)
 		}
 		else if (modulationSettingsAuto[modulation] == L"J.83C-64QAM") {
-			// ISDB-Cƒgƒ‰ƒ“ƒXƒ‚ƒWƒ…ƒŒ[ƒVƒ‡ƒ“ 64QAM
+			// ISDB-Cãƒˆãƒ©ãƒ³ã‚¹ãƒ¢ã‚¸ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ 64QAM
 			modulationNumberJ83C64QAM = modulation;
-			m_sModulationName[modulation] = L"J.83C-64QAM";						// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_64QAM;			// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFEC = BDA_FEC_METHOD_NOT_SET;	// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_NOT_SET;	// “à•”FECƒŒ[ƒg
-			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// ŠO•”FECƒŒ[ƒg
-			m_aModulationType[modulation].SymbolRate = 5274;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"J.83C-64QAM";						// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_64QAM;			// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_METHOD_NOT_SET;	// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_NOT_SET;	// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = 5274;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"J.83C-256QAM") {
-			// ISDB-Cƒgƒ‰ƒ“ƒXƒ‚ƒWƒ…ƒŒ[ƒVƒ‡ƒ“ 256QAM
+			// ISDB-Cãƒˆãƒ©ãƒ³ã‚¹ãƒ¢ã‚¸ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ 256QAM
 			modulationNumberJ83C256QAM = modulation;
-			m_sModulationName[modulation] = L"J.83C-256QAM";					// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_256QAM;			// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFEC = BDA_FEC_METHOD_NOT_SET;	// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_NOT_SET;	// “à•”FECƒŒ[ƒg
-			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// ŠO•”FECƒŒ[ƒg
-			m_aModulationType[modulation].SymbolRate = 5274;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"J.83C-256QAM";					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_256QAM;			// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFEC = BDA_FEC_METHOD_NOT_SET;	// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].InnerFECRate = BDA_BCC_RATE_NOT_SET;	// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].OuterFEC = BDA_FEC_RS_204_188;		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].OuterFECRate = BDA_BCC_RATE_NOT_SET;	// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+			m_aModulationType[modulation].SymbolRate = 5274;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"J.83B-OPTICAST") {
-			// ƒXƒJƒp[!ƒvƒŒƒ~ƒAƒ€ƒT[ƒrƒXŒõ 256QAM
+			// ã‚¹ã‚«ãƒ‘ãƒ¼!ãƒ—ãƒ¬ãƒŸã‚¢ãƒ ã‚µãƒ¼ãƒ“ã‚¹å…‰ 256QAM
 			modulationNumberOpticast = modulation;
-			m_sModulationName[modulation] = L"J.83B-Opticast";					// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_256QAM;			// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].SymbolRate = 5600;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"J.83B-Opticast";					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_256QAM;			// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].SymbolRate = 5600;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"J.83B-64QAM") {
 			// J.83 Annex-B 64QAM
-			m_sModulationName[modulation] = L"J.83B-64QAM";						// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_64QAM;			// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].SymbolRate = 5057;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"J.83B-64QAM";						// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_64QAM;			// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].SymbolRate = 5057;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 		else if (modulationSettingsAuto[modulation] == L"J.83B-256QAM") {
 			// J.83 Annex-B 256QAM
-			m_sModulationName[modulation] = L"J.83B-256QAM";					// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
-			m_aModulationType[modulation].Modulation = BDA_MOD_256QAM;			// •Ï’²ƒ^ƒCƒv
-			m_aModulationType[modulation].SymbolRate = 5361;					// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+			m_sModulationName[modulation] = L"J.83B-256QAM";					// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
+			m_aModulationType[modulation].Modulation = BDA_MOD_256QAM;			// å¤‰èª¿ã‚¿ã‚¤ãƒ—
+			m_aModulationType[modulation].SymbolRate = 5361;					// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		}
 
-		// ƒ`ƒƒƒ“ƒlƒ‹–¼¶¬—p•Ï’²•û®–¼Ì
+		// ãƒãƒ£ãƒ³ãƒãƒ«åç”Ÿæˆç”¨å¤‰èª¿æ–¹å¼åç§°
 		key = prefix + L"Name";
 		m_sModulationName[modulation] = IniFileAccess.ReadKeySSectionData(key, m_sModulationName[modulation]);
 
-		// •Ï’²ƒ^ƒCƒv
+		// å¤‰èª¿ã‚¿ã‚¤ãƒ—
 		key = prefix + L"Modulation";
 		m_aModulationType[modulation].Modulation
 			= (ModulationType)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aModulationType[modulation].Modulation, mapModulationType);
 
-		// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
+		// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
 		key = prefix + L"InnerFEC";
 		m_aModulationType[modulation].InnerFEC
 			= (FECMethod)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aModulationType[modulation].InnerFEC, mapFECMethod);
 
-		// “à•”FECƒŒ[ƒg
+		// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
 		key = prefix + L"InnerFECRate";
 		m_aModulationType[modulation].InnerFECRate
 			= (BinaryConvolutionCodeRate)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aModulationType[modulation].InnerFECRate, mapBinaryConvolutionCodeRate);
 
-		// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
+		// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
 		key = prefix + L"OuterFEC";
 		m_aModulationType[modulation].OuterFEC
 			= (FECMethod)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aModulationType[modulation].OuterFEC, mapFECMethod);
 
-		// ŠO•”FECƒŒ[ƒg
+		// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
 		key = prefix + L"OuterFECRate";
 		m_aModulationType[modulation].OuterFECRate
 			= (BinaryConvolutionCodeRate)IniFileAccess.ReadKeyIValueMapSectionData(key, m_aModulationType[modulation].OuterFECRate, mapBinaryConvolutionCodeRate);
 
-		// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
+		// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
 		key = prefix + L"SymbolRate";
 		m_aModulationType[modulation].SymbolRate
 			= (long)IniFileAccess.ReadKeyISectionData(key, m_aModulationType[modulation].SymbolRate);
 
-		// ‘Ñˆæ•(MHz)
+		// å¸¯åŸŸå¹…(MHz)
 		key = prefix + L"BandWidth";
 		m_aModulationType[modulation].BandWidth
 			= (long)IniFileAccess.ReadKeyISectionData(key, m_aModulationType[modulation].BandWidth);
 	}
 
 	//
-	// Channel ƒZƒNƒVƒ‡ƒ“
+	// Channel ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	//
 
-	// iniƒtƒ@ƒCƒ‹‚©‚çCHİ’è‚ğ“Ç‚ŞÛ‚Ég—p‚³‚ê‚Ä‚¢‚È‚¢CH”Ô†‚ª‚ ‚Á‚Ä‚à‘O‹l‚¹‚¸Šm•Û‚µ‚Ä‚¨‚­‚©‚Ç‚¤‚©
-	// [Channel]ƒZƒNƒVƒ‡ƒ“‚Å‚Ì’è‹` ... ‘S‚Ä‚Ìƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ‚É‰e‹¿
+	// iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰CHè¨­å®šã‚’èª­è¾¼ã‚€éš›ã«ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„CHç•ªå·ãŒã‚ã£ã¦ã‚‚å‰è©°ã›ãšç¢ºä¿ã—ã¦ãŠãã‹ã©ã†ã‹
+	// [Channel]ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã§ã®å®šç¾© ... å…¨ã¦ã®ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ã«å½±éŸ¿
 	BOOL bReserveUnusedChGlobal = IniFileAccess.ReadKeyB(L"CHANNEL", L"ReserveUnusedCh", FALSE);
 
-	// ƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ00`99‚Ìİ’è‚ğ“Ç
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“00ï½99ã®è¨­å®šã‚’èª­è¾¼
 	for (DWORD space = 0; space < 100; space++)	{
 		std::wstring section = common::WStringPrintf(L"TUNINGSPACE%02d", space);
 		if (IniFileAccess.ReadSection(section) <= 0) {
-			// TuningSpaceXX‚ÌƒZƒNƒVƒ‡ƒ“‚ª‘¶İ‚µ‚È‚¢ê‡
+			// TuningSpaceXXã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ãŒå­˜åœ¨ã—ãªã„å ´åˆ
 			if (space != 0)
 				continue;
-			// TuningSpace00‚Ì‚ÍChannelƒZƒNƒVƒ‡ƒ“‚àŒ©‚é
+			// TuningSpace00ã®æ™‚ã¯Channelã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚‚è¦‹ã‚‹
 			IniFileAccess.ReadSection(L"CHANNEL");
 		}
 		IniFileAccess.CreateSectionData();
 
-		// iniƒtƒ@ƒCƒ‹‚©‚çCHİ’è‚ğ“Ç‚ŞÛ‚Ég—p‚³‚ê‚Ä‚¢‚È‚¢CH”Ô†‚ª‚ ‚Á‚Ä‚à‘O‹l‚¹‚¸Šm•Û‚µ‚Ä‚¨‚­‚©‚Ç‚¤‚©
-		// [TuningSpaceXX]ƒZƒNƒVƒ‡ƒ“‚Å‚Ì’è‹` ... Œ»İ‚Ìƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ‚É‰e‹¿
+		// iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰CHè¨­å®šã‚’èª­è¾¼ã‚€éš›ã«ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„CHç•ªå·ãŒã‚ã£ã¦ã‚‚å‰è©°ã›ãšç¢ºä¿ã—ã¦ãŠãã‹ã©ã†ã‹
+		// [TuningSpaceXX]ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã§ã®å®šç¾© ... ç¾åœ¨ã®ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ã«å½±éŸ¿
 		BOOL bReserveUnusedCh = IniFileAccess.ReadKeyBSectionData(L"ReserveUnusedCh", bReserveUnusedChGlobal);
 
-		// Šù‚Éƒ`ƒ…[ƒjƒ“ƒO‹óŠÔƒf[ƒ^‚ª‘¶İ‚·‚éê‡‚Í‚»‚Ì“à—e‚ğ‘‚«Š·‚¦‚é
-		// –³‚¢ê‡‚Í‹ó‚Ìƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ‚ğì¬
+		// æ—¢ã«ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆã¯ãã®å†…å®¹ã‚’æ›¸ãæ›ãˆã‚‹
+		// ç„¡ã„å ´åˆã¯ç©ºã®ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ã‚’ä½œæˆ
 		auto itSpace = m_TuningData.Spaces.find(space);
 		if (itSpace == m_TuningData.Spaces.end()) {
 			itSpace = m_TuningData.Spaces.emplace(space, TuningSpaceData()).first;
 		}
 
-		// Tuning Space–¼
+		// Tuning Spaceå
 		std::wstring temp;
 		if (space == 0)
 			temp = sTempTuningSpaceName;
@@ -1960,44 +1988,44 @@ void CBonTuner::ReadIniFile(void)
 		
 		itSpace->second.sTuningSpaceName = common::WStringToTString(IniFileAccess.ReadKeySSectionData(L"TuningSpaceName", temp));
 
-		// iniƒtƒ@ƒCƒ‹‚Ì1‚Â‚Ìƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ‚Å’è‹`‚Å‚«‚éÅ‘åChannelGenerate‚Ì”
+		// iniãƒ•ã‚¡ã‚¤ãƒ«ã®1ã¤ã®ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ã§å®šç¾©ã§ãã‚‹æœ€å¤§ChannelGenerateã®æ•°
 		static constexpr unsigned int MAX_CH_GENERATE = 100;
 
-		// ƒ`ƒƒƒ“ƒlƒ‹©“®¶¬ƒ^ƒCƒv
+		// ãƒãƒ£ãƒ³ãƒãƒ«è‡ªå‹•ç”Ÿæˆã‚¿ã‚¤ãƒ—
 		enum enumChGenerate {
 			eChGenerateNone = 0,
-			eChGenerateVHF_L = 1,				// VHF 1ch`3ch
-			eChGenerateVHF_H = 2,				// VHF 4ch`12ch
-			eChGenerateUHF = 3,					// UHF 13ch`62ch
-			eChGenerateCATV_L = 4,				// CATV C13ch`C22ch
-			eChGenerateCATV_H = 5,				// CATV C23ch`C63ch
+			eChGenerateVHF_L = 1,				// VHF 1chï½3ch
+			eChGenerateVHF_H = 2,				// VHF 4chï½12ch
+			eChGenerateUHF = 3,					// UHF 13chï½62ch
+			eChGenerateCATV_L = 4,				// CATV C13chï½C22ch
+			eChGenerateCATV_H = 5,				// CATV C23chï½C63ch
 			eChGenerateVHF_4Plus = 8,			// VHF 4ch+
 			eChGenerateCATV_22Plus = 9,			// CATV C22ch+
-			eChGenerateCATV_24Plus = 10,		// CATV C24ch+`C27ch+
-			eChGenerateBS1 = 16,				// BS-R BS1,BS3,BS5...`BS23
-			eChGenerateND2 = 20,				// CS110-R ND2,ND4,ND6...`ND24
-			eChGenerateJD1 = 32,				// JCSAT-3A/JCSAT-4B JD1`JD16
-			eChGenerateJD17A = 33,				// JCSAT-3A JD17`JD28
-			eChGenerateJD17B = 34,				// JCSAT-4B JD17`JD32
-			eChGenerateOpticast = 64,			// SKY PerfecTV! Premium Service Hikari H001`H058
-			eChGenerateOpticast_11Plus = 72,	// SKY PerfecTV! Premium Service Hikari H011+`H012+
-			eChGenerateOpticast_26Plus = 73,	// SKY PerfecTV! Premium Service Hikari H026+`H028+
+			eChGenerateCATV_24Plus = 10,		// CATV C24ch+ï½C27ch+
+			eChGenerateBS1 = 16,				// BS-R BS1,BS3,BS5...ï½BS23
+			eChGenerateND2 = 20,				// CS110-R ND2,ND4,ND6...ï½ND24
+			eChGenerateJD1 = 32,				// JCSAT-3A/JCSAT-4B JD1ï½JD16
+			eChGenerateJD17A = 33,				// JCSAT-3A JD17ï½JD28
+			eChGenerateJD17B = 34,				// JCSAT-4B JD17ï½JD32
+			eChGenerateOpticast = 64,			// SKY PerfecTV! Premium Service Hikari H001ï½H058
+			eChGenerateOpticast_11Plus = 72,	// SKY PerfecTV! Premium Service Hikari H011+ï½H012+
+			eChGenerateOpticast_26Plus = 73,	// SKY PerfecTV! Premium Service Hikari H026+ï½H028+
 		};
 
-		// ƒ`ƒƒƒ“ƒlƒ‹©“®¶¬—pƒpƒ‰ƒ[ƒ^
+		// ãƒãƒ£ãƒ³ãƒãƒ«è‡ªå‹•ç”Ÿæˆç”¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 		struct ChGenerate {
 			enumChGenerate Space;
-			unsigned int Offset;			// ŠJnƒIƒtƒZƒbƒg
-			unsigned int Count;				// ì¬CH”
-			unsigned int RelativeTS;		// ‘Š‘ÎTSì¬”
-			unsigned int ModulationNumber;	// •Ï’²•û®”Ô†
-			unsigned int SatelliteNumber;	// ‰q¯”Ô†
-			unsigned int StartCh;			// æ“ªƒ`ƒƒƒ“ƒlƒ‹”Ô†
-			unsigned int TuningFreq;		// ƒ`ƒ…[ƒjƒ“ƒOü”g”ƒIƒtƒZƒbƒg
-			std::wstring NameFormat;		// ƒ`ƒƒƒ“ƒlƒ‹–¼ƒtƒH[ƒ}ƒbƒg
-			unsigned int NameOffset;		// ƒ`ƒƒƒ“ƒlƒ‹–¼‚Ég—p‚·‚éƒ`ƒƒƒ“ƒlƒ‹”Ô†ƒIƒtƒZƒbƒg
-			unsigned int NameStep;			// ƒ`ƒƒƒ“ƒlƒ‹–¼‚Ég—p‚·‚éƒ`ƒƒƒ“ƒlƒ‹”Ô†ƒXƒeƒbƒv
-			unsigned int NameOffsetTS;		// ƒ`ƒƒƒ“ƒlƒ‹–¼‚Ég—p‚·‚éTS”Ô†ƒIƒtƒZƒbƒg
+			unsigned int Offset;			// é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+			unsigned int Count;				// ä½œæˆCHæ•°
+			unsigned int RelativeTS;		// ç›¸å¯¾TSä½œæˆæ•°
+			unsigned int ModulationNumber;	// å¤‰èª¿æ–¹å¼ç•ªå·
+			unsigned int SatelliteNumber;	// è¡›æ˜Ÿç•ªå·
+			unsigned int StartCh;			// å…ˆé ­ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
+			unsigned int TuningFreq;		// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°å‘¨æ³¢æ•°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+			std::wstring NameFormat;		// ãƒãƒ£ãƒ³ãƒãƒ«åãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+			unsigned int NameOffset;		// ãƒãƒ£ãƒ³ãƒãƒ«åã«ä½¿ç”¨ã™ã‚‹ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+			unsigned int NameStep;			// ãƒãƒ£ãƒ³ãƒãƒ«åã«ä½¿ç”¨ã™ã‚‹ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·ã‚¹ãƒ†ãƒƒãƒ—
+			unsigned int NameOffsetTS;		// ãƒãƒ£ãƒ³ãƒãƒ«åã«ä½¿ç”¨ã™ã‚‹TSç•ªå·ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 			ChGenerate(void)
 				: Space(eChGenerateNone),
 				Offset(0),
@@ -2017,10 +2045,10 @@ void CBonTuner::ReadIniFile(void)
 			};
 		};
 
-		// ƒ`ƒƒƒ“ƒlƒ‹‚Ì©“®¶¬’è‹`s
+		// ãƒãƒ£ãƒ³ãƒãƒ«ã®è‡ªå‹•ç”Ÿæˆå®šç¾©è¡Œ
 		std::wstring ChannelGenerate[MAX_CH_GENERATE];
 
-		// UHF/CATV“™‚ÌCHİ’è‚ğ©“®¶¬‚·‚é
+		// UHF/CATVç­‰ã®CHè¨­å®šã‚’è‡ªå‹•ç”Ÿæˆã™ã‚‹
 		std::wstring chAuto = common::WStringToUpperCase(IniFileAccess.ReadKeySSectionData(L"ChannelSettingsAuto", L""));
 		std::wstring chAutoOpt = common::WStringToUpperCase(IniFileAccess.ReadKeySSectionData(L"ChannelSettingsAutoOptions", L""));
 		BOOL bOptVHFPlus = FALSE;
@@ -2036,7 +2064,7 @@ void CBonTuner::ReadIniFile(void)
 		std::wstring sOptRelativeTS = L"";
 		std::wstring sOptRelativeTS64QAM = L"";
 		{
-			// ƒJƒ“ƒ}‹æØ‚è‚Å7‚Â‚É•ª‰ğ
+			// ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§7ã¤ã«åˆ†è§£
 			std::wstring t(chAutoOpt);
 			for (int n = 0; n < 10; n++) {
 				std::wstring opt;
@@ -2283,23 +2311,23 @@ void CBonTuner::ReadIniFile(void)
 			}
 		}
 
-		unsigned int nextCh = 0;	// ©“®æ“ªƒ`ƒƒƒ“ƒlƒ‹”Ô†
+		unsigned int nextCh = 0;	// è‡ªå‹•å…ˆé ­ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
 
-		// iniƒtƒ@ƒCƒ‹‚©‚ç‚Ì“Ç
+		// iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã®èª­è¾¼
 		for (int i = 0; i < MAX_CH_GENERATE; i++) {
 			ChGenerate Generate;
 			std::wstring key = L"ChannelGenerate" + std::to_wstring(i);
 			ChannelGenerate[i] = IniFileAccess.ReadKeySSectionData(key, ChannelGenerate[i]);
 			if (ChannelGenerate[i].length() == 0)
 				break;
-			// ƒJƒ“ƒ}‹æØ‚è‚Å9‚Â‚É•ª‰ğ
+			// ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§9ã¤ã«åˆ†è§£
 			std::wstring t(ChannelGenerate[i]);
 			std::wstring buf[9];
 			for (int n = 0; n < 9; n++) {
 				if (std::wstring::npos == common::WStringSplit(&t, L',', &buf[n]))
 					break;
 			}
-			// ì¬‹óŠÔ:ŠJnƒIƒtƒZƒbƒg:ì¬CH”:‘Š‘ÎTSì¬” ‚ğ•ª‰ğ
+			// ä½œæˆç©ºé–“:é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ:ä½œæˆCHæ•°:ç›¸å¯¾TSä½œæˆæ•° ã‚’åˆ†è§£
 			std::wstring t2(buf[0]);
 			std::wstring buf2[4];
 			for (int n = 0; n < 4; n++) {
@@ -2470,7 +2498,7 @@ void CBonTuner::ReadIniFile(void)
 				Generate.NameFormat = L"H%03d+";
 				Generate.NameOffset = 26UL;
 			}
-			// ‘Š‘ÎTSì¬”
+			// ç›¸å¯¾TSä½œæˆæ•°
 			if (buf2[3] != L"") {
 				Generate.RelativeTS = common::WStringToLong(buf2[3]);
 				Generate.NameFormat += postfix;
@@ -2479,45 +2507,45 @@ void CBonTuner::ReadIniFile(void)
 				Generate.RelativeTS = relativeTS;
 			}
 
-			// •Ï’²•û®”Ô†
+			// å¤‰èª¿æ–¹å¼ç•ªå·
 			if (buf[1] != L"") {
 				Generate.ModulationNumber = common::WStringToLong(buf[1]);
 			}
-			// ‰q¯”Ô†
+			// è¡›æ˜Ÿç•ªå·
 			if (buf[2] != L"") {
 				Generate.SatelliteNumber = common::WStringToLong(buf[2]);
 			}
-			// æ“ªƒ`ƒƒƒ“ƒlƒ‹”Ô†
+			// å…ˆé ­ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
 			if (buf[3] != L"") {
 				Generate.StartCh = common::WStringToLong(buf[3]);
 			}
 			else {
 				Generate.StartCh = nextCh;
 			}
-			// ƒ`ƒ…[ƒjƒ“ƒOü”g”ƒIƒtƒZƒbƒg
+			// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°å‘¨æ³¢æ•°ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 			if (buf[4] != L"") {
 				Generate.TuningFreq = common::WStringToLong(buf[4]);
 			}
-			// ƒ`ƒƒƒ“ƒlƒ‹–¼ƒtƒH[ƒ}ƒbƒg
+			// ãƒãƒ£ãƒ³ãƒãƒ«åãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 			if (buf[5] != L"") {
 				Generate.NameFormat = buf[5];
 			}
-			// ƒ`ƒƒƒ“ƒlƒ‹–¼ƒIƒtƒZƒbƒg
+			// ãƒãƒ£ãƒ³ãƒãƒ«åã‚ªãƒ•ã‚»ãƒƒãƒˆ
 			if (buf[6] != L"") {
 				Generate.NameOffset = common::WStringToLong(buf[6]);
 			}
-			// ƒ`ƒƒƒ“ƒlƒ‹–¼ƒXƒeƒbƒv
+			// ãƒãƒ£ãƒ³ãƒãƒ«åã‚¹ãƒ†ãƒƒãƒ—
 			if (buf[7] != L"") {
 				Generate.NameStep = common::WStringToLong(buf[7]);
 			}
-			// TS”Ô†ƒIƒtƒZƒbƒg
+			// TSç•ªå·ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 			if (buf[8] != L"") {
 				Generate.NameOffsetTS = common::WStringToLong(buf[8]);
 			}
 
-			unsigned int freqBase = 0UL;			// æ“ªƒ`ƒƒƒ“ƒlƒ‹‚Ìü”g”
-			unsigned int freqStep = 0UL;			// ü”g”ƒXƒeƒbƒv
-			unsigned int polarisastionType = 0UL;	// •Î”gƒ^ƒCƒv 0 .. g—p‚µ‚È‚¢, 1 .. V/H‚ÌŒJ‚è•Ô‚µ, 8 .. RŒÅ’è
+			unsigned int freqBase = 0UL;			// å…ˆé ­ãƒãƒ£ãƒ³ãƒãƒ«ã®å‘¨æ³¢æ•°
+			unsigned int freqStep = 0UL;			// å‘¨æ³¢æ•°ã‚¹ãƒ†ãƒƒãƒ—
+			unsigned int polarisastionType = 0UL;	// åæ³¢ã‚¿ã‚¤ãƒ— 0 .. ä½¿ç”¨ã—ãªã„, 1 .. V/Hã®ç¹°ã‚Šè¿”ã—, 8 .. Rå›ºå®š
 
 			switch (Generate.Space) {
 			case eChGenerateVHF_L:
@@ -2633,53 +2661,53 @@ void CBonTuner::ReadIniFile(void)
 			}
 		}
 
-		// ü”g”ƒIƒtƒZƒbƒg’l
+		// å‘¨æ³¢æ•°ã‚ªãƒ•ã‚»ãƒƒãƒˆå€¤
 		itSpace->second.FrequencyOffset = (long)IniFileAccess.ReadKeyISectionData(L"FrequencyOffset", 0);
 
-		// TuningSpace‚Ìí—Ş”Ô†
+		// TuningSpaceã®ç¨®é¡ç•ªå·
 		itSpace->second.DVBSystemTypeNumber = IniFileAccess.ReadKeyISectionData(L"DVBSystemTypeNumber", 0);
 
-		// TSMF‚Ìˆ—ƒ‚[ƒh
+		// TSMFã®å‡¦ç†ãƒ¢ãƒ¼ãƒ‰
 		itSpace->second.TSMFMode = IniFileAccess.ReadKeyIValueMapSectionData(L"TSMFMode", 0, mapTSMFMode);
 
-		// CHİ’è
-		//    ƒ`ƒƒƒ“ƒlƒ‹”Ô† = ‰q¯”Ô†,ü”g”,•Î”g,•Ï’²•û®[,ƒ`ƒƒƒ“ƒlƒ‹–¼[,SID/MinorChannel[,TSID/Channel[,ONID/PhysicalChannel[,MajorChannel[,SourceID]]]]]]
-		//    —á: CH001 = 1,12658,V,0
-		//      ƒ`ƒƒƒ“ƒlƒ‹”Ô† : CH000`CH999‚Åw’è
-		//      ‰q¯”Ô†       : SatelliteƒZƒNƒVƒ‡ƒ“‚Åİ’è‚µ‚½‰q¯”Ô†(1`4) ‚Ü‚½‚Í 0(–¢w’è)
-		//                       (’nƒfƒWƒ`ƒ…[ƒi[“™‚Í0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢)
-		//      ü”g”         : ü”g”‚ğMHz‚Åw’è
-		//                       (¬”“_‚ğ•t‚¯‚é‚±‚Æ‚É‚æ‚èKHz’PˆÊ‚Å‚Ìw’è‚ª‰Â”\‚Å‚·)
-		//      •Î”g           : 'V' = ‚’¼•Î”g 'H'=…•½•Î”g 'L'=¶ù‰~•Î”g 'R'=‰Eù‰~•Î”g ' '=–¢w’è
-		//                       (’nƒfƒWƒ`ƒ…[ƒi[“™‚Í–¢w’è)
-		//      •Ï’²•û®       : ModulationƒZƒNƒVƒ‡ƒ“‚Åİ’è‚µ‚½•Ï’²•û®”Ô†(0`3)
-		//      ƒ`ƒƒƒ“ƒlƒ‹–¼   : ƒ`ƒƒƒ“ƒlƒ‹–¼Ì
-		//                       (È—ª‚µ‚½ê‡‚Í 128.0E / 12658H / DVB - S ‚Ì‚æ‚¤‚ÈŒ`®‚Å©“®¶¬‚³‚ê‚Ü‚·)
-		//      SID            : DVB / ISDB‚ÌƒT[ƒrƒXID
-		//      TSID           : DVB / ISDB‚Ìƒgƒ‰ƒ“ƒXƒ|[ƒgƒXƒgƒŠ[ƒ€ID
-		//      ONID           : DVB / ISDB‚ÌƒIƒŠƒWƒiƒ‹ƒlƒbƒgƒ[ƒNID
-		//      MinorChannel   : ATSC / Digital Cable‚ÌMinor Channel
-		//      Channel        : ATSC / Digital Cable‚ÌChannel
-		//      PhysicalChannel: ATSC / Digital Cable‚ÌPhysical Channel
-		//      MajorChannel   : Digital Cable‚ÌMajor Channel
-		//      SourceID       : Digital Cable‚ÌSourceID
+		// CHè¨­å®š
+		//    ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå· = è¡›æ˜Ÿç•ªå·,å‘¨æ³¢æ•°,åæ³¢,å¤‰èª¿æ–¹å¼[,ãƒãƒ£ãƒ³ãƒãƒ«å[,SID/MinorChannel[,TSID/Channel[,ONID/PhysicalChannel[,MajorChannel[,SourceID]]]]]]
+		//    ä¾‹: CH001 = 1,12658,V,0
+		//      ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå· : CH000ï½CH999ã§æŒ‡å®š
+		//      è¡›æ˜Ÿç•ªå·       : Satelliteã‚»ã‚¯ã‚·ãƒ§ãƒ³ã§è¨­å®šã—ãŸè¡›æ˜Ÿç•ªå·(1ï½4) ã¾ãŸã¯ 0(æœªæŒ‡å®šæ™‚)
+		//                       (åœ°ãƒ‡ã‚¸ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ç­‰ã¯0ã‚’æŒ‡å®šã—ã¦ãã ã•ã„)
+		//      å‘¨æ³¢æ•°         : å‘¨æ³¢æ•°ã‚’MHzã§æŒ‡å®š
+		//                       (å°æ•°ç‚¹ã‚’ä»˜ã‘ã‚‹ã“ã¨ã«ã‚ˆã‚ŠKHzå˜ä½ã§ã®æŒ‡å®šãŒå¯èƒ½ã§ã™)
+		//      åæ³¢           : 'V' = å‚ç›´åæ³¢ 'H'=æ°´å¹³åæ³¢ 'L'=å·¦æ—‹å††åæ³¢ 'R'=å³æ—‹å††åæ³¢ ' '=æœªæŒ‡å®š
+		//                       (åœ°ãƒ‡ã‚¸ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ç­‰ã¯æœªæŒ‡å®š)
+		//      å¤‰èª¿æ–¹å¼       : Modulationã‚»ã‚¯ã‚·ãƒ§ãƒ³ã§è¨­å®šã—ãŸå¤‰èª¿æ–¹å¼ç•ªå·(0ï½3)
+		//      ãƒãƒ£ãƒ³ãƒãƒ«å   : ãƒãƒ£ãƒ³ãƒãƒ«åç§°
+		//                       (çœç•¥ã—ãŸå ´åˆã¯ 128.0E / 12658H / DVB - S ã®ã‚ˆã†ãªå½¢å¼ã§è‡ªå‹•ç”Ÿæˆã•ã‚Œã¾ã™)
+		//      SID            : DVB / ISDBã®ã‚µãƒ¼ãƒ“ã‚¹ID
+		//      TSID           : DVB / ISDBã®ãƒˆãƒ©ãƒ³ã‚¹ãƒãƒ¼ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ ID
+		//      ONID           : DVB / ISDBã®ã‚ªãƒªã‚¸ãƒŠãƒ«ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ID
+		//      MinorChannel   : ATSC / Digital Cableã®Minor Channel
+		//      Channel        : ATSC / Digital Cableã®Channel
+		//      PhysicalChannel: ATSC / Digital Cableã®Physical Channel
+		//      MajorChannel   : Digital Cableã®Major Channel
+		//      SourceID       : Digital Cableã®SourceID
 		std::wstring key, data;
 		while (IniFileAccess.ReadSectionData(&key, &data) == true) {
 			std::wregex re(LR"(^CH(?:\d{3}|)$)", std::regex_constants::icase);
 			if (std::regex_match(key, re) == true) {
 				if (data.length() != 0) {
-					// CHİ’è—L‚è
+					// CHè¨­å®šæœ‰ã‚Š
 					DWORD ch = common::WStringDecimalToLong(key.substr(2));
 
-					// ReserveUnusedCh‚ªw’è‚³‚ê‚Ä‚¢‚éê‡‚ÍCH”Ô†‚ğã‘‚«‚·‚é
-					// w’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í“o˜^‡‚ÉCH”Ô†‚ğU‚é
+					// ReserveUnusedChãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯CHç•ªå·ã‚’ä¸Šæ›¸ãã™ã‚‹
+					// æŒ‡å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ç™»éŒ²é †ã«CHç•ªå·ã‚’æŒ¯ã‚‹
 					DWORD chNum = bReserveUnusedCh ? ch : (DWORD)(itSpace->second.Channels.size());
 					auto itCh = itSpace->second.Channels.find(chNum);
 					if (itCh == itSpace->second.Channels.end()) {
 						itCh = itSpace->second.Channels.emplace(chNum, ChData()).first;
 					}
 
-					// ƒJƒ“ƒ}‹æØ‚è‚Å10ŒÂ‚É•ª‰ğ
+					// ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§10å€‹ã«åˆ†è§£
 					std::wstring t(data);
 					std::wstring buf[10];
 					for (int n = 0; n < 10; n++) {
@@ -2687,7 +2715,7 @@ void CBonTuner::ReadIniFile(void)
 							break;
 					}
 
-					// ‰q¯”Ô†
+					// è¡›æ˜Ÿç•ªå·
 					val = common::WStringToLong(buf[0]);
 					if (val >= 0 && val < MAX_SATELLITE) {
 						itCh->second.Satellite = val;
@@ -2695,7 +2723,7 @@ void CBonTuner::ReadIniFile(void)
 					else
 						OutputDebug(L"Format Error in readIniFile; Wrong Bird.\n");
 
-					// ü”g”
+					// å‘¨æ³¢æ•°
 					val = (int)(common::WstringToDouble(buf[1]) * 1000.0);
 					if ((val > 0) && (val <= 30000000)) {
 						itCh->second.Frequency = val;
@@ -2703,7 +2731,7 @@ void CBonTuner::ReadIniFile(void)
 					else
 						OutputDebug(L"Format Error in readIniFile; Wrong Frequency.\n");
 
-					// •Î”gí—Ş
+					// åæ³¢ç¨®é¡
 					WCHAR c = buf[2].c_str()[0];
 					if (c == L'\0') {
 						c = L' ';
@@ -2715,7 +2743,7 @@ void CBonTuner::ReadIniFile(void)
 					else
 						OutputDebug(L"Format Error in readIniFile; Wrong Polarisation.\n");
 
-					// •Ï’²•û®
+					// å¤‰èª¿æ–¹å¼
 					val = common::WStringToLong(buf[3]);
 					if (val >= 0 && val < MAX_MODULATION) {
 						itCh->second.ModulationType = val;
@@ -2723,10 +2751,10 @@ void CBonTuner::ReadIniFile(void)
 					else
 						OutputDebug(L"Format Error in readIniFile; Wrong Method.\n");
 
-					// ƒ`ƒƒƒ“ƒlƒ‹–¼
+					// ãƒãƒ£ãƒ³ãƒãƒ«å
 					std::basic_string<TCHAR> name(common::WStringToTString(buf[4]));
 					if (name.length() == 0)
-						// iniƒtƒ@ƒCƒ‹‚Åw’è‚µ‚½–¼Ì‚ª‚È‚¯‚ê‚Î128.0E/12658H/DVB-S ‚Ì‚æ‚¤‚ÈŒ`®‚Åì¬‚·‚é
+						// iniãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã—ãŸåç§°ãŒãªã‘ã‚Œã°128.0E/12658H/DVB-S ã®ã‚ˆã†ãªå½¢å¼ã§ä½œæˆã™ã‚‹
 						name = MakeChannelName(&itCh->second);
 					itCh->second.sServiceName = name;
 
@@ -2766,49 +2794,49 @@ void CBonTuner::ReadIniFile(void)
 			}
 		}
 
-		//ƒ`ƒƒƒ“ƒlƒ‹’è‹`‚Ì”
+		//ãƒãƒ£ãƒ³ãƒãƒ«å®šç¾©ã®æ•°
 		auto itChEnd = itSpace->second.Channels.end();
 		if (itChEnd == itSpace->second.Channels.begin()) {
-			// ƒ`ƒƒƒ“ƒlƒ‹’è‹`‚ª1‚Â‚à‚È‚¢
+			// ãƒãƒ£ãƒ³ãƒãƒ«å®šç¾©ãŒ1ã¤ã‚‚ãªã„
 			itSpace->second.dwNumChannel = 0;
 		}
 		else {
-			// CH”Ô†‚ÌÅ‘å’l + 1
+			// CHç•ªå·ã®æœ€å¤§å€¤ + 1
 			itChEnd--;
 			itSpace->second.dwNumChannel = itChEnd->first + 1;
 		}
 		OutputDebug(L"%s: dwNumChannel = %d.\n", section.c_str(), itSpace->second.dwNumChannel);
 
-		// CHØ‘Ö“®ì‚ğ‹­§“I‚É2“xs‚¤ê‡‚Ì‘ÎÛCH
+		// CHåˆ‡æ›¿å‹•ä½œã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†å ´åˆã®å¯¾è±¡CH
 		if (m_bLockTwice) {
 			std::wstring s = IniFileAccess.ReadKeySSectionData(L"ChannelLockTwiceTarget", L"");
 			if (s != L"") {
 				while (1) {
-					// ƒJƒ“ƒ}‹æØ‚è‚Ü‚Å‚Ì•¶š—ñ‚ğæ“¾
+					// ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã¾ã§ã®æ–‡å­—åˆ—ã‚’å–å¾—
 					std::wstring token;
 					std::wstring::size_type pos = common::WStringSplit(&s, L',', &token);
 					if (token != L"") {
 						DWORD begin = 0;
 						DWORD end = itSpace->second.dwNumChannel - 1;
-						// ‚³‚ç‚É'-'‹æØ‚è‚Ì”’l‚É•ª‰ğ
+						// ã•ã‚‰ã«'-'åŒºåˆ‡ã‚Šã®æ•°å€¤ã«åˆ†è§£
 						std::wstring left;
 						std::wstring right(token);
 						if (std::wstring::npos == common::WStringSplit(&right, L'-', &left)) {
-							// "-"‹L†‚ª–³‚¢
+							// "-"è¨˜å·ãŒç„¡ã„
 							begin = end = common::WStringToLong(left);
 						}
 						else {
-							// "-"‹L†‚ª—L‚é
+							// "-"è¨˜å·ãŒæœ‰ã‚‹
 							if (left != L"") {
-								// "-"‹L†‚Ì‘O‚É”’l‚ª‚ ‚é
+								// "-"è¨˜å·ã®å‰ã«æ•°å€¤ãŒã‚ã‚‹
 								begin = common::WStringToLong(left);
 							}
 							if (right != L"") {
-								// "-"‹L†‚ÌŒã‚É”’l‚ª‚ ‚é
+								// "-"è¨˜å·ã®å¾Œã«æ•°å€¤ãŒã‚ã‚‹
 								end = common::WStringToLong(right);
 							}
 						}
-						// ‘ÎÛ”ÍˆÍ‚ÌCH‚ÌFlag‚ğSet‚·‚é
+						// å¯¾è±¡ç¯„å›²ã®CHã®Flagã‚’Setã™ã‚‹
 						for (DWORD ch = begin; ch <= end; ch++) {
 							auto itCh = itSpace->second.Channels.find(ch);
 							if (itCh != itSpace->second.Channels.end()) {
@@ -2821,7 +2849,7 @@ void CBonTuner::ReadIniFile(void)
 				}
 			}
 			else {
-				// ChannelLockTwiceTarget‚Ìw’è‚ª–³‚¢ê‡‚Í‚·‚×‚Ä‚ÌCH‚ª‘ÎÛ
+				// ChannelLockTwiceTargetã®æŒ‡å®šãŒç„¡ã„å ´åˆã¯ã™ã¹ã¦ã®CHãŒå¯¾è±¡
 				for (auto itCh = itSpace->second.Channels.begin(); itCh != itSpace->second.Channels.end(); itCh++) {
 					itCh->second.LockTwiceTarget = TRUE;
 				}
@@ -2829,20 +2857,20 @@ void CBonTuner::ReadIniFile(void)
 		}
 	}
 
-	// ƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ”Ô†0‚ğ’T‚·
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ç•ªå·0ã‚’æ¢ã™
 	auto itSpace0 = m_TuningData.Spaces.find(0);
 	if (itSpace0 == m_TuningData.Spaces.end()) {
-		// ‚±‚±‚É‚Í—ˆ‚È‚¢‚Í‚¸‚¾‚¯‚Çˆê‰
-		// ‹ó‚ÌTuningSpaceData‚ğƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ”Ô†0‚É‘}“ü
+		// ã“ã“ã«ã¯æ¥ãªã„ã¯ãšã ã‘ã©ä¸€å¿œ
+		// ç©ºã®TuningSpaceDataã‚’ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ç•ªå·0ã«æŒ¿å…¥
 		itSpace0 = m_TuningData.Spaces.emplace(0, TuningSpaceData()).first;
 	}
 
 	if (!itSpace0->second.Channels.size()) {
-		// CH’è‹`‚ªˆê‚Â‚à‚³‚ê‚Ä‚¢‚È‚¢
+		// CHå®šç¾©ãŒä¸€ã¤ã‚‚ã•ã‚Œã¦ã„ãªã„
 		if (m_nDefaultNetwork == eDefaultNetworkSPHD) {
-			// SPHD‚Ìê‡‚Ì‚İ‰ß‹‚Ìƒo[ƒWƒ‡ƒ“ŒİŠ·“®ì
-			// 3‚Â‚ÌTP‚ğƒfƒtƒHƒ‹ƒg‚ÅƒZƒbƒg‚µ‚Ä‚¨‚­
-			//   128.0E 12.658GHz V DVB-S *** 2015-10-10Œ»İANIT‚É‚Í‘¶İ‚·‚é‚¯‚Ç’â”g’†
+			// SPHDã®å ´åˆã®ã¿éå»ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³äº’æ›å‹•ä½œ
+			// 3ã¤ã®TPã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã‚»ãƒƒãƒˆã—ã¦ãŠã
+			//   128.0E 12.658GHz V DVB-S *** 2015-10-10ç¾åœ¨ã€NITã«ã¯å­˜åœ¨ã™ã‚‹ã‘ã©åœæ³¢ä¸­
 			auto itCh = itSpace0->second.Channels.emplace(0, ChData()).first;
 			itCh->second.Satellite = 1;
 			itCh->second.Polarisation = 2;
@@ -2867,10 +2895,10 @@ void CBonTuner::ReadIniFile(void)
 		}
 	}
 
-	// ƒ`ƒ…[ƒjƒ“ƒO‹óŠÔ‚Ì”
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ã®æ•°
 	auto itSpaceEnd = m_TuningData.Spaces.end();
 	if (itSpaceEnd == m_TuningData.Spaces.begin()) {
-		// ‚±‚Á‚¿‚àˆê‰
+		// ã“ã£ã¡ã‚‚ä¸€å¿œ
 		m_TuningData.dwNumSpace = 0;
 	}
 	else {
@@ -2885,11 +2913,11 @@ void CBonTuner::GetSignalState(int* pnStrength, int* pnQuality, int* pnLock)
 	if (pnQuality) *pnQuality = 0;
 	if (pnLock) *pnLock = 1;
 
-	// ƒ`ƒ…[ƒiŒÅ—L GetSignalState ‚ª‚ ‚ê‚ÎAŠÛ“Š‚°
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰ GetSignalState ãŒã‚ã‚Œã°ã€ä¸¸æŠ•ã’
 	HRESULT hr;
 	if ((m_pIBdaSpecials) && (hr = m_pIBdaSpecials->GetSignalState(pnStrength, pnQuality, pnLock)) != E_NOINTERFACE) {
-		// E_NOINTERFACE ‚Å‚È‚¯‚ê‚ÎAŒÅ—LŠÖ”‚ª‚ ‚Á‚½‚Æ‚¢‚¤–‚È‚Ì‚ÅA
-		// ‚±‚Ì‚Ü‚ÜƒŠƒ^[ƒ“
+		// E_NOINTERFACE ã§ãªã‘ã‚Œã°ã€å›ºæœ‰é–¢æ•°ãŒã‚ã£ãŸã¨ã„ã†äº‹ãªã®ã§ã€
+		// ã“ã®ã¾ã¾ãƒªã‚¿ãƒ¼ãƒ³
 		return;
 	}
 
@@ -2967,11 +2995,11 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 {
 	HRESULT hr;
 
-	// ƒ`ƒ…[ƒiŒÅ—L LockChannel ‚ª‚ ‚ê‚ÎAŠÛ“Š‚°
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰ LockChannel ãŒã‚ã‚Œã°ã€ä¸¸æŠ•ã’
 	if (m_pIBdaSpecials2 && (hr = m_pIBdaSpecials2->LockChannel(pTuningParam)) != E_NOINTERFACE) {
-		// BonDriver_BDA‰üê—pDLL
-		// E_NOINTERFACE ‚Å‚È‚¯‚ê‚ÎAŒÅ—LŠÖ”‚ª‚ ‚Á‚½‚Æ‚¢‚¤–‚È‚Ì‚ÅA
-		// ‚»‚Ì’†‚Å‘I‹Çˆ—‚ªs‚È‚í‚ê‚Ä‚¢‚é‚Í‚¸B‚æ‚Á‚Ä‚±‚Ì‚Ü‚ÜƒŠƒ^[ƒ“
+		// BonDriver_BDAæ”¹å°‚ç”¨DLL
+		// E_NOINTERFACE ã§ãªã‘ã‚Œã°ã€å›ºæœ‰é–¢æ•°ãŒã‚ã£ãŸã¨ã„ã†äº‹ãªã®ã§ã€
+		// ãã®ä¸­ã§é¸å±€å‡¦ç†ãŒè¡Œãªã‚ã‚Œã¦ã„ã‚‹ã¯ãšã€‚ã‚ˆã£ã¦ã“ã®ã¾ã¾ãƒªã‚¿ãƒ¼ãƒ³
 		m_nCurTone = pTuningParam->Antenna.Tone;
 		if (SUCCEEDED(hr) && bLockTwice) {
 			OutputDebug(L"  TwiceLock 1st[Special2] SUCCESS.\n");
@@ -2989,9 +3017,9 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 
 	if (m_pIBdaSpecials && (hr = m_pIBdaSpecials->LockChannel(pTuningParam->Antenna.Tone ? 1 : 0, (pTuningParam->Polarisation == BDA_POLARISATION_LINEAR_H) ? TRUE : FALSE, pTuningParam->Frequency / 1000,
 			(pTuningParam->Modulation.Modulation == BDA_MOD_NBC_8PSK || pTuningParam->Modulation.Modulation == BDA_MOD_8PSK) ? TRUE : FALSE)) != E_NOINTERFACE) {
-		// BonDriver_BDAƒIƒŠƒWƒiƒ‹ŒİŠ·DLL
-		// E_NOINTERFACE ‚Å‚È‚¯‚ê‚ÎAŒÅ—LŠÖ”‚ª‚ ‚Á‚½‚Æ‚¢‚¤–‚È‚Ì‚ÅA
-		// ‚»‚Ì’†‚Å‘I‹Çˆ—‚ªs‚È‚í‚ê‚Ä‚¢‚é‚Í‚¸B‚æ‚Á‚Ä‚±‚Ì‚Ü‚ÜƒŠƒ^[ƒ“
+		// BonDriver_BDAã‚ªãƒªã‚¸ãƒŠãƒ«äº’æ›DLL
+		// E_NOINTERFACE ã§ãªã‘ã‚Œã°ã€å›ºæœ‰é–¢æ•°ãŒã‚ã£ãŸã¨ã„ã†äº‹ãªã®ã§ã€
+		// ãã®ä¸­ã§é¸å±€å‡¦ç†ãŒè¡Œãªã‚ã‚Œã¦ã„ã‚‹ã¯ãšã€‚ã‚ˆã£ã¦ã“ã®ã¾ã¾ãƒªã‚¿ãƒ¼ãƒ³
 		m_nCurTone = pTuningParam->Antenna.Tone;
 		if (SUCCEEDED(hr) && bLockTwice) {
 			OutputDebug(L"  TwiceLock 1st[Special] SUCCESS.\n");
@@ -3009,53 +3037,53 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 	}
 
-	// ƒ`ƒ…[ƒiŒÅ—Lƒg[ƒ“§ŒäŠÖ”‚ª‚ ‚ê‚ÎA‚»‚ê‚ğ‚±‚±‚ÅŒÄ‚Ño‚·
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰ãƒˆãƒ¼ãƒ³åˆ¶å¾¡é–¢æ•°ãŒã‚ã‚Œã°ã€ãã‚Œã‚’ã“ã“ã§å‘¼ã³å‡ºã™
 	if (m_pIBdaSpecials2 && (hr = m_pIBdaSpecials2->Set22KHz(pTuningParam->Antenna.Tone)) != E_NOINTERFACE) {
-		// BonDriver_BDA‰üê—pDLL
+		// BonDriver_BDAæ”¹å°‚ç”¨DLL
 		if (SUCCEEDED(hr)) {
 			OutputDebug(L"  Set22KHz[Special2] successfully.\n");
 			if (pTuningParam->Antenna.Tone != m_nCurTone) {
 				m_nCurTone = pTuningParam->Antenna.Tone;
 				if (m_nToneWait) {
-					SleepWithMessageLoop(m_nToneWait); // ‰q¯Ø‘Ö‘Ò‚¿
+					SleepWithMessageLoop(m_nToneWait); // è¡›æ˜Ÿåˆ‡æ›¿å¾…ã¡
 				}
 			}
 		}
 		else {
 			OutputDebug(L"  Set22KHz[Special2] failed.\n");
-			// BDA generic ‚È•û–@‚ÅØ‚è‘Ö‚í‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚ÅAƒƒbƒZ[ƒW‚¾‚¯o‚µ‚ÄA‚»‚Ì‚Ü‚Ü‘±s
+			// BDA generic ãªæ–¹æ³•ã§åˆ‡ã‚Šæ›¿ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ã®ã§ã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã ã‘å‡ºã—ã¦ã€ãã®ã¾ã¾ç¶šè¡Œ
 		}
 	}
 	else if (m_pIBdaSpecials && (hr = m_pIBdaSpecials->Set22KHz(pTuningParam->Antenna.Tone ? 1 : 0)) != E_NOINTERFACE) {
-		// BonDriver_BDAƒIƒŠƒWƒiƒ‹ŒİŠ·DLL
+		// BonDriver_BDAã‚ªãƒªã‚¸ãƒŠãƒ«äº’æ›DLL
 		if (SUCCEEDED(hr)) {
 			OutputDebug(L"  Set22KHz[Special] successfully.\n");
 			if (pTuningParam->Antenna.Tone != m_nCurTone) {
 				m_nCurTone = pTuningParam->Antenna.Tone;
 				if (m_nToneWait) {
-					SleepWithMessageLoop(m_nToneWait); // ‰q¯Ø‘Ö‘Ò‚¿
+					SleepWithMessageLoop(m_nToneWait); // è¡›æ˜Ÿåˆ‡æ›¿å¾…ã¡
 				}
 			}
 		}
 		else {
 			OutputDebug(L"  Set22KHz[Special] failed.\n");
-			// BDA generic ‚È•û–@‚ÅØ‚è‘Ö‚í‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚ÅAƒƒbƒZ[ƒW‚¾‚¯o‚µ‚ÄA‚»‚Ì‚Ü‚Ü‘±s
+			// BDA generic ãªæ–¹æ³•ã§åˆ‡ã‚Šæ›¿ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ã®ã§ã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã ã‘å‡ºã—ã¦ã€ãã®ã¾ã¾ç¶šè¡Œ
 		}
 	}
 	else {
-		// ŒÅ—LŠÖ”‚ª‚È‚¢‚¾‚¯‚È‚Ì‚ÅA‰½‚à‚¹‚¸
+		// å›ºæœ‰é–¢æ•°ãŒãªã„ã ã‘ãªã®ã§ã€ä½•ã‚‚ã›ãš
 	}
 
-	// TuningSpace‚Ìí—Ş”Ô†
+	// TuningSpaceã®ç¨®é¡ç•ªå·
 	unsigned int systemTypeNumber = m_TuningData.Spaces[pTuningParam->IniSpaceID].DVBSystemTypeNumber;
 	if (!m_DVBSystemTypeDB.IsExist(systemTypeNumber))
 		systemTypeNumber = 0;
 
-	// ITuningSpaceŒp³‡F
-	//   ITuningSpace ¨ IDVBTuningSpace ¨ IDVBTuningSpace2 ¨ IDVBSTuningSpace
-	//                ¨ IAnalogTVTuningSpace ¨ IATSCTuningSpace ¨ IDigitalCableTuningSpace
-	//                ¨ IAnalogRadioTuningSpace ¨ IAnalogRadioTuningSpace2
-	//                ¨ IAuxInTuningSpace ¨ IAuxInTuningSpace2
+	// ITuningSpaceç¶™æ‰¿é †ï¼š
+	//   ITuningSpace â†’ IDVBTuningSpace â†’ IDVBTuningSpace2 â†’ IDVBSTuningSpace
+	//                â†’ IAnalogTVTuningSpace â†’ IATSCTuningSpace â†’ IDigitalCableTuningSpace
+	//                â†’ IAnalogRadioTuningSpace â†’ IAnalogRadioTuningSpace2
+	//                â†’ IAuxInTuningSpace â†’ IAuxInTuningSpace2
 	CComPtr<ITuningSpace> pITuningSpace(m_DVBSystemTypeDB.SystemType[systemTypeNumber].pITuningSpace);
 	if (!pITuningSpace) {
 		OutputDebug(L"  Fail to get ITuningSpace.\n");
@@ -3063,12 +3091,12 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 	}
 
 	OutputDebug(L"    ITuningSpace\n");
-	// IDVBSTuningSpace“Á—L
+	// IDVBSTuningSpaceç‰¹æœ‰
 	{
 		CComQIPtr<IDVBSTuningSpace> pIDVBSTuningSpace(pITuningSpace);
 		if (pIDVBSTuningSpace) {
 			OutputDebug(L"    ->IDVBSTuningSpace\n");
-			// LNB ü”g”‚ğİ’è
+			// LNB å‘¨æ³¢æ•°ã‚’è¨­å®š
 			if (pTuningParam->Antenna.HighOscillator != -1) {
 				pIDVBSTuningSpace->put_HighOscillator(pTuningParam->Antenna.HighOscillator);
 			}
@@ -3076,30 +3104,30 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 				pIDVBSTuningSpace->put_LowOscillator(pTuningParam->Antenna.LowOscillator);
 			}
 
-			// LNBƒXƒCƒbƒ`‚Ìü”g”‚ğİ’è
+			// LNBã‚¹ã‚¤ãƒƒãƒã®å‘¨æ³¢æ•°ã‚’è¨­å®š
 			if (pTuningParam->Antenna.LNBSwitch != -1) {
-				// LNBSwitchü”g”‚Ìİ’è‚ª‚³‚ê‚Ä‚¢‚é
+				// LNBSwitchå‘¨æ³¢æ•°ã®è¨­å®šãŒã•ã‚Œã¦ã„ã‚‹
 				pIDVBSTuningSpace->put_LNBSwitch(pTuningParam->Antenna.LNBSwitch);
 			}
 			else {
-				// 10GHz‚ğİ’è‚µ‚Ä‚¨‚¯‚ÎHigh‘¤‚ÉA20GHz‚ğİ’è‚µ‚Ä‚¨‚¯‚ÎLow‘¤‚ÉØ‘Ö‚í‚é‚Í‚¸
+				// 10GHzã‚’è¨­å®šã—ã¦ãŠã‘ã°Highå´ã«ã€20GHzã‚’è¨­å®šã—ã¦ãŠã‘ã°Lowå´ã«åˆ‡æ›¿ã‚ã‚‹ã¯ãš
 				pIDVBSTuningSpace->put_LNBSwitch((pTuningParam->Antenna.Tone != 0) ? 10000000 : 20000000);
 			}
 
-			// ˆÊ‘Š•Ï’²ƒXƒyƒNƒgƒ‹”½“]‚Ìí—Ş
+			// ä½ç›¸å¤‰èª¿ã‚¹ãƒšã‚¯ãƒˆãƒ«åè»¢ã®ç¨®é¡
 			pIDVBSTuningSpace->put_SpectralInversion(BDA_SPECTRAL_INVERSION_AUTOMATIC);
 		}
 	}
 
-	// ILocatoræ“¾
+	// ILocatorå–å¾—
 	//
-	// ILocatorŒp³‡F
-	//   ILocator ¨ IDigitalLocator ¨ IDVBTLocator ¨ IDVBTLocator2
-	//                               ¨ IDVBSLocator ¨ IDVBSLocator2
-	//                                               ¨ IISDBSLocator
-	//                               ¨ IDVBCLocator
-	//                               ¨ IATSCLocator ¨ IATSCLocator2 ¨ IDigitalCableLocator
-	//            ¨ IAnalogLocator
+	// ILocatorç¶™æ‰¿é †ï¼š
+	//   ILocator â†’ IDigitalLocator â†’ IDVBTLocator â†’ IDVBTLocator2
+	//                               â†’ IDVBSLocator â†’ IDVBSLocator2
+	//                                               â†’ IISDBSLocator
+	//                               â†’ IDVBCLocator
+	//                               â†’ IATSCLocator â†’ IATSCLocator2 â†’ IDigitalCableLocator
+	//            â†’ IAnalogLocator
 	CComPtr<ILocator> pILocator;
 	if (FAILED(hr = pITuningSpace->get_DefaultLocator(&pILocator))) {
 		OutputDebug(L"  Fail to get ILocator. hr=0x%08lx\n", hr);
@@ -3107,46 +3135,46 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 	}
 
 	OutputDebug(L"    ILocator\n");
-	// RF M†‚Ìü”g”‚ğİ’è
+	// RF ä¿¡å·ã®å‘¨æ³¢æ•°ã‚’è¨­å®š
 	pILocator->put_CarrierFrequency(pTuningParam->Frequency);
 
-	// “à•”‘O•ûŒë‚è’ù³‚Ìƒ^ƒCƒv‚ğİ’è
+	// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã®ã‚¿ã‚¤ãƒ—ã‚’è¨­å®š
 	pILocator->put_InnerFEC(pTuningParam->Modulation.InnerFEC);
 
-	// “à•” FEC ƒŒ[ƒg‚ğİ’è
-	// ‘O•ûŒë‚è’ù³•û®‚Åg‚¤ƒoƒCƒiƒŠ ƒRƒ“ƒ{ƒ‹[ƒVƒ‡ƒ“‚ÌƒR[ƒh ƒŒ[ƒg DVB-S‚Í 3/4 S2‚Í 3/5
+	// å†…éƒ¨ FEC ãƒ¬ãƒ¼ãƒˆã‚’è¨­å®š
+	// å‰æ–¹èª¤ã‚Šè¨‚æ­£æ–¹å¼ã§ä½¿ã†ãƒã‚¤ãƒŠãƒª ã‚³ãƒ³ãƒœãƒ«ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚³ãƒ¼ãƒ‰ ãƒ¬ãƒ¼ãƒˆ DVB-Sã¯ 3/4 S2ã¯ 3/5
 	pILocator->put_InnerFECRate(pTuningParam->Modulation.InnerFECRate);
 
-	// •Ï’²ƒ^ƒCƒv‚ğİ’è
-	// DVB-S‚ÍQPSKAS2‚Ìê‡‚Í 8PSK
+	// å¤‰èª¿ã‚¿ã‚¤ãƒ—ã‚’è¨­å®š
+	// DVB-Sã¯QPSKã€S2ã®å ´åˆã¯ 8PSK
 	pILocator->put_Modulation(pTuningParam->Modulation.Modulation);
 
-	// ŠO•”‘O•ûŒë‚è’ù³‚Ìƒ^ƒCƒv‚ğİ’è
-	//	ƒŠ[ƒh-ƒ\ƒƒ‚ƒ“ 204/188 (ŠO•” FEC), DVB-S2‚Å‚à“¯‚¶
+	// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã®ã‚¿ã‚¤ãƒ—ã‚’è¨­å®š
+	//	ãƒªãƒ¼ãƒ‰-ã‚½ãƒ­ãƒ¢ãƒ³ 204/188 (å¤–éƒ¨ FEC), DVB-S2ã§ã‚‚åŒã˜
 	pILocator->put_OuterFEC(pTuningParam->Modulation.OuterFEC);
 
-	// ŠO•” FEC ƒŒ[ƒg‚ğİ’è
+	// å¤–éƒ¨ FEC ãƒ¬ãƒ¼ãƒˆã‚’è¨­å®š
 	pILocator->put_OuterFECRate(pTuningParam->Modulation.OuterFECRate);
 
-	// QPSK ƒVƒ“ƒ{ƒ‹ ƒŒ[ƒg‚ğİ’è
+	// QPSK ã‚·ãƒ³ãƒœãƒ« ãƒ¬ãƒ¼ãƒˆã‚’è¨­å®š
 	pILocator->put_SymbolRate(pTuningParam->Modulation.SymbolRate);
 
-	// IDVBSLocator“Á—L
+	// IDVBSLocatorç‰¹æœ‰
 	{
 		CComQIPtr<IDVBSLocator> pIDVBSLocator(pILocator);
 		if (pIDVBSLocator) {
 			OutputDebug(L"    ->IDVBSLocator\n");
-			// M†‚Ì•Î”g‚ğİ’è
+			// ä¿¡å·ã®åæ³¢ã‚’è¨­å®š
 			pIDVBSLocator->put_SignalPolarisation(pTuningParam->Polarisation);
 		}
 	}
 
-	// IDVBSLocator2“Á—L
+	// IDVBSLocator2ç‰¹æœ‰
 	{
 		CComQIPtr<IDVBSLocator2> pIDVBSLocator2(pILocator);
 		if (pIDVBSLocator2) {
 			OutputDebug(L"    ->IDVBSLocator2\n");
-			// DiSEqC‚ğİ’è
+			// DiSEqCã‚’è¨­å®š
 			if (pTuningParam->Antenna.DiSEqC >= BDA_LNB_SOURCE_A) {
 				pIDVBSLocator2->put_DiseqLNBSource((LNB_Source)(pTuningParam->Antenna.DiSEqC));
 			}
@@ -3156,19 +3184,19 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 	}
 
-	// IDVBTLocator“Á—L
+	// IDVBTLocatorç‰¹æœ‰
 	{
 		CComQIPtr<IDVBTLocator> pIDVBTLocator(pILocator);
 		if (pIDVBTLocator) {
 			OutputDebug(L"    ->IDVBTLocator\n");
-			// ü”g”‚Ì‘Ñˆæ• (MHz)‚ğİ’è
+			// å‘¨æ³¢æ•°ã®å¸¯åŸŸå¹… (MHz)ã‚’è¨­å®š
 			if (pTuningParam->Modulation.BandWidth != -1) {
 				pIDVBTLocator->put_Bandwidth(pTuningParam->Modulation.BandWidth);
 			}
 		}
 	}
 
-	// IATSCLocator“Á—L
+	// IATSCLocatorç‰¹æœ‰
 	{
 		CComQIPtr<IATSCLocator> pIATSCLocator(pILocator);
 		if (pIATSCLocator) {
@@ -3180,13 +3208,13 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 	}
 
-	// ITuneRequestì¬
+	// ITuneRequestä½œæˆ
 	//
-	// ITuneRequestŒp³‡F
-	//   ITuneRequest ¨ IDVBTuneRequest
-	//                ¨ IChannelTuneRequest ¨ IATSCChannelTuneRequest ¨ IDigitalCableTuneRequest
-	//                ¨ IChannelIDTuneRequest
-	//                ¨ IMPEG2TuneRequest
+	// ITuneRequestç¶™æ‰¿é †ï¼š
+	//   ITuneRequest â†’ IDVBTuneRequest
+	//                â†’ IChannelTuneRequest â†’ IATSCChannelTuneRequest â†’ IDigitalCableTuneRequest
+	//                â†’ IChannelIDTuneRequest
+	//                â†’ IMPEG2TuneRequest
 	CComPtr<ITuneRequest> pITuneRequest;
 	if (FAILED(hr = pITuningSpace->CreateTuneRequest(&pITuneRequest))) {
 		OutputDebug(L"  Fail to create ITuneRequest. hr=0x%08lx\n", hr);
@@ -3194,22 +3222,22 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 	}
 
 	OutputDebug(L"    ITuneRequest\n");
-	// ITuneRequest‚ÉILocator‚ğİ’è
+	// ITuneRequestã«ILocatorã‚’è¨­å®š
 	hr = pITuneRequest->put_Locator(pILocator);
 
-	// IDVBTuneRequest“Á—L
+	// IDVBTuneRequestç‰¹æœ‰
 	{
 		CComQIPtr<IDVBTuneRequest> pIDVBTuneRequest(pITuneRequest);
 		if (pIDVBTuneRequest) {
 			OutputDebug(L"    ->IDVBTuneRequest\n");
-			// DVB Triplet ID‚Ìİ’è
+			// DVB Triplet IDã®è¨­å®š
 			pIDVBTuneRequest->put_ONID(pTuningParam->ONID);
 			pIDVBTuneRequest->put_TSID(pTuningParam->TSID);
 			pIDVBTuneRequest->put_SID(pTuningParam->SID);
 		}
 	}
 
-	// IChannelTuneRequest“Á—L
+	// IChannelTuneRequestç‰¹æœ‰
 	{
 		CComQIPtr<IChannelTuneRequest> pIChannelTuneRequest(pITuneRequest);
 		if (pIChannelTuneRequest) {
@@ -3219,7 +3247,7 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 	}
 
-	// IATSCChannelTuneRequest“Á—L
+	// IATSCChannelTuneRequestç‰¹æœ‰
 	{
 		CComQIPtr<IATSCChannelTuneRequest> pIATSCChannelTuneRequest(pITuneRequest);
 		if (pIATSCChannelTuneRequest) {
@@ -3229,7 +3257,7 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 	}
 
-	// IDigitalCableTuneRequest“Á—L
+	// IDigitalCableTuneRequestç‰¹æœ‰
 	{
 		CComQIPtr<IDigitalCableTuneRequest> pIDigitalCableTuneRequest(pITuneRequest);
 		if (pIDigitalCableTuneRequest) {
@@ -3242,15 +3270,15 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 	}
 
 	if (m_pIBdaSpecials2) {
-		// ƒ`ƒ…[ƒiŒÅ—L‚ÌTSIDŠÖ”‚ª‚ ‚ê‚ÎŒÄ‚Ño‚·
+		// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰ã®TSIDé–¢æ•°ãŒã‚ã‚Œã°å‘¼ã³å‡ºã™
 		hr = m_pIBdaSpecials2->SetTSid(pTuningParam->TSID);
 
-		// m_pIBdaSpecials‚Åput_TuneRequest‚Ì‘O‚É‰½‚ç‚©‚Ìˆ—‚ª•K—v‚È‚çs‚¤
+		// m_pIBdaSpecialsã§put_TuneRequestã®å‰ã«ä½•ã‚‰ã‹ã®å‡¦ç†ãŒå¿…è¦ãªã‚‰è¡Œã†
 		hr = m_pIBdaSpecials2->PreTuneRequest(pTuningParam, pITuneRequest);
 	}
 
 	if (pTuningParam->Antenna.Tone != m_nCurTone && m_nToneWait) {
-		//ƒg[ƒ“Ø‘Ö‚ ‚è‚Ìê‡Aæ‚Éˆê“xTuneRequest‚µ‚Ä‚¨‚­
+		//ãƒˆãƒ¼ãƒ³åˆ‡æ›¿ã‚ã‚Šã®å ´åˆã€å…ˆã«ä¸€åº¦TuneRequestã—ã¦ãŠã
 		OutputDebug(L"  Requesting pre tune.\n");
 		if (FAILED(hr = m_pITuner->put_TuneRequest(pITuneRequest))) {
 			OutputDebug(L"  Fail to put pre tune request.  hr=0x%08lx\n", hr);
@@ -3258,16 +3286,16 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 		OutputDebug(L"  Pre tune request complete.\n");
 		if (m_pIBdaSpecials2) {
-			// m_pIBdaSpecials‚Åput_TuneRequest‚ÌŒã‚É‰½‚ç‚©‚Ìˆ—‚ª•K—v‚È‚çs‚¤
+			// m_pIBdaSpecialsã§put_TuneRequestã®å¾Œã«ä½•ã‚‰ã‹ã®å‡¦ç†ãŒå¿…è¦ãªã‚‰è¡Œã†
 			hr = m_pIBdaSpecials2->PostTuneRequest(pTuningParam);
 		}
 
-		SleepWithMessageLoop(m_nToneWait); // ‰q¯Ø‘Ö‘Ò‚¿
+		SleepWithMessageLoop(m_nToneWait); // è¡›æ˜Ÿåˆ‡æ›¿å¾…ã¡
 	}
 	m_nCurTone = pTuningParam->Antenna.Tone;
 
 	if (bLockTwice) {
-		// TuneRequest‚ğ‹­§“I‚É2“xs‚¤
+		// TuneRequestã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†
 		OutputDebug(L"  Requesting 1st twice tune.\n");
 		if (FAILED(hr = m_pITuner->put_TuneRequest(pITuneRequest))) {
 			OutputDebug(L"  Fail to put 1st twice tune request. hr=0x%08lx\n", hr);
@@ -3275,7 +3303,7 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 		OutputDebug(L"  1st Twice tune request complete.\n");
 		if (m_pIBdaSpecials2) {
-			// m_pIBdaSpecials‚Åput_TuneRequest‚ÌŒã‚É‰½‚ç‚©‚Ìˆ—‚ª•K—v‚È‚çs‚¤
+			// m_pIBdaSpecialsã§put_TuneRequestã®å¾Œã«ä½•ã‚‰ã‹ã®å‡¦ç†ãŒå¿…è¦ãªã‚‰è¡Œã†
 			hr = m_pIBdaSpecials2->PostTuneRequest(pTuningParam);
 		}
 		SleepWithMessageLoop(m_nLockTwiceDelay);
@@ -3291,7 +3319,7 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 		}
 		OutputDebug(L"  Tune request complete.\n");
 		if (m_pIBdaSpecials2) {
-			// m_pIBdaSpecials‚Åput_TuneRequest‚ÌŒã‚É‰½‚ç‚©‚Ìˆ—‚ª•K—v‚È‚çs‚¤
+			// m_pIBdaSpecialsã§put_TuneRequestã®å¾Œã«ä½•ã‚‰ã‹ã®å‡¦ç†ãŒå¿…è¦ãªã‚‰è¡Œã†
 			hr = m_pIBdaSpecials2->PostTuneRequest(pTuningParam);
 		}
 
@@ -3316,48 +3344,48 @@ BOOL CBonTuner::LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice)
 	return nLock != 0;
 }
 
-// ƒ`ƒ…[ƒiŒÅ—LDll‚Ìƒ[ƒh
+// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰Dllã®ãƒ­ãƒ¼ãƒ‰
 HRESULT CBonTuner::CheckAndInitTunerDependDll(IBaseFilter * pTunerDevice, std::wstring tunerGUID, std::wstring tunerFriendlyName)
 {
 	if (m_aTunerParam.sDLLBaseName == L"") {
-		// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚ğg‚í‚È‚¢ê‡
+		// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã‚’ä½¿ã‚ãªã„å ´åˆ
 		return S_OK;
 	}
 
 	if (common::WStringToUpperCase(m_aTunerParam.sDLLBaseName) == L"AUTO") {
-		// INI ƒtƒ@ƒCƒ‹‚Å "AUTO" w’è‚Ìê‡
+		// INI ãƒ•ã‚¡ã‚¤ãƒ«ã§ "AUTO" æŒ‡å®šã®å ´åˆ
 		BOOL found = FALSE;
 		for (unsigned int i = 0; i < sizeof aTunerSpecialData / sizeof TUNER_SPECIAL_DLL; i++) {
 			std::wstring dbGUID(aTunerSpecialData[i].sTunerGUID);
 			if ((dbGUID != L"") && (tunerGUID.find(dbGUID)) != std::wstring::npos) {
-				// ‚±‚Ì‚Ìƒ`ƒ…[ƒiˆË‘¶ƒR[ƒh‚ğƒ`ƒ…[ƒiƒpƒ‰ƒ[ƒ^‚É•Ï”‚ÉƒZƒbƒg‚·‚é
+				// ã“ã®æ™‚ã®ãƒãƒ¥ãƒ¼ãƒŠä¾å­˜ã‚³ãƒ¼ãƒ‰ã‚’ãƒãƒ¥ãƒ¼ãƒŠãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«å¤‰æ•°ã«ã‚»ãƒƒãƒˆã™ã‚‹
 				m_aTunerParam.sDLLBaseName = aTunerSpecialData[i].sDLLBaseName;
 				break;
 			}
 		}
 		if (!found) {
-			// Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚Åƒ`ƒ…[ƒiŒÅ—LŠÖ”‚Íg‚í‚È‚¢
+			// è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã®ã§ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã¯ä½¿ã‚ãªã„
 			return S_OK;
 		}
 	}
 
-	// ‚±‚±‚Å DLL ‚ğƒ[ƒh‚·‚éB
+	// ã“ã“ã§ DLL ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
 	WCHAR szPath[_MAX_PATH + 1] = L"";
 	::GetModuleFileNameW(st_hModule, szPath, _MAX_PATH + 1);
-	// ƒtƒ‹ƒpƒX‚ğ•ª‰ğ
+	// ãƒ•ãƒ«ãƒ‘ã‚¹ã‚’åˆ†è§£
 	WCHAR szDrive[_MAX_DRIVE];
 	WCHAR szDir[_MAX_DIR];
 	WCHAR szFName[_MAX_FNAME];
 	WCHAR szExt[_MAX_EXT];
 	::_wsplitpath_s(szPath, szDrive, szDir, szFName, szExt);
 
-	// ƒtƒHƒ‹ƒ_–¼æ“¾
+	// ãƒ•ã‚©ãƒ«ãƒ€åå–å¾—
 	std::wstring sDllName;
 	sDllName = common::WStringPrintf(L"%s%s%s.dll", szDrive, szDir, m_aTunerParam.sDLLBaseName.c_str());
 
 	if ((m_hModuleTunerSpecials = ::LoadLibraryW(sDllName.c_str())) == NULL) {
-		// ƒ[ƒh‚Å‚«‚È‚¢ê‡A‚Ç‚¤‚·‚é? 
-		//  ¨ ƒfƒoƒbƒOƒƒbƒZ[ƒW‚¾‚¯o‚µ‚ÄAŒÅ—LŠÖ”‚ğg‚í‚È‚¢‚à‚Ì‚Æ‚µ‚Äˆµ‚¤
+		// ãƒ­ãƒ¼ãƒ‰ã§ããªã„å ´åˆã€ã©ã†ã™ã‚‹? 
+		//  â†’ ãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã ã‘å‡ºã—ã¦ã€å›ºæœ‰é–¢æ•°ã‚’ä½¿ã‚ãªã„ã‚‚ã®ã¨ã—ã¦æ‰±ã†
 		OutputDebug(L"CheckAndInitTunerDependDll: DLL Not found.\n");
 		return S_OK;
 	} else {
@@ -3367,15 +3395,15 @@ HRESULT CBonTuner::CheckAndInitTunerDependDll(IBaseFilter * pTunerDevice, std::w
 	HRESULT (* func)(IBaseFilter *, const WCHAR *, const WCHAR *, const WCHAR *) =
 		(HRESULT (*)(IBaseFilter *, const WCHAR *, const WCHAR *, const WCHAR *))::GetProcAddress(m_hModuleTunerSpecials, "CheckAndInitTuner");
 	if (!func) {
-		// ‰Šú‰»ƒR[ƒh‚ª–³‚¢
-		// ¨‰Šú‰»•s—v
+		// åˆæœŸåŒ–ã‚³ãƒ¼ãƒ‰ãŒç„¡ã„
+		// â†’åˆæœŸåŒ–ä¸è¦
 		return S_OK;
 	}
 
 	return (* func)(pTunerDevice, tunerGUID.c_str(), tunerFriendlyName.c_str(), m_sIniFilePath.c_str());
 }
 
-// ƒ`ƒ…[ƒiŒÅ—LDll‚Å‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒXŠm”F
+// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰Dllã§ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ç¢ºèª
 HRESULT CBonTuner::CheckCapture(std::wstring tunerGUID, std::wstring tunerFriendlyName, std::wstring captureGUID, std::wstring captureFriendlyName)
 {
 	if (m_hModuleTunerSpecials == NULL) {
@@ -3391,7 +3419,7 @@ HRESULT CBonTuner::CheckCapture(std::wstring tunerGUID, std::wstring tunerFriend
 	return (* func)(tunerGUID.c_str(), tunerFriendlyName.c_str(), captureGUID.c_str(), captureFriendlyName.c_str(), m_sIniFilePath.c_str());
 }
 
-// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚Ìƒ[ƒh
+// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã®ãƒ­ãƒ¼ãƒ‰
 void CBonTuner::LoadTunerDependCode(std::wstring tunerGUID, std::wstring tunerFriendlyName, std::wstring captureGUID, std::wstring captureFriendlyName)
 {
 	if (!m_hModuleTunerSpecials)
@@ -3421,28 +3449,28 @@ void CBonTuner::LoadTunerDependCode(std::wstring tunerGUID, std::wstring tunerFr
 	if (!m_pIBdaSpecials2)
 		OutputDebug(L"LoadTunerDependCode: Not IBdaSpecials2 Interface DLL.\n");
 
-	//  BdaSpecials‚Éiniƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ü‚¹‚é
+	//  BdaSpecialsã«iniãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¾ã›ã‚‹
 	HRESULT hr;
 	if (m_pIBdaSpecials2) {
 		hr = m_pIBdaSpecials2->ReadIniFile(m_sIniFilePath.c_str());
 	}
 
-	// ƒ`ƒ…[ƒiŒÅ—L‰Šú‰»ŠÖ”‚ğ‚±‚±‚ÅÀs‚µ‚Ä‚¨‚­
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰åˆæœŸåŒ–é–¢æ•°ã‚’ã“ã“ã§å®Ÿè¡Œã—ã¦ãŠã
 	if (m_pIBdaSpecials)
 		m_pIBdaSpecials->InitializeHook();
 
 	return;
 }
 
-// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚ÆDll‚Ì‰ğ•ú
+// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã¨Dllã®è§£æ”¾
 void CBonTuner::ReleaseTunerDependCode(void)
 {
 	HRESULT hr;
 
-	// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚ª’è‹`‚³‚ê‚Ä‚¢‚ê‚ÎA‚±‚±‚ÅÀs‚µ‚Ä‚¨‚­
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ãŒå®šç¾©ã•ã‚Œã¦ã„ã‚Œã°ã€ã“ã“ã§å®Ÿè¡Œã—ã¦ãŠã
 	if (m_pIBdaSpecials) {
 		if ((hr = m_pIBdaSpecials->FinalizeHook()) == E_NOINTERFACE) {
-			// ŒÅ—LFinalizeŠÖ”‚ª‚È‚¢‚¾‚¯‚È‚Ì‚ÅA‰½‚à‚¹‚¸
+			// å›ºæœ‰Finalizeé–¢æ•°ãŒãªã„ã ã‘ãªã®ã§ã€ä½•ã‚‚ã›ãš
 		}
 		else if (SUCCEEDED(hr)) {
 			OutputDebug(L"ReleaseTunerDependCode: Tuner Special Finalize successfully.\n");
@@ -3470,28 +3498,28 @@ HRESULT CBonTuner::InitializeGraphBuilder(void)
 {
 	HRESULT hr = E_FAIL;
 	
-	// pIGraphBuilder interface‚ğæ“¾
+	// pIGraphBuilder interfaceã‚’å–å¾—
 	CComPtr<IGraphBuilder> pIGraphBuilder;
 	if (FAILED(hr = pIGraphBuilder.CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER))) {
 		OutputDebug(L"[InitializeGraphBuilder] Fail to get IGraphBuilder interface.\n");
 	}
 	else {
-		// pIGraphBuilder interface‚Ìæ“¾¬Œ÷
-		// IMediaControl interface‚ğæ“¾
+		// pIGraphBuilder interfaceã®å–å¾—æˆåŠŸ
+		// IMediaControl interfaceã‚’å–å¾—
 		CComQIPtr<IMediaControl> pIMediaControl(pIGraphBuilder);
 		if (!pIMediaControl) {
 			OutputDebug(L"[InitializeGraphBuilder] Fail to get IMediaControl interface.\n");
 			hr = E_FAIL;
 		}
 		else {
-			// ¬Œ÷‚È‚Ì‚Å‚±‚Ì‚Ü‚ÜI—¹
+			// æˆåŠŸãªã®ã§ã“ã®ã¾ã¾çµ‚äº†
 			m_pIGraphBuilder = pIGraphBuilder;
 			m_pIMediaControl = pIMediaControl;
 			return hr;
 		}
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
@@ -3508,8 +3536,8 @@ void CBonTuner::CleanupGraph(void)
 	UnloadDemux();
 	UnloadTsWriter();
 
-	// Tuner ¨ Capture ‚Ì‡‚Å Release ‚µ‚È‚¢‚Æ
-	// ƒƒ‚ƒŠƒŠ[ƒN‚ğ‹N‚±‚·ƒfƒoƒCƒX‚ª‚ ‚é
+	// Tuner â†’ Capture ã®é †ã§ Release ã—ãªã„ã¨
+	// ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯ã‚’èµ·ã“ã™ãƒ‡ãƒã‚¤ã‚¹ãŒã‚ã‚‹
 	UnloadTunerDevice();
 	UnloadCaptureDevice();
 
@@ -3546,9 +3574,9 @@ void CBonTuner::StopGraph(void)
 		m_bIsSetStreamThread = FALSE;
 
 		// a workaround for WinXP SP3
-		// CBonTuner::LoadAndConnectDevice() ‚É‚Ä“®ì‚·‚éƒ`ƒ…[ƒi‚ªˆê‚Â‚à‚È‚©‚Á‚½‚Æ‚«A
-		// m_pIMediaControl->Stop() ‚Ì“à•”‚Å MsDvbNp.ax ‚ª access violation ‚ğ‹N‚±‚·B
-		// ‚È‚Ì‚ÅAStop ‚·‚é•K—v‚Ì‚È‚¢‚Æ‚«‚Í‰½‚à‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+		// CBonTuner::LoadAndConnectDevice() ã«ã¦å‹•ä½œã™ã‚‹ãƒãƒ¥ãƒ¼ãƒŠãŒä¸€ã¤ã‚‚ãªã‹ã£ãŸã¨ãã€
+		// m_pIMediaControl->Stop() ã®å†…éƒ¨ã§ MsDvbNp.ax ãŒ access violation ã‚’èµ·ã“ã™ã€‚
+		// ãªã®ã§ã€Stop ã™ã‚‹å¿…è¦ã®ãªã„ã¨ãã¯ä½•ã‚‚ã—ãªã„ã‚ˆã†ã«ã™ã‚‹
 		OAFilterState fs;
 		if (FAILED(hr = m_pIMediaControl->GetState(100, &fs))) {
 			OutputDebug(L"IMediaControl::GetState failed.\n");
@@ -3573,74 +3601,74 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 	for (auto it = m_DVBSystemTypeDB.SystemType.begin(); it != m_DVBSystemTypeDB.SystemType.end(); it++) {
 		OutputDebug(L"[CreateTuningSpace] Processing number %ld.\n", it->first);
 
-		// ƒIƒuƒWƒFƒNƒgì¬—p•Ï”
-		enumTuningSpace specifyTuningSpace = eTuningSpaceAuto;					// g—p‚·‚éTuningSpaceƒIƒuƒWƒFƒNƒg
-		CLSID clsidTuningSpace = CLSID_NULL;									// TuningSpaceƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXid
-		enumLocator specifyLocator = eLocatorAuto;								// g—p‚·‚éLocatorƒIƒuƒWƒFƒNƒg
-		CLSID clsidLocator = CLSID_NULL;										// LocatorƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXid
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆç”¨å¤‰æ•°
+		enumTuningSpace specifyTuningSpace = eTuningSpaceAuto;					// ä½¿ç”¨ã™ã‚‹TuningSpaceã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		CLSID clsidTuningSpace = CLSID_NULL;									// TuningSpaceã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹id
+		enumLocator specifyLocator = eLocatorAuto;								// ä½¿ç”¨ã™ã‚‹Locatorã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		CLSID clsidLocator = CLSID_NULL;										// Locatorã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹id
 
-		// TuningSpaceİ’è—p•Ï”
+		// TuningSpaceè¨­å®šç”¨å¤‰æ•°
 		// ITuningSpace
-		_bstr_t bstrUniqueName;													// ITuningSpace‚Éİ’è‚·‚éUniqueName
-		_bstr_t bstrFriendlyName;												// ITuningSpace‚Éİ’è‚·‚éFriendlyName
-		enumNetworkType specifyITuningSpaceNetworkType = eNetworkTypeAuto;		// ITuningSpace‚Éİ’è‚·‚éNetworkType
-		IID iidNetworkType = IID_NULL;											// ITuningSpace‚Éİ’è‚·‚éNetworkType‚ÌGUID
+		_bstr_t bstrUniqueName;													// ITuningSpaceã«è¨­å®šã™ã‚‹UniqueName
+		_bstr_t bstrFriendlyName;												// ITuningSpaceã«è¨­å®šã™ã‚‹FriendlyName
+		enumNetworkType specifyITuningSpaceNetworkType = eNetworkTypeAuto;		// ITuningSpaceã«è¨­å®šã™ã‚‹NetworkType
+		IID iidNetworkType = IID_NULL;											// ITuningSpaceã«è¨­å®šã™ã‚‹NetworkTypeã®GUID
 		// IDVBTuningSpace
-		DVBSystemType dvbSystemType = DVB_Satellite;							// DVB‚ÌƒVƒXƒeƒ€ƒ^ƒCƒv
+		DVBSystemType dvbSystemType = DVB_Satellite;							// DVBã®ã‚·ã‚¹ãƒ†ãƒ ã‚¿ã‚¤ãƒ—
 		// IDVBTuningSpace2
 		long networkID = -1;													// Network ID
 		// IDVBSTuningSpace
-		long highOscillator = -1;												// High‘¤Oscillatorü”g”
-		long lowOscillator = -1;												// Low‘¤Oscillatorü”g”
-		long lnbSwitch = -1;													// LNBƒXƒCƒbƒ`ü”g”
-		SpectralInversion spectralInversion = BDA_SPECTRAL_INVERSION_NOT_SET;	// ƒXƒyƒNƒgƒ‹”½“]
+		long highOscillator = -1;												// Highå´Oscillatorå‘¨æ³¢æ•°
+		long lowOscillator = -1;												// Lowå´Oscillatorå‘¨æ³¢æ•°
+		long lnbSwitch = -1;													// LNBã‚¹ã‚¤ãƒƒãƒå‘¨æ³¢æ•°
+		SpectralInversion spectralInversion = BDA_SPECTRAL_INVERSION_NOT_SET;	// ã‚¹ãƒšã‚¯ãƒˆãƒ«åè»¢
 		// IAnalogTVTuningSpace
-		TunerInputType inputType = TunerInputCable;								// ƒAƒ“ƒeƒiEƒP[ƒuƒ‹‚Ì“ü—Íƒ^ƒCƒv
-		long countryCode = 0;													// ‘E’nˆæƒR[ƒh
-		long minChannel = 0;													// Channel”Ô†‚ÌÅ¬’l
-		long maxChannel = 0;													// Channel”Ô†‚ÌÅ‘å’l
+		TunerInputType inputType = TunerInputCable;								// ã‚¢ãƒ³ãƒ†ãƒŠãƒ»ã‚±ãƒ¼ãƒ–ãƒ«ã®å…¥åŠ›ã‚¿ã‚¤ãƒ—
+		long countryCode = 0;													// å›½ãƒ»åœ°åŸŸã‚³ãƒ¼ãƒ‰
+		long minChannel = 0;													// Channelç•ªå·ã®æœ€å°å€¤
+		long maxChannel = 0;													// Channelç•ªå·ã®æœ€å¤§å€¤
 		// IATSCTuningSpace
-		long minPhysicalChannel = 0;											// Physical Channel”Ô†‚ÌÅ¬’l
-		long maxPhysicalChannel = 0;											// Physical Channel”Ô†‚ÌÅ‘å’l
-		long minMinorChannel = 0;												// Minor Channel”Ô†‚ÌÅ¬’l
-		long maxMinorChannel = 0;												// Minor Channel”Ô†‚ÌÅ‘å’l
+		long minPhysicalChannel = 0;											// Physical Channelç•ªå·ã®æœ€å°å€¤
+		long maxPhysicalChannel = 0;											// Physical Channelç•ªå·ã®æœ€å¤§å€¤
+		long minMinorChannel = 0;												// Minor Channelç•ªå·ã®æœ€å°å€¤
+		long maxMinorChannel = 0;												// Minor Channelç•ªå·ã®æœ€å¤§å€¤
 		// IDigitalCableTuningSpace
-		long minMajorChannel = 0;												// Major Channel”Ô†‚ÌÅ¬’l
-		long maxMajorChannel = 0;												// Major Channel”Ô†‚ÌÅ‘å’l
-		long minSourceID = 0;													// Source ID‚ÌÅ¬’l
-		long maxSourceID = 0;													// Source ID‚ÌÅ‘å’l
+		long minMajorChannel = 0;												// Major Channelç•ªå·ã®æœ€å°å€¤
+		long maxMajorChannel = 0;												// Major Channelç•ªå·ã®æœ€å¤§å€¤
+		long minSourceID = 0;													// Source IDã®æœ€å°å€¤
+		long maxSourceID = 0;													// Source IDã®æœ€å¤§å€¤
 
-		// Default Locatorİ’è—p•Ï”
+		// Default Locatorè¨­å®šç”¨å¤‰æ•°
 		// ILocator
-		long frequency = -1;													// RFM†‚Ìü”g”
-		long symbolRate = -1;													// ƒVƒ“ƒ{ƒ‹ƒŒ[ƒg
-		FECMethod innerFECMethod = BDA_FEC_METHOD_NOT_SET;						// “à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-		BinaryConvolutionCodeRate innerFECRate = BDA_BCC_RATE_NOT_SET;			// “à•”FECƒŒ[ƒg
-		FECMethod outerFECMethod = BDA_FEC_METHOD_NOT_SET;						// ŠO•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-		BinaryConvolutionCodeRate outerFECRate = BDA_BCC_RATE_NOT_SET;			// ŠO•”FECƒŒ[ƒg
-		ModulationType modulationType = BDA_MOD_NOT_SET;						// •Ï’²ƒ^ƒCƒv
+		long frequency = -1;													// RFä¿¡å·ã®å‘¨æ³¢æ•°
+		long symbolRate = -1;													// ã‚·ãƒ³ãƒœãƒ«ãƒ¬ãƒ¼ãƒˆ
+		FECMethod innerFECMethod = BDA_FEC_METHOD_NOT_SET;						// å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+		BinaryConvolutionCodeRate innerFECRate = BDA_BCC_RATE_NOT_SET;			// å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+		FECMethod outerFECMethod = BDA_FEC_METHOD_NOT_SET;						// å¤–éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+		BinaryConvolutionCodeRate outerFECRate = BDA_BCC_RATE_NOT_SET;			// å¤–éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+		ModulationType modulationType = BDA_MOD_NOT_SET;						// å¤‰èª¿ã‚¿ã‚¤ãƒ—
 		// IDVBSLocator
-		VARIANT_BOOL westPosition = VARIANT_TRUE;								// ‰q¯‚ÌŒo“x‚ğ¼Œo‚Æ“ŒŒo‚Ì‚Ç‚¿‚ç‚Å•\Œ»‚·‚é‚©(True‚Å¼Œo)
-		long orbitalPosition = -1;												// ‰q¯‚ÌŒo“x(1/10‹)
-		long elevation = -1;													// ‰q¯‚Ì‹ÂŠp(1/10‹)
-		long azimuth = -1;														// ‰q¯‚Ì•ûˆÊŠp(1/10‹)
-		Polarisation polarisation = BDA_POLARISATION_NOT_SET;					// •Î”g’l
+		VARIANT_BOOL westPosition = VARIANT_TRUE;								// è¡›æ˜Ÿã®çµŒåº¦ã‚’è¥¿çµŒã¨æ±çµŒã®ã©ã¡ã‚‰ã§è¡¨ç¾ã™ã‚‹ã‹(Trueã§è¥¿çµŒ)
+		long orbitalPosition = -1;												// è¡›æ˜Ÿã®çµŒåº¦(1/10Â°)
+		long elevation = -1;													// è¡›æ˜Ÿã®ä»°è§’(1/10Â°)
+		long azimuth = -1;														// è¡›æ˜Ÿã®æ–¹ä½è§’(1/10Â°)
+		Polarisation polarisation = BDA_POLARISATION_NOT_SET;					// åæ³¢å€¤
 		// IDVBSLocator2
-		LNB_Source diseqLNBSource = BDA_LNB_SOURCE_NOT_SET;						// DiSeqC LNB“ü—Íƒ\[ƒX
-		Pilot pilot = BDA_PILOT_NOT_SET;										// DVB-S2ƒpƒCƒƒbƒgƒ‚[ƒh
-		RollOff rollOff = BDA_ROLL_OFF_NOT_SET;									// DVB-S2ƒ[ƒ‹ƒIƒtŒW”
+		LNB_Source diseqLNBSource = BDA_LNB_SOURCE_NOT_SET;						// DiSeqC LNBå…¥åŠ›ã‚½ãƒ¼ã‚¹
+		Pilot pilot = BDA_PILOT_NOT_SET;										// DVB-S2ãƒ‘ã‚¤ãƒ­ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰
+		RollOff rollOff = BDA_ROLL_OFF_NOT_SET;									// DVB-S2ãƒ­ãƒ¼ãƒ«ã‚ªãƒ•ä¿‚æ•°
 		// IDVBTLocator
-		long bandwidth = -1;													// ‘Ñˆæ•(MHz)
-		GuardInterval guardInterval = BDA_GUARD_NOT_SET;						// ƒK[ƒhƒCƒ“ƒ^[ƒoƒ‹
-		HierarchyAlpha hierarchyAlpha = BDA_HALPHA_NOT_SET;						// ŠK‘wóƒAƒ‹ƒtƒ@
-		FECMethod lpInnerFECMethod = BDA_FEC_METHOD_NOT_SET;					// LPƒXƒgƒŠ[ƒ€‚Ì“à•”‘O•ûŒë‚è’ù³ƒ^ƒCƒv
-		BinaryConvolutionCodeRate lpInnerFECRate = BDA_BCC_RATE_NOT_SET;		// LPƒXƒgƒŠ[ƒ€‚Ì“à•”FECƒŒ[ƒg
-		TransmissionMode transmissionMode = BDA_XMIT_MODE_NOT_SET;				// “`‘—ƒ‚[ƒh
-		VARIANT_BOOL otherFrequencyInUse = VARIANT_TRUE;						// •Ê‚ÌDVB-Tƒuƒ[ƒhƒLƒƒƒXƒ^‚Åg‚í‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
+		long bandwidth = -1;													// å¸¯åŸŸå¹…(MHz)
+		GuardInterval guardInterval = BDA_GUARD_NOT_SET;						// ã‚¬ãƒ¼ãƒ‰ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«
+		HierarchyAlpha hierarchyAlpha = BDA_HALPHA_NOT_SET;						// éšå±¤çŠ¶ã‚¢ãƒ«ãƒ•ã‚¡
+		FECMethod lpInnerFECMethod = BDA_FEC_METHOD_NOT_SET;					// LPã‚¹ãƒˆãƒªãƒ¼ãƒ ã®å†…éƒ¨å‰æ–¹èª¤ã‚Šè¨‚æ­£ã‚¿ã‚¤ãƒ—
+		BinaryConvolutionCodeRate lpInnerFECRate = BDA_BCC_RATE_NOT_SET;		// LPã‚¹ãƒˆãƒªãƒ¼ãƒ ã®å†…éƒ¨FECãƒ¬ãƒ¼ãƒˆ
+		TransmissionMode transmissionMode = BDA_XMIT_MODE_NOT_SET;				// ä¼é€ãƒ¢ãƒ¼ãƒ‰
+		VARIANT_BOOL otherFrequencyInUse = VARIANT_TRUE;						// åˆ¥ã®DVB-Tãƒ–ãƒ­ãƒ¼ãƒ‰ã‚­ãƒ£ã‚¹ã‚¿ã§ä½¿ã‚ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹
 		// IDVBTLocator2
 		long physicalLayerPipeId = -1;											// PLP ID
 		// IATSCLocator
-		long physicalChannel = -1;												// Physical Channel”Ô†
+		long physicalChannel = -1;												// Physical Channelç•ªå·
 		long transportStreamID = -1;											// TSID
 		// IATSCLocator2
 		long programNumber = -1;												// Program Number
@@ -3875,18 +3903,18 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 		HRESULT hr;
 
 		CComPtr<ITuningSpace> pITuningSpace;
-		// ITuningSpace‚ğì¬
+		// ITuningSpaceã‚’ä½œæˆ
 		//
-		// ITuningSpaceŒp³‡F
-		//   ITuningSpace ¨ IDVBTuningSpace ¨ IDVBTuningSpace2 ¨ IDVBSTuningSpace
-		//                ¨ IAnalogTVTuningSpace ¨ IATSCTuningSpace ¨ IDigitalCableTuningSpace
-		//                ¨ IAnalogRadioTuningSpace ¨ IAnalogRadioTuningSpace2
-		//                ¨ IAuxInTuningSpace ¨ IAuxInTuningSpace2
+		// ITuningSpaceç¶™æ‰¿é †ï¼š
+		//   ITuningSpace â†’ IDVBTuningSpace â†’ IDVBTuningSpace2 â†’ IDVBSTuningSpace
+		//                â†’ IAnalogTVTuningSpace â†’ IATSCTuningSpace â†’ IDigitalCableTuningSpace
+		//                â†’ IAnalogRadioTuningSpace â†’ IAnalogRadioTuningSpace2
+		//                â†’ IAuxInTuningSpace â†’ IAuxInTuningSpace2
 		if (FAILED(hr = pITuningSpace.CoCreateInstance(clsidTuningSpace, NULL, CLSCTX_INPROC_SERVER))) {
 			OutputDebug(L"[CreateTuningSpace] Fail to get ITuningSpace interface\n");
 		}
 		else {
-			// ITuningSpace ‚É NetworkType ‚ğİ’è
+			// ITuningSpace ã« NetworkType ã‚’è¨­å®š
 			if (FAILED(hr = pITuningSpace->put__NetworkType(iidNetworkType))) {
 				OutputDebug(L"[CreateTuningSpace] put__NetworkType failed\n");
 			}
@@ -3899,7 +3927,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 				pITuningSpace->put_FriendlyName(bstrFriendlyName);
 				OutputDebug(L"  ITuningSpace is initialized.\n");
 
-				// IDVBTuningSpace“Á—L
+				// IDVBTuningSpaceç‰¹æœ‰
 				{
 					CComQIPtr<IDVBTuningSpace> pIDVBTuningSpace(pITuningSpace);
 					if (pIDVBTuningSpace) {
@@ -3908,7 +3936,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					}
 				}
 
-				// IDVBTuningSpace2“Á—L
+				// IDVBTuningSpace2ç‰¹æœ‰
 				{
 					CComQIPtr<IDVBTuningSpace2> pIDVBTuningSpace2(pITuningSpace);
 					if (pIDVBTuningSpace2) {
@@ -3917,7 +3945,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					}
 				}
 
-				// IDVBSTuningSpace“Á—L
+				// IDVBSTuningSpaceç‰¹æœ‰
 				{
 					CComQIPtr<IDVBSTuningSpace> pIDVBSTuningSpace(pITuningSpace);
 					if (pIDVBSTuningSpace) {
@@ -3929,7 +3957,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					}
 				}
 
-				// IAnalogTVTuningSpace“Á—L
+				// IAnalogTVTuningSpaceç‰¹æœ‰
 				{
 					CComQIPtr<IAnalogTVTuningSpace> pIAnalogTVTuningSpace(pITuningSpace);
 					if (pIAnalogTVTuningSpace) {
@@ -3941,7 +3969,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					}
 				}
 
-				// IATSCTuningSpace“Á—L
+				// IATSCTuningSpaceç‰¹æœ‰
 				{
 					CComQIPtr<IATSCTuningSpace> pIATSCTuningSpace(pITuningSpace);
 					if (pIATSCTuningSpace) {
@@ -3953,7 +3981,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					}
 				}
 
-				// IDigitalCableTuningSpace“Á—L
+				// IDigitalCableTuningSpaceç‰¹æœ‰
 				{
 					CComQIPtr<IDigitalCableTuningSpace> pIDigitalCableTuningSpace(pITuningSpace);
 					if (pIDigitalCableTuningSpace) {
@@ -3965,21 +3993,21 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					}
 				}
 
-				// pILocator‚ğì¬
+				// pILocatorã‚’ä½œæˆ
 				//
-				// ILocatorŒp³‡F
-				//   ILocator ¨ IDigitalLocator ¨ IDVBTLocator ¨ IDVBTLocator2
-				//                               ¨ IDVBSLocator ¨ IDVBSLocator2
-				//                                               ¨ IISDBSLocator
-				//                               ¨ IDVBCLocator
-				//                               ¨ IATSCLocator ¨ IATSCLocator2 ¨ IDigitalCableLocator
-				//            ¨ IAnalogLocator
+				// ILocatorç¶™æ‰¿é †ï¼š
+				//   ILocator â†’ IDigitalLocator â†’ IDVBTLocator â†’ IDVBTLocator2
+				//                               â†’ IDVBSLocator â†’ IDVBSLocator2
+				//                                               â†’ IISDBSLocator
+				//                               â†’ IDVBCLocator
+				//                               â†’ IATSCLocator â†’ IATSCLocator2 â†’ IDigitalCableLocator
+				//            â†’ IAnalogLocator
 				CComPtr<ILocator> pILocator;
 				if (FAILED(hr = pILocator.CoCreateInstance(clsidLocator))) {
 					OutputDebug(L"[CreateTuningSpace] Failed to get ILocator interface.\n");
 				}
 				else {
-					// Default Locator‚Ì’l‚ğì¬ 
+					// Default Locatorã®å€¤ã‚’ä½œæˆ 
 					// ILocator
 					pILocator->put_CarrierFrequency(frequency);
 					pILocator->put_SymbolRate(symbolRate);
@@ -3990,7 +4018,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 					pILocator->put_Modulation(modulationType);
 					OutputDebug(L"  ILocator is initialized.\n");
 
-					// IDigitalLocator“Á—LƒvƒƒpƒeƒB‚Í–³‚¢‚¯‚ÇLog‚Éc‚·
+					// IDigitalLocatorç‰¹æœ‰ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¯ç„¡ã„ã‘ã©Logã«æ®‹ã™
 					{
 						CComQIPtr<IDigitalLocator> pIDigitalLocator(pILocator);
 						if (pIDigitalLocator) {
@@ -3998,7 +4026,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IDVBSLocator“Á—L
+					// IDVBSLocatorç‰¹æœ‰
 					{
 						CComQIPtr<IDVBSLocator> pIDVBSLocator(pILocator);
 						if (pIDVBSLocator) {
@@ -4011,7 +4039,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IDVBSLocator2“Á—L
+					// IDVBSLocator2ç‰¹æœ‰
 					{
 						CComQIPtr<IDVBSLocator2> pIDVBSLocator2(pILocator);
 						if (pIDVBSLocator2) {
@@ -4026,7 +4054,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IISDBSLocator“Á—LƒvƒƒpƒeƒB‚Í–³‚¢‚¯‚ÇLog‚Éc‚·
+					// IISDBSLocatorç‰¹æœ‰ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¯ç„¡ã„ã‘ã©Logã«æ®‹ã™
 					{
 						CComQIPtr<IISDBSLocator> pIISDBSLocator(pILocator);
 						if (pIISDBSLocator) {
@@ -4034,7 +4062,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IDVBTLocator“Á—L
+					// IDVBTLocatorç‰¹æœ‰
 					{
 						CComQIPtr<IDVBTLocator> pIDVBTLocator(pILocator);
 						if (pIDVBTLocator) {
@@ -4049,7 +4077,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IDVBTLocator2“Á—L
+					// IDVBTLocator2ç‰¹æœ‰
 					{
 						CComQIPtr<IDVBTLocator2> pIDVBTLocator2(pILocator);
 						if (pIDVBTLocator2) {
@@ -4058,7 +4086,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IDVBCLocator“Á—LƒvƒƒpƒeƒB‚Í–³‚¢‚¯‚ÇLog‚Éc‚·
+					// IDVBCLocatorç‰¹æœ‰ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¯ç„¡ã„ã‘ã©Logã«æ®‹ã™
 					{
 						CComQIPtr<IDVBCLocator> pIDVBCLocator(pILocator);
 						if (pIDVBCLocator) {
@@ -4066,7 +4094,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IATSCLocator“Á—L
+					// IATSCLocatorç‰¹æœ‰
 					{
 						CComQIPtr<IATSCLocator> pIATSCLocator(pILocator);
 						if (pIATSCLocator) {
@@ -4076,7 +4104,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IATSCLocator2“Á—L
+					// IATSCLocator2ç‰¹æœ‰
 					{
 						CComQIPtr<IATSCLocator2> pIATSCLocator2(pILocator);
 						if (pIATSCLocator2) {
@@ -4085,7 +4113,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 						}
 					}
 
-					// IDigitalCableLocator“Á—LƒvƒƒpƒeƒB‚Í–³‚¢‚¯‚ÇLog‚Éc‚·
+					// IDigitalCableLocatorç‰¹æœ‰ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¯ç„¡ã„ã‘ã©Logã«æ®‹ã™
 					{
 						CComQIPtr<IDigitalCableLocator> pIDigitalCableLocator(pILocator);
 						if (pIDigitalCableLocator) {
@@ -4095,7 +4123,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 
 					pITuningSpace->put_DefaultLocator(pILocator);
 
-					// ‘S‚Ä¬Œ÷
+					// å…¨ã¦æˆåŠŸ
 					it->second.pITuningSpace = pITuningSpace;
 					OutputDebug(L"[CreateTuningSpace] Process number %ld was successful.\n", it->first);
 					continue;
@@ -4103,7 +4131,7 @@ HRESULT CBonTuner::CreateTuningSpace(void)
 			}
 		}
 
-		// ¸”s
+		// å¤±æ•—
 		OutputDebug(L"[CreateTuningSpace] Process number %ld failed.\n", it->first);
 	}
 
@@ -4120,9 +4148,9 @@ void CBonTuner::UnloadTuningSpace(void)
 	m_DVBSystemTypeDB.ReleaseAll();
 }
 
-// Tuning Request ‚ğ‘—‚Á‚Ä Tuning Space ‚ğ‰Šú‰»‚·‚é
-//   ‚±‚ê‚ğ‚â‚ç‚È‚¢‚Æ output pin ‚ªoŒ»‚µ‚È‚¢ƒ`ƒ…[ƒiƒtƒBƒ‹ƒ^‚ª
-//   ‚ ‚é‚ç‚µ‚¢
+// Tuning Request ã‚’é€ã£ã¦ Tuning Space ã‚’åˆæœŸåŒ–ã™ã‚‹
+//   ã“ã‚Œã‚’ã‚„ã‚‰ãªã„ã¨ output pin ãŒå‡ºç¾ã—ãªã„ãƒãƒ¥ãƒ¼ãƒŠãƒ•ã‚£ãƒ«ã‚¿ãŒ
+//   ã‚ã‚‹ã‚‰ã—ã„
 HRESULT CBonTuner::InitTuningSpace(void)
 {
 	if (!m_DVBSystemTypeDB.IsExist(0)) {
@@ -4137,19 +4165,19 @@ HRESULT CBonTuner::InitTuningSpace(void)
 
 	HRESULT hr = E_FAIL;
 
-	// ITuneRequestì¬
+	// ITuneRequestä½œæˆ
 	//
-	// ITuneRequestŒp³‡F
-	//   ITuneRequest ¨ IDVBTuneRequest
-	//                ¨ IChannelTuneRequest ¨ IATSCChannelTuneRequest ¨ IDigitalCableTuneRequest
-	//                ¨ IChannelIDTuneRequest
-	//                ¨ IMPEG2TuneRequest
+	// ITuneRequestç¶™æ‰¿é †ï¼š
+	//   ITuneRequest â†’ IDVBTuneRequest
+	//                â†’ IChannelTuneRequest â†’ IATSCChannelTuneRequest â†’ IDigitalCableTuneRequest
+	//                â†’ IChannelIDTuneRequest
+	//                â†’ IMPEG2TuneRequest
 	CComPtr<ITuneRequest> pITuneRequest;
 	if (FAILED(hr = m_DVBSystemTypeDB.SystemType[0].pITuningSpace->CreateTuneRequest(&pITuneRequest))) {
 		OutputDebug(L"[InitTuningSpace] Fail to get ITuneRequest interface.\n");
 	}
 	else {
-		// IDVBTuneRequest“Á—L
+		// IDVBTuneRequestç‰¹æœ‰
 		{
 			CComQIPtr<IDVBTuneRequest> pIDVBTuneRequest(pITuneRequest);
 			if (pIDVBTuneRequest) {
@@ -4159,7 +4187,7 @@ HRESULT CBonTuner::InitTuningSpace(void)
 			}
 		}
 
-		// IChannelTuneRequest“Á—L
+		// IChannelTuneRequestç‰¹æœ‰
 		{
 			CComQIPtr<IChannelTuneRequest> pIChannelTuneRequest(pITuneRequest);
 			if (pIChannelTuneRequest) {
@@ -4167,7 +4195,7 @@ HRESULT CBonTuner::InitTuningSpace(void)
 			}
 		}
 
-		// IATSCChannelTuneRequest“Á—L
+		// IATSCChannelTuneRequestç‰¹æœ‰
 		{
 			CComQIPtr<IATSCChannelTuneRequest> pIATSCChannelTuneRequest(pITuneRequest);
 			if (pIATSCChannelTuneRequest) {
@@ -4175,7 +4203,7 @@ HRESULT CBonTuner::InitTuningSpace(void)
 			}
 		}
 
-		// IDigitalCableTuneRequest“Á—L
+		// IDigitalCableTuneRequestç‰¹æœ‰
 		{
 			CComQIPtr<IDigitalCableTuneRequest> pIDigitalCableTuneRequest(pITuneRequest);
 			if (pIDigitalCableTuneRequest) {
@@ -4187,11 +4215,11 @@ HRESULT CBonTuner::InitTuningSpace(void)
 		hr = m_pITuner->put_TuningSpace(m_DVBSystemTypeDB.SystemType[0].pITuningSpace);
 		hr = m_pITuner->put_TuneRequest(pITuneRequest);
 
-		// ‘S‚Ä¬Œ÷
+		// å…¨ã¦æˆåŠŸ
 		return S_OK;
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
@@ -4250,29 +4278,29 @@ HRESULT CBonTuner::LoadNetworkProvider(void)
 	HRESULT hr = E_FAIL;
 
 	CComPtr<IBaseFilter> pNetworkProvider;
-	// Network ProveiderƒtƒBƒ‹ƒ^‚ğæ“¾
+	// Network Proveiderãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—
 	if (FAILED(hr = pNetworkProvider.CoCreateInstance(clsidNetworkProvider, NULL, CLSCTX_INPROC_SERVER))) {
 		OutputDebug(L"[LoadNetworkProvider] Fail to get NetworkProvider IBaseFilter interface.\n");
 	}
 	else {
 		std::wstring strName = CDSFilterEnum::getRegistryName(pNetworkProvider);
 		OutputDebug(L"[LoadNetworkProvider] %s is loaded.\n", strName.c_str());
-		// ƒtƒBƒ‹ƒ^æ“¾¬Œ÷
-		// Graph Builder‚ÉƒtƒBƒ‹ƒ^‚ğ’Ç‰Á
+		// ãƒ•ã‚£ãƒ«ã‚¿å–å¾—æˆåŠŸ
+		// Graph Builderã«ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ 
 		if (FAILED(hr = m_pIGraphBuilder->AddFilter(pNetworkProvider, strName.c_str()))) {
 			OutputDebug(L"[LoadNetworkProvider] Fail to add NetworkProvider IBaseFilter into graph.\n");
 		}
 		else {
-			// ƒtƒBƒ‹ƒ^’Ç‰Á¬Œ÷
-			// ITuner interface‚ğæ“¾
+			// ãƒ•ã‚£ãƒ«ã‚¿è¿½åŠ æˆåŠŸ
+			// ITuner interfaceã‚’å–å¾—
 			CComQIPtr<ITuner> pITuner(pNetworkProvider);
 			if (!pITuner) {
 				OutputDebug(L"[LoadNetworkProvider] Fail to get ITuner interface.\n");
 				hr = E_FAIL;
 			}
 			else {
-				// ITuner interface‚Ìæ“¾¬Œ÷
-				// ‘S‚Ä¬Œ÷
+				// ITuner interfaceã®å–å¾—æˆåŠŸ
+				// å…¨ã¦æˆåŠŸ
 				m_pNetworkProvider = pNetworkProvider;
 				m_pITuner = pITuner;
 				return hr;
@@ -4280,7 +4308,7 @@ HRESULT CBonTuner::LoadNetworkProvider(void)
 		}
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
@@ -4294,12 +4322,12 @@ void CBonTuner::UnloadNetworkProvider(void)
 	m_pNetworkProvider.Release();
 }
 
-// ini ƒtƒ@ƒCƒ‹‚Åw’è‚³‚ê‚½ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒ‚Ì‘g‡‚¹List‚ğì¬
+// ini ãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã•ã‚ŒãŸãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ã®çµ„åˆã›Listã‚’ä½œæˆ
 HRESULT CBonTuner::InitDSFilterEnum(void)
 {
 	HRESULT hr;
 
-	// ƒVƒXƒeƒ€‚É‘¶İ‚·‚éƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒ‚ÌƒŠƒXƒg
+	// ã‚·ã‚¹ãƒ†ãƒ ã«å­˜åœ¨ã™ã‚‹ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ã®ãƒªã‚¹ãƒˆ
 	std::vector<DSListData> TunerList;
 	std::vector<DSListData> CaptureList;
 
@@ -4314,11 +4342,11 @@ HRESULT CBonTuner::InitDSFilterEnum(void)
 		std::wstring sDisplayName;
 		std::wstring sFriendlyName;
 
-		// ƒ`ƒ…[ƒi‚Ì DisplayName, FriendlyName ‚ğ“¾‚é
+		// ãƒãƒ¥ãƒ¼ãƒŠã® DisplayName, FriendlyName ã‚’å¾—ã‚‹
 		m_pDSFilterEnumTuner->getDisplayName(&sDisplayName);
 		m_pDSFilterEnumTuner->getFriendlyName(&sFriendlyName);
 
-		// ˆê——‚É’Ç‰Á
+		// ä¸€è¦§ã«è¿½åŠ 
 		TunerList.emplace_back(sDisplayName, sFriendlyName, order);
 
 		order++;
@@ -4330,11 +4358,11 @@ HRESULT CBonTuner::InitDSFilterEnum(void)
 		std::wstring sDisplayName;
 		std::wstring sFriendlyName;
 
-		// ƒ`ƒ…[ƒi‚Ì DisplayName, FriendlyName ‚ğ“¾‚é
+		// ãƒãƒ¥ãƒ¼ãƒŠã® DisplayName, FriendlyName ã‚’å¾—ã‚‹
 		m_pDSFilterEnumCapture->getDisplayName(&sDisplayName);
 		m_pDSFilterEnumCapture->getFriendlyName(&sFriendlyName);
 
-		// ˆê——‚É’Ç‰Á
+		// ä¸€è¦§ã«è¿½åŠ 
 		CaptureList.emplace_back(sDisplayName, sFriendlyName, order);
 
 		order++;
@@ -4345,54 +4373,54 @@ HRESULT CBonTuner::InitDSFilterEnum(void)
 
 	for (unsigned int i = 0; i < m_aTunerParam.Tuner.size(); i++) {
 		for (auto it = TunerList.begin(); it != TunerList.end(); it++) {
-			// DisplayName ‚É GUID ‚ªŠÜ‚Ü‚ê‚é‚©ŒŸ¸‚µ‚ÄANO‚¾‚Á‚½‚çŸ‚Ìƒ`ƒ…[ƒi‚Ö
+			// DisplayName ã« GUID ãŒå«ã¾ã‚Œã‚‹ã‹æ¤œæŸ»ã—ã¦ã€NOã ã£ãŸã‚‰æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 			if (m_aTunerParam.Tuner[i].TunerGUID.compare(L"") != 0 && it->GUID.find(m_aTunerParam.Tuner[i].TunerGUID) == std::wstring::npos) {
 				continue;
 			}
 
-			// FriendlyName ‚ªŠÜ‚Ü‚ê‚é‚©ŒŸ¸‚µ‚ÄANO‚¾‚Á‚½‚çŸ‚Ìƒ`ƒ…[ƒi‚Ö
+			// FriendlyName ãŒå«ã¾ã‚Œã‚‹ã‹æ¤œæŸ»ã—ã¦ã€NOã ã£ãŸã‚‰æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 			if (m_aTunerParam.Tuner[i].TunerFriendlyName.compare(L"") != 0 && it->FriendlyName.find(m_aTunerParam.Tuner[i].TunerFriendlyName) == std::wstring::npos) {
 				continue;
 			}
 
-			// ‘ÎÛ‚Ìƒ`ƒ…[ƒiƒfƒoƒCƒX‚¾‚Á‚½
+			// å¯¾è±¡ã®ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ã ã£ãŸ
 			OutputDebug(L"[InitDSFilterEnum] Found tuner device=FriendlyName:%s,  GUID:%s\n", it->FriendlyName.c_str(), it->GUID.c_str());
 			if (!m_aTunerParam.bNotExistCaptureDevice) {
-				// CaptureƒfƒoƒCƒX‚ğg—p‚·‚é
+				// Captureãƒ‡ãƒã‚¤ã‚¹ã‚’ä½¿ç”¨ã™ã‚‹
 				std::vector<DSListData> TempCaptureList;
 				for (auto it2 = CaptureList.begin(); it2 != CaptureList.end(); it2++) {
-					// DisplayName ‚É GUID ‚ªŠÜ‚Ü‚ê‚é‚©ŒŸ¸‚µ‚ÄANO‚¾‚Á‚½‚çŸ‚ÌƒLƒƒƒvƒ`ƒƒ‚Ö
+					// DisplayName ã« GUID ãŒå«ã¾ã‚Œã‚‹ã‹æ¤œæŸ»ã—ã¦ã€NOã ã£ãŸã‚‰æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ã¸
 					if (m_aTunerParam.Tuner[i].CaptureGUID.compare(L"") != 0 && it2->GUID.find(m_aTunerParam.Tuner[i].CaptureGUID) == std::wstring::npos) {
 						continue;
 					}
 
-					// FriendlyName ‚ªŠÜ‚Ü‚ê‚é‚©ŒŸ¸‚µ‚ÄANO‚¾‚Á‚½‚çŸ‚ÌƒLƒƒƒvƒ`ƒƒ‚Ö
+					// FriendlyName ãŒå«ã¾ã‚Œã‚‹ã‹æ¤œæŸ»ã—ã¦ã€NOã ã£ãŸã‚‰æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ã¸
 					if (m_aTunerParam.Tuner[i].CaptureFriendlyName.compare(L"") != 0 && it2->FriendlyName.find(m_aTunerParam.Tuner[i].CaptureFriendlyName) == std::wstring::npos) {
 						continue;
 					}
 
-					// ‘ÎÛ‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚¾‚Á‚½
+					// å¯¾è±¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã ã£ãŸ
 					OutputDebug(L"[InitDSFilterEnum]   Found capture device=FriendlyName:%s,  GUID:%s\n", it2->FriendlyName.c_str(), it2->GUID.c_str());
 					TempCaptureList.emplace_back(*it2);
 				}
 
 				if (TempCaptureList.empty()) {
-					// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚Ö
+					// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 					OutputDebug(L"[InitDSFilterEnum]   No combined capture devices.\n");
 					continue;
 				}
 
-				// ƒ`ƒ…[ƒi‚ğList‚É’Ç‰Á
+				// ãƒãƒ¥ãƒ¼ãƒŠã‚’Listã«è¿½åŠ 
 				m_UsableTunerCaptureList.emplace_back(*it);
 
 				unsigned int count = 0;
 				if (m_aTunerParam.bCheckDeviceInstancePath) {
-					// ƒ`ƒ…[ƒiƒfƒoƒCƒX‚ÆƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ÌƒfƒoƒCƒXƒCƒ“ƒXƒ^ƒ“ƒXƒpƒX‚ªˆê’v‚µ‚Ä‚¢‚é‚©Šm”F
+					// ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ã¨ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã®ãƒ‡ãƒã‚¤ã‚¹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ‘ã‚¹ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹ç¢ºèª
 					OutputDebug(L"[InitDSFilterEnum]   Checking device instance path.\n");
 					std::wstring dip = CDSFilterEnum::getDeviceInstancePathrFromDisplayName(it->GUID);
 					for (auto it2 = TempCaptureList.begin(); it2 != TempCaptureList.end(); it2++) {
 						if (CDSFilterEnum::getDeviceInstancePathrFromDisplayName(it2->GUID) == dip) {
-							// ƒfƒoƒCƒXƒpƒX‚ªˆê’v‚·‚é‚à‚Ì‚ğList‚É’Ç‰Á
+							// ãƒ‡ãƒã‚¤ã‚¹ãƒ‘ã‚¹ãŒä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’Listã«è¿½åŠ 
 							OutputDebug(L"[InitDSFilterEnum]     Adding matched tuner and capture device.\n");
 							OutputDebug(L"[InitDSFilterEnum]       tuner=FriendlyName:%s,  GUID:%s\n", it->FriendlyName.c_str(), it->GUID.c_str());
 							OutputDebug(L"[InitDSFilterEnum]       capture=FriendlyName:%s,  GUID:%s\n", it2->FriendlyName.c_str(), it2->GUID.c_str());
@@ -4403,12 +4431,12 @@ HRESULT CBonTuner::InitDSFilterEnum(void)
 				}
 
 				if (count == 0) {
-					// ƒfƒoƒCƒXƒpƒX‚ªˆê’v‚·‚é‚à‚Ì‚ª‚È‚©‚Á‚½ or Šm”F‚µ‚È‚¢
+					// ãƒ‡ãƒã‚¤ã‚¹ãƒ‘ã‚¹ãŒä¸€è‡´ã™ã‚‹ã‚‚ã®ãŒãªã‹ã£ãŸ or ç¢ºèªã—ãªã„
 					if (m_aTunerParam.bCheckDeviceInstancePath) {
 						OutputDebug(L"[InitDSFilterEnum]     No matched devices.\n");
 					}
 					for (auto it2 = TempCaptureList.begin(); it2 != TempCaptureList.end(); it2++) {
-						// ‚·‚×‚ÄList‚É’Ç‰Á
+						// ã™ã¹ã¦Listã«è¿½åŠ 
 						OutputDebug(L"[InitDSFilterEnum]   Adding tuner and capture device.\n");
 						OutputDebug(L"[InitDSFilterEnum]     tuner=FriendlyName:%s,  GUID:%s\n", it->FriendlyName.c_str(), it->GUID.c_str());
 						OutputDebug(L"[InitDSFilterEnum]     capture=FriendlyName:%s,  GUID:%s\n", it2->FriendlyName.c_str(), it2->GUID.c_str());
@@ -4422,7 +4450,7 @@ HRESULT CBonTuner::InitDSFilterEnum(void)
 			}
 			else
 			{
-				// CaptureƒfƒoƒCƒX‚ğg—p‚µ‚È‚¢
+				// Captureãƒ‡ãƒã‚¤ã‚¹ã‚’ä½¿ç”¨ã—ãªã„
 				OutputDebug(L"[InitDSFilterEnum]   Adding tuner device only.\n");
 				OutputDebug(L"[InitDSFilterEnum]     tuner=FriendlyName:%s,  GUID:%s\n", it->FriendlyName.c_str(), it->GUID.c_str());
 				m_UsableTunerCaptureList.emplace_back(*it);
@@ -4438,7 +4466,7 @@ HRESULT CBonTuner::InitDSFilterEnum(void)
 	return S_OK;
 }
 
-// ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒ‚Ì‘g‡‚í‚¹ƒŠƒXƒg‚©‚ç“®ì‚·‚é‚à‚Ì‚ğ’T‚·
+// ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ã®çµ„åˆã‚ã›ãƒªã‚¹ãƒˆã‹ã‚‰å‹•ä½œã™ã‚‹ã‚‚ã®ã‚’æ¢ã™
 HRESULT CBonTuner::LoadAndConnectDevice(void)
 {
 	HRESULT hr;
@@ -4454,144 +4482,144 @@ HRESULT CBonTuner::LoadAndConnectDevice(void)
 
 	for (auto it = m_UsableTunerCaptureList.begin(); it != m_UsableTunerCaptureList.end(); it++) {
 		OutputDebug(L"[P->T] Trying tuner device=FriendlyName:%s,  GUID:%s\n", it->Tuner.FriendlyName.c_str(), it->Tuner.GUID.c_str());
-		// ƒ`ƒ…[ƒiƒfƒoƒCƒXƒ‹[ƒv
-		// ”r‘¼ˆ——p‚ÉƒZƒ}ƒtƒH—p•¶š—ñ‚ğì¬ ('\' -> '/')
+		// ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ãƒ«ãƒ¼ãƒ—
+		// æ’ä»–å‡¦ç†ç”¨ã«ã‚»ãƒãƒ•ã‚©ç”¨æ–‡å­—åˆ—ã‚’ä½œæˆ ('\' -> '/')
 		std::wstring semName = it->Tuner.GUID;
 		std::replace(semName.begin(), semName.end(), L'\\', L'/');
 		semName = L"Global\\" + semName;
 
-		// ”r‘¼ˆ—
+		// æ’ä»–å‡¦ç†
 		m_hSemaphore = ::CreateSemaphoreW(NULL, 1, 1, semName.c_str());
 		DWORD result = WaitForSingleObjectWithMessageLoop(m_hSemaphore, 0);
 		if (result != WAIT_OBJECT_0) {
-			// g—p’†‚È‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚ğ’T‚·
+			// ä½¿ç”¨ä¸­ãªã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã‚’æ¢ã™
 			OutputDebug(L"[P->T] Another is using.\n");
 		} 
 		else {
-			// ”r‘¼Šm”FOK
+			// æ’ä»–ç¢ºèªOK
 			CComPtr<IBaseFilter> pTunerDevice;
-			// ƒ`ƒ…[ƒiƒfƒoƒCƒX‚ÌƒtƒBƒ‹ƒ^‚ğæ“¾
+			// ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—
 			if (FAILED(hr = m_pDSFilterEnumTuner->getFilter(&pTunerDevice, it->Tuner.Order))) {
-				// ƒtƒBƒ‹ƒ^‚ğæ“¾‚Å‚«‚È‚©‚Á‚½‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚Ö
+				// ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—ã§ããªã‹ã£ãŸã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 				OutputDebug(L"[P->T] Fail to get TunerDevice IBaseFilter interface.\n");
 			}
 			else {
-				// ƒtƒBƒ‹ƒ^æ“¾¬Œ÷
-				// Graph Builder‚Éƒ`ƒ…[ƒiƒfƒoƒCƒX‚ÌƒtƒBƒ‹ƒ^‚ğ’Ç‰Á
+				// ãƒ•ã‚£ãƒ«ã‚¿å–å¾—æˆåŠŸ
+				// Graph Builderã«ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ 
 				if (FAILED(hr = m_pIGraphBuilder->AddFilter(pTunerDevice, it->Tuner.FriendlyName.c_str()))) {
-					// ƒtƒBƒ‹ƒ^‚Ì’Ç‰Á‚É¸”s‚µ‚½‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚Ö
+					// ãƒ•ã‚£ãƒ«ã‚¿ã®è¿½åŠ ã«å¤±æ•—ã—ãŸã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 					OutputDebug(L"[P->T] Fail to add TunerDevice IBaseFilter into graph.\n");
 				}
 				else {
-					// ƒtƒBƒ‹ƒ^’Ç‰Á¬Œ÷
-					// ƒ`ƒ…[ƒiƒfƒoƒCƒX‚ğconnect ‚µ‚Ä‚İ‚é
+					// ãƒ•ã‚£ãƒ«ã‚¿è¿½åŠ æˆåŠŸ
+					// ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ã‚’connect ã—ã¦ã¿ã‚‹
 					if (FAILED(hr = Connect(m_pNetworkProvider, pTunerDevice))) {
-						// connect‚É¸”s‚µ‚½‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚Ö
+						// connectã«å¤±æ•—ã—ãŸã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 						OutputDebug(L"[P->T] Fail to connect.\n");
 					}
 					else {
-						// connect ¬Œ÷
+						// connect æˆåŠŸ
 						OutputDebug(L"[P->T] Connect OK.\n");
-						// ƒ`ƒ…[ƒiŒÅ—LDll‚ª•K—v‚È‚ç“Ç‚İAŒÅ—L‚Ì‰Šú‰»ˆ—‚ª‚ ‚ê‚ÎŒÄ‚Ño‚·
+						// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰DllãŒå¿…è¦ãªã‚‰èª­è¾¼ã¿ã€å›ºæœ‰ã®åˆæœŸåŒ–å‡¦ç†ãŒã‚ã‚Œã°å‘¼ã³å‡ºã™
 						if (FAILED(hr = CheckAndInitTunerDependDll(pTunerDevice, it->Tuner.GUID, it->Tuner.FriendlyName))) {
-							// ŒÅ—LDll‚Ìˆ—‚ª¸”s‚µ‚½‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚Ö
+							// å›ºæœ‰Dllã®å‡¦ç†ãŒå¤±æ•—ã—ãŸã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 							OutputDebug(L"[P->T] Discarded by BDASpecial's CheckAndInitTuner function.\n");
 						}
 						else {
-							// ŒÅ—LDllˆ—OK
+							// å›ºæœ‰Dllå‡¦ç†OK
 							if (!m_aTunerParam.bNotExistCaptureDevice) {
-								// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ğg—p‚·‚éê‡
+								// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã‚’ä½¿ç”¨ã™ã‚‹å ´åˆ
 								for (auto it2 = it->CaptureList.begin(); it2 != it->CaptureList.end(); it2++) {
-									// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒXƒ‹[ƒv
+									// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ãƒ«ãƒ¼ãƒ—
 									OutputDebug(L"[T->C] Trying capture device=FriendlyName:%s,  GUID:%s\n", it2->FriendlyName.c_str(), it2->GUID.c_str());
-									// ƒ`ƒ…[ƒiŒÅ—LDll‚Å‚ÌŠm”Fˆ—‚ª‚ ‚ê‚ÎŒÄ‚Ño‚·
+									// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰Dllã§ã®ç¢ºèªå‡¦ç†ãŒã‚ã‚Œã°å‘¼ã³å‡ºã™
 									if (FAILED(hr = CheckCapture(it->Tuner.GUID, it->Tuner.FriendlyName, it2->GUID, it2->FriendlyName))) {
-										// ŒÅ—LDll‚ªƒ_ƒ‚ÆŒ¾‚Á‚Ä‚¢‚é‚Ì‚ÅŸ‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚Ö
+										// å›ºæœ‰DllãŒãƒ€ãƒ¡ã¨è¨€ã£ã¦ã„ã‚‹ã®ã§æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã¸
 										OutputDebug(L"[T->C] Discarded by BDASpecial's CheckCapture function.\n");
 									}
 									else {
-										// ŒÅ—LDll‚ÌŠm”FOK
+										// å›ºæœ‰Dllã®ç¢ºèªOK
 										CComPtr<IBaseFilter> pCaptureDevice;
-										// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ÌƒtƒBƒ‹ƒ^‚ğæ“¾
+										// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—
 										if (!m_pDSFilterEnumCapture || FAILED(hr = m_pDSFilterEnumCapture->getFilter(&pCaptureDevice, it2->Order))) {
-											// ƒtƒBƒ‹ƒ^‚ğæ“¾‚Å‚«‚È‚©‚Á‚½‚Ì‚ÅŸ‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚Ö
+											// ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—ã§ããªã‹ã£ãŸã®ã§æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã¸
 											OutputDebug(L"[T->C] Fail to get CaptureDevice IBaseFilter interface.\n");
 										}
 										else {
-											// ƒtƒBƒ‹ƒ^æ“¾¬Œ÷
-											// Graph Builder‚ÉƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ÌƒtƒBƒ‹ƒ^‚ğ’Ç‰Á
+											// ãƒ•ã‚£ãƒ«ã‚¿å–å¾—æˆåŠŸ
+											// Graph Builderã«ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ 
 											if (FAILED(hr = m_pIGraphBuilder->AddFilter(pCaptureDevice, it2->FriendlyName.c_str()))) {
-												// ƒtƒBƒ‹ƒ^‚Ì’Ç‰Á‚É¸”s‚µ‚½‚Ì‚ÅŸ‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚Ö
+												// ãƒ•ã‚£ãƒ«ã‚¿ã®è¿½åŠ ã«å¤±æ•—ã—ãŸã®ã§æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã¸
 												OutputDebug(L"[T->C] Fail to add CaptureDevice IBaseFilter into graph.\n");
 											}
 											else {
-												// ƒtƒBƒ‹ƒ^’Ç‰Á¬Œ÷
-												// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ğconnect ‚µ‚Ä‚İ‚é
+												// ãƒ•ã‚£ãƒ«ã‚¿è¿½åŠ æˆåŠŸ
+												// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã‚’connect ã—ã¦ã¿ã‚‹
 												if (FAILED(hr = Connect(pTunerDevice, pCaptureDevice))) {
-													// connect‚É¸”s‚µ‚½‚Ì‚ÅŸ‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚Ö
+													// connectã«å¤±æ•—ã—ãŸã®ã§æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã¸
 													OutputDebug(L"[T->C] Fail to connect.\n");
 												}
 												else {
-													// connect ¬Œ÷
+													// connect æˆåŠŸ
 													OutputDebug(L"[T->C] Connect OK.\n");
-													// TsWriterˆÈ~‚ÆÚ‘±`Run
+													// TsWriterä»¥é™ã¨æ¥ç¶šï½Run
 													if (SUCCEEDED(LoadAndConnectMiscFilters(pTunerDevice, pCaptureDevice))) {
-														// ‚·‚×‚Ä¬Œ÷
+														// ã™ã¹ã¦æˆåŠŸ
 														m_pTunerDevice = pTunerDevice;
 														m_pCaptureDevice = pCaptureDevice;
-														// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚Ìƒ[ƒh
+														// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã®ãƒ­ãƒ¼ãƒ‰
 														LoadTunerDependCode(it->Tuner.GUID, it->Tuner.FriendlyName, it2->GUID, it2->FriendlyName);
 														if (m_bTryAnotherTuner)
-															// ¡‰ñ‚Ì‘g‡‚¹‚ğƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒƒŠƒXƒg‚ÌÅŒã”ö‚ÉˆÚ“®
+															// ä»Šå›ã®çµ„åˆã›ã‚’ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒªã‚¹ãƒˆã®æœ€å¾Œå°¾ã«ç§»å‹•
 															m_UsableTunerCaptureList.splice(m_UsableTunerCaptureList.end(), m_UsableTunerCaptureList, it);
 														return S_OK;
 													}
-													// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ğdisconnect
+													// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã‚’disconnect
 													// DisconnectAll(pCaptureDevice);
 												}
-												// Graph Builder‚©‚çƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ğremove
+												// Graph Builderã‹ã‚‰ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã‚’remove
 												m_pIGraphBuilder->RemoveFilter(pCaptureDevice);
 											}
 										}
 									}
-									// Ÿ‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚Öƒ‹[ƒv
+									// æ¬¡ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã¸ãƒ«ãƒ¼ãƒ—
 								}
-								// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒXƒ‹[ƒvI‚í‚è
-								// “®ì‚·‚é‘g‡‚¹‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅŸ‚Ìƒ`ƒ…[ƒi‚Ö
+								// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ãƒ«ãƒ¼ãƒ—çµ‚ã‚ã‚Š
+								// å‹•ä½œã™ã‚‹çµ„åˆã›ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã®ã§æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠã¸
 							}
 							else {
-								// ƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ğg—p‚µ‚È‚¢ê‡
-								// TsWriterˆÈ~‚ÆÚ‘±`Run
+								// ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã‚’ä½¿ç”¨ã—ãªã„å ´åˆ
+								// TsWriterä»¥é™ã¨æ¥ç¶šï½Run
 								if (SUCCEEDED(hr = LoadAndConnectMiscFilters(pTunerDevice, NULL))) {
-									// ‚·‚×‚Ä¬Œ÷
+									// ã™ã¹ã¦æˆåŠŸ
 									m_pTunerDevice = pTunerDevice;
-									// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚Ìƒ[ƒh
+									// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã®ãƒ­ãƒ¼ãƒ‰
 									LoadTunerDependCode(it->Tuner.GUID, it->Tuner.FriendlyName, L"", L"");
 									if (m_bTryAnotherTuner)
-										// ¡‰ñ‚Ì‘g‡‚¹‚ğƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒƒŠƒXƒg‚ÌÅŒã”ö‚ÉˆÚ“®
+										// ä»Šå›ã®çµ„åˆã›ã‚’ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒªã‚¹ãƒˆã®æœ€å¾Œå°¾ã«ç§»å‹•
 										m_UsableTunerCaptureList.splice(m_UsableTunerCaptureList.end(), m_UsableTunerCaptureList, it);
 									return S_OK;
 								}
 							}
-							// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚ÆDll‰ğ•ú
+							// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã¨Dllè§£æ”¾
 							ReleaseTunerDependCode();
 						}
-						// Graph Builder‚©‚çƒ`ƒ…[ƒi‚ğremove
+						// Graph Builderã‹ã‚‰ãƒãƒ¥ãƒ¼ãƒŠã‚’remove
 						// DisconnectAll(pTunerDevice);
 					}
-					// Graph Builder‚©‚çƒ`ƒ…[ƒi‚ğremove
+					// Graph Builderã‹ã‚‰ãƒãƒ¥ãƒ¼ãƒŠã‚’remove
 					m_pIGraphBuilder->RemoveFilter(pTunerDevice);
 				}
 			}
-			// ”r‘¼ˆ—I—¹
+			// æ’ä»–å‡¦ç†çµ‚äº†
 			::ReleaseSemaphore(m_hSemaphore, 1, NULL);
 		}
-		// ƒZƒ}ƒtƒH‰ğ•ú
+		// ã‚»ãƒãƒ•ã‚©è§£æ”¾
 		SAFE_CLOSE_HANDLE(m_hSemaphore);
-		// Ÿ‚Ìƒ`ƒ…[ƒiƒfƒoƒCƒX‚Öƒ‹[ƒv
+		// æ¬¡ã®ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ã¸ãƒ«ãƒ¼ãƒ—
 	}
-	// ƒ`ƒ…[ƒiƒfƒoƒCƒXƒ‹[ƒvI‚í‚è
-	// “®ì‚·‚é‘g‚İ‡‚í‚¹‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹ãƒ«ãƒ¼ãƒ—çµ‚ã‚ã‚Š
+	// å‹•ä½œã™ã‚‹çµ„ã¿åˆã‚ã›ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 	OutputDebug(L"[P->T] Can not found a connectable pair of TunerDevice and CaptureDevice.\n");
 	return E_FAIL;
 }
@@ -4622,15 +4650,15 @@ HRESULT CBonTuner::LoadAndConnectMiscFilters(IBaseFilter* pTunerDevice, IBaseFil
 {
 	HRESULT hr = E_FAIL;
 
-	// TsWriter‚ÆÚ‘±
+	// TsWriterã¨æ¥ç¶š
 	if (SUCCEEDED(hr = LoadAndConnectTsWriter(pTunerDevice, pCaptureDevice))) {
-		// TsDemuxer‚ÆÚ‘±
+		// TsDemuxerã¨æ¥ç¶š
 		if (SUCCEEDED(hr = LoadAndConnectDemux())) {
-			// TIF‚ÆÚ‘±
+			// TIFã¨æ¥ç¶š
 			if (SUCCEEDED(hr = LoadAndConnectTif())) {
-				// Run‚µ‚Ä‚İ‚é
+				// Runã—ã¦ã¿ã‚‹
 				if (SUCCEEDED(hr = RunGraph())) {
-					// ¬Œ÷
+					// æˆåŠŸ
 					OutputDebug(L"RunGraph OK.\n");
 					return hr;
 				}
@@ -4645,13 +4673,13 @@ HRESULT CBonTuner::LoadAndConnectMiscFilters(IBaseFilter* pTunerDevice, IBaseFil
 		UnloadTsWriter();
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
 HRESULT CBonTuner::LoadAndConnectTsWriter(IBaseFilter* pTunerDevice, IBaseFilter* pCaptureDevice)
 {
-	// TS Writer‚Ì–¼Ì:AddFilter‚É“o˜^‚·‚é–¼‘O
+	// TS Writerã®åç§°:AddFilteræ™‚ã«ç™»éŒ²ã™ã‚‹åå‰
 	static constexpr WCHAR * const FILTER_GRAPH_NAME_TSWRITER = L"TS Writer";
 
 	HRESULT hr = E_FAIL;
@@ -4661,51 +4689,51 @@ HRESULT CBonTuner::LoadAndConnectTsWriter(IBaseFilter* pTunerDevice, IBaseFilter
 		return E_POINTER;
 	}
 
-	// ƒtƒBƒ‹ƒ^ƒNƒ‰ƒX‚Ìƒ[ƒh
+	// ãƒ•ã‚£ãƒ«ã‚¿ã‚¯ãƒ©ã‚¹ã®ãƒ­ãƒ¼ãƒ‰
 	CTsWriter *pCTsWriter = (CTsWriter *)CTsWriter::CreateInstance(NULL, &hr);
 	if (!pCTsWriter) {
 		OutputDebug(L"[C->W/T->W] Fail to create CTsWriter filter class instance.\n");
 		hr = E_FAIL;
 	}
 	else {
-		// ƒtƒBƒ‹ƒ^‚ğæ“¾
+		// ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—
 		CComQIPtr<IBaseFilter> pTsWriter(pCTsWriter);
 		if (!pTsWriter) {
 			OutputDebug(L"[C->W/T->W] Fail to get TsWriter IBaseFilter interface.\n");
 			hr = E_FAIL;
 		}
 		else {
-			// ƒtƒBƒ‹ƒ^æ“¾¬Œ÷
+			// ãƒ•ã‚£ãƒ«ã‚¿å–å¾—æˆåŠŸ
 			OutputDebug(L"[C->W/T->W] %s is loaded.\n", FILTER_GRAPH_NAME_TSWRITER);
-			// Graph Builder‚ÉƒtƒBƒ‹ƒ^‚ğ’Ç‰Á
+			// Graph Builderã«ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ 
 			if (FAILED(hr = m_pIGraphBuilder->AddFilter(pTsWriter, FILTER_GRAPH_NAME_TSWRITER))) {
 				OutputDebug(L"[C->W/T->W] Fail to add TsWriter IBaseFilter into graph.\n");
 			}
 			else {
-				// ƒtƒBƒ‹ƒ^’Ç‰Á¬Œ÷
-				// ITsWriter interface‚ğæ“¾
+				// ãƒ•ã‚£ãƒ«ã‚¿è¿½åŠ æˆåŠŸ
+				// ITsWriter interfaceã‚’å–å¾—
 				CComQIPtr<ITsWriter> pITsWriter(pTsWriter);
 				if (!pITsWriter) {
 					OutputDebug(L"[C->W/T->W] Fail to get ITsWriter interface.\n");
 					hr = E_FAIL;
 				}
 				else {
-					// ITsWriter interface‚Ìæ“¾¬Œ÷
-					// connect ‚µ‚Ä‚İ‚é
+					// ITsWriter interfaceã®å–å¾—æˆåŠŸ
+					// connect ã—ã¦ã¿ã‚‹
 					if (m_aTunerParam.bNotExistCaptureDevice) {
-						// CaptureƒfƒoƒCƒX‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍTuner‚ÆÚ‘±
+						// Captureãƒ‡ãƒã‚¤ã‚¹ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯Tunerã¨æ¥ç¶š
 						if (FAILED(hr = Connect(pTunerDevice, pTsWriter))) {
 							OutputDebug(L"[T->W] Failed to connect.\n");
 						}
 					}
 					else {
-						// CaptureƒfƒoƒCƒX‚ÆÚ‘±
+						// Captureãƒ‡ãƒã‚¤ã‚¹ã¨æ¥ç¶š
 						if (FAILED(hr = Connect(pCaptureDevice, pTsWriter))) {
 							OutputDebug(L"[C->W] Fail to connect.\n");
 						}
 					}
 					if (SUCCEEDED(hr)) {
-						// connect ¬Œ÷‚È‚Ì‚Å‚±‚Ì‚Ü‚ÜI—¹
+						// connect æˆåŠŸãªã®ã§ã“ã®ã¾ã¾çµ‚äº†
 						OutputDebug(L"[C->W/T->W] Connect OK.\n");
 						m_pTsWriter = pTsWriter;
 						m_pITsWriter = pITsWriter;
@@ -4717,7 +4745,7 @@ HRESULT CBonTuner::LoadAndConnectTsWriter(IBaseFilter* pTunerDevice, IBaseFilter
 		}
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
@@ -4741,26 +4769,26 @@ HRESULT CBonTuner::LoadAndConnectDemux(void)
 	}
 
 	CComPtr<IBaseFilter> pDemux;
-	// ƒtƒBƒ‹ƒ^‚ğæ“¾
+	// ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—
 	if (FAILED(hr = pDemux.CoCreateInstance(CLSID_MPEG2Demultiplexer, NULL, CLSCTX_INPROC_SERVER))) {
 		OutputDebug(L"[W->M] Fail to get MPEG2Demultiplexer IBaseFilter interface.\n");
 	}
 	else {
 		std::wstring strName = CDSFilterEnum::getRegistryName(pDemux);
 		OutputDebug(L"[W->M] %s is loaded.\n", strName.c_str());
-		// ƒtƒBƒ‹ƒ^æ“¾¬Œ÷
-		// Graph Builder‚ÉƒtƒBƒ‹ƒ^‚ğ’Ç‰Á
+		// ãƒ•ã‚£ãƒ«ã‚¿å–å¾—æˆåŠŸ
+		// Graph Builderã«ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ 
 		if (FAILED(hr = m_pIGraphBuilder->AddFilter(pDemux, strName.c_str()))) {
 			OutputDebug(L"[W->M] Fail to add MPEG2Demultiplexer IBaseFilter into graph.\n");
 		}
 		else {
-			// ƒtƒBƒ‹ƒ^’Ç‰Á¬Œ÷
-			// connect ‚µ‚Ä‚İ‚é
+			// ãƒ•ã‚£ãƒ«ã‚¿è¿½åŠ æˆåŠŸ
+			// connect ã—ã¦ã¿ã‚‹
 			if (FAILED(hr = Connect(m_pTsWriter, pDemux))) {
 				OutputDebug(L"[W->M] Fail to connect.\n");
 			}
 			else {
-				// connect ¬Œ÷‚È‚Ì‚Å‚±‚Ì‚Ü‚ÜI—¹
+				// connect æˆåŠŸãªã®ã§ã“ã®ã¾ã¾çµ‚äº†
 				OutputDebug(L"[W->M] Connect OK.\n");
 				m_pDemux = pDemux;
 				return hr;
@@ -4769,7 +4797,7 @@ HRESULT CBonTuner::LoadAndConnectDemux(void)
 		}
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
@@ -4784,7 +4812,7 @@ void CBonTuner::UnloadDemux(void)
 
 HRESULT CBonTuner::LoadAndConnectTif(void)
 {
-	// MPEG2 TIF‚ÌCLSID
+	// MPEG2 TIFã®CLSID
 	static constexpr CLSID CLSID_MPEG2TransportInformationFilter = { 0xfc772ab0, 0x0c7f, 0x11d3, 0x8f, 0xf2, 0x00, 0xa0, 0xc9, 0x22, 0x4c, 0xf4 };
 
 	HRESULT hr = E_FAIL;
@@ -4795,26 +4823,26 @@ HRESULT CBonTuner::LoadAndConnectTif(void)
 	}
 
 	CComPtr<IBaseFilter> pTif;
-	// ƒtƒBƒ‹ƒ^‚ğæ“¾
+	// ãƒ•ã‚£ãƒ«ã‚¿ã‚’å–å¾—
 	if (FAILED(hr = pTif.CoCreateInstance(CLSID_MPEG2TransportInformationFilter, NULL, CLSCTX_INPROC_SERVER))) {
 		OutputDebug(L"[M->I] Fail to get TIF IBaseFilter interface.\n");
 	}
 	else {
 		std::wstring strName = CDSFilterEnum::getRegistryName(pTif);
 		OutputDebug(L"[M->I] %s is loaded.\n", strName.c_str());
-		// ƒtƒBƒ‹ƒ^æ“¾¬Œ÷
-		// Graph Builder‚ÉƒtƒBƒ‹ƒ^‚ğ’Ç‰Á
+		// ãƒ•ã‚£ãƒ«ã‚¿å–å¾—æˆåŠŸ
+		// Graph Builderã«ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ 
 		if (FAILED(hr = m_pIGraphBuilder->AddFilter(pTif, strName.c_str()))) {
 			OutputDebug(L"[M->I] Fail to add TIF IBaseFilter into graph.\n");
 		}
 		else {
-			// ƒtƒBƒ‹ƒ^’Ç‰Á¬Œ÷
-			// connect ‚µ‚Ä‚İ‚é
+			// ãƒ•ã‚£ãƒ«ã‚¿è¿½åŠ æˆåŠŸ
+			// connect ã—ã¦ã¿ã‚‹
 			if (FAILED(hr = Connect(m_pDemux, pTif))) {
 				OutputDebug(L"[M->I] Fail to connect.\n");
 			}
 			else {
-				// connect ¬Œ÷‚È‚Ì‚Å‚±‚Ì‚Ü‚ÜI—¹
+				// connect æˆåŠŸãªã®ã§ã“ã®ã¾ã¾çµ‚äº†
 				OutputDebug(L"[M->I] Connect OK.\n");
 				m_pTif = pTif;
 				return hr;
@@ -4823,7 +4851,7 @@ HRESULT CBonTuner::LoadAndConnectTif(void)
 		}
 	}
 
-	// ¸”s
+	// å¤±æ•—
 	return hr;
 }
 
@@ -4899,7 +4927,7 @@ void CBonTuner::UnloadTunerSignalStatistics(void)
 }
 
 // Connect pins (Common subroutine)
-//  ‘S‚Ä‚Ìƒsƒ“‚ğÚ‘±‚µ‚Ä¬Œ÷‚µ‚½‚çI—¹
+//  å…¨ã¦ã®ãƒ”ãƒ³ã‚’æ¥ç¶šã—ã¦æˆåŠŸã—ãŸã‚‰çµ‚äº†
 //
 HRESULT CBonTuner::Connect(IBaseFilter* pFilterUp, IBaseFilter* pFilterDown)
 {
@@ -4908,52 +4936,52 @@ HRESULT CBonTuner::Connect(IBaseFilter* pFilterUp, IBaseFilter* pFilterDown)
 	CDSEnumPins DSEnumPinsUp(pFilterUp);
 	CDSEnumPins DSEnumPinsDown(pFilterDown);
 
-	// ã—¬ƒtƒBƒ‹ƒ^‚ÌOutputƒsƒ“‚Ì”‚¾‚¯ƒ‹[ƒv
+	// ä¸Šæµãƒ•ã‚£ãƒ«ã‚¿ã®Outputãƒ”ãƒ³ã®æ•°ã ã‘ãƒ«ãƒ¼ãƒ—
 	while (1) {
 		CComPtr<IPin> pIPinUp;
 		if (S_OK != (hr = DSEnumPinsUp.getNextPin(&pIPinUp, PIN_DIRECTION::PINDIR_OUTPUT))) {
-			// ƒ‹[ƒvI‚í‚è
+			// ãƒ«ãƒ¼ãƒ—çµ‚ã‚ã‚Š
 			break;
 		}
 		do {
 			CComPtr<IPin> pIPinPeerOfUp;
-			// ã—¬ƒtƒBƒ‹ƒ^‚Ì’…–Úƒsƒ“‚ªÚ‘±ÏorƒGƒ‰[‚¾‚Á‚½‚çŸ‚Ìã—¬ƒsƒ“‚Ö
+			// ä¸Šæµãƒ•ã‚£ãƒ«ã‚¿ã®ç€ç›®ãƒ”ãƒ³ãŒæ¥ç¶šæ¸ˆorã‚¨ãƒ©ãƒ¼ã ã£ãŸã‚‰æ¬¡ã®ä¸Šæµãƒ”ãƒ³ã¸
 			if (pIPinUp->ConnectedTo(&pIPinPeerOfUp) != VFW_E_NOT_CONNECTED){
 				OutputDebug(L"  An already connected pin was found.\n");
 				break;
 			}
 
-			// ‰º—¬ƒtƒBƒ‹ƒ^‚ÌInputƒsƒ“‚Ì”‚¾‚¯ƒ‹[ƒv
+			// ä¸‹æµãƒ•ã‚£ãƒ«ã‚¿ã®Inputãƒ”ãƒ³ã®æ•°ã ã‘ãƒ«ãƒ¼ãƒ—
 			DSEnumPinsDown.Reset();
 			while (1) {
 				CComPtr<IPin> pIPinDown;
 				if (S_OK != (hr = DSEnumPinsDown.getNextPin(&pIPinDown, PIN_DIRECTION::PINDIR_INPUT))) {
-					// ƒ‹[ƒvI‚í‚è
+					// ãƒ«ãƒ¼ãƒ—çµ‚ã‚ã‚Š
 					break;
 				}
 				do {
 					CComPtr<IPin> pIPinPeerOfDown;
-					// ‰º—¬ƒtƒBƒ‹ƒ^‚Ì’…–Úƒsƒ“‚ªÚ‘±ÏorƒGƒ‰[‚¾‚Á‚½‚çŸ‚Ì‰º—¬ƒsƒ“‚Ö
+					// ä¸‹æµãƒ•ã‚£ãƒ«ã‚¿ã®ç€ç›®ãƒ”ãƒ³ãŒæ¥ç¶šæ¸ˆorã‚¨ãƒ©ãƒ¼ã ã£ãŸã‚‰æ¬¡ã®ä¸‹æµãƒ”ãƒ³ã¸
 					if (pIPinDown->ConnectedTo(&pIPinPeerOfDown) != VFW_E_NOT_CONNECTED) {
 						OutputDebug(L"  An already connected pin was found.\n");
 						break;
 					}
 
-					// Ú‘±‚ğ‚İ‚é
+					// æ¥ç¶šã‚’è©¦ã¿ã‚‹
 					if (SUCCEEDED(hr = m_pIGraphBuilder->ConnectDirect(pIPinUp, pIPinDown, NULL))) {
-						// Ú‘±¬Œ÷
+						// æ¥ç¶šæˆåŠŸ
 						return hr;
 					} else {
-						// ˆá‚¤ƒ`ƒ…[ƒiƒ†ƒjƒbƒg‚ÌƒtƒBƒ‹ƒ^‚ğÚ‘±‚µ‚æ‚¤‚Æ‚µ‚Ä‚éê‡‚È‚Ç
-						// ƒRƒlƒNƒg‚Å‚«‚È‚¢ê‡AŸ‚Ì‰º—¬ƒsƒ“‚Ö
+						// é•ã†ãƒãƒ¥ãƒ¼ãƒŠãƒ¦ãƒ‹ãƒƒãƒˆã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’æ¥ç¶šã—ã‚ˆã†ã¨ã—ã¦ã‚‹å ´åˆãªã©
+						// ã‚³ãƒã‚¯ãƒˆã§ããªã„å ´åˆã€æ¬¡ã®ä¸‹æµãƒ”ãƒ³ã¸
 						OutputDebug(L"  A pair of pins that can not be connected was found.\n");
 					}
 				} while(0);
-			} // while; Ÿ‚Ì‰º—¬ƒsƒ“‚Ö
+			} // while; æ¬¡ã®ä¸‹æµãƒ”ãƒ³ã¸
 		} while (0);
-	} // while ; Ÿ‚Ìã—¬ƒsƒ“‚Ö
+	} // while ; æ¬¡ã®ä¸Šæµãƒ”ãƒ³ã¸
 
-	// ƒRƒlƒNƒg‰Â”\‚È‘g‚İ‡‚í‚¹‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
+	// ã‚³ãƒã‚¯ãƒˆå¯èƒ½ãªçµ„ã¿åˆã‚ã›ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
 	OutputDebug(L"  Can not found a pair of connectable pins.\n");
 	return E_FAIL;
 }
@@ -4966,15 +4994,15 @@ void CBonTuner::DisconnectAll(IBaseFilter* pFilter)
 	HRESULT hr;
 
 	CDSEnumPins DSEnumPins(pFilter);
-	// ƒsƒ“‚Ì”‚¾‚¯ƒ‹[ƒv
+	// ãƒ”ãƒ³ã®æ•°ã ã‘ãƒ«ãƒ¼ãƒ—
 	while (1) {
 		CComPtr<IPin> pIPin;
 		CComPtr<IPin> pIPinPeerOf;
 		if (S_OK != (hr = DSEnumPins.getNextPin(&pIPin))) {
-			// ƒ‹[ƒvI‚í‚è
+			// ãƒ«ãƒ¼ãƒ—çµ‚ã‚ã‚Š
 			break;
 		}
-		// ƒsƒ“‚ªÚ‘±Ï‚¾‚Á‚½‚çØ’f
+		// ãƒ”ãƒ³ãŒæ¥ç¶šæ¸ˆã ã£ãŸã‚‰åˆ‡æ–­
 		if (SUCCEEDED(hr = pIPin->ConnectedTo(&pIPinPeerOf))) {
 			hr = m_pIGraphBuilder->Disconnect(pIPinPeerOf);
 			hr = m_pIGraphBuilder->Disconnect(pIPin);
