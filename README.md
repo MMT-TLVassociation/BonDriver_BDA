@@ -10,14 +10,23 @@ BonDriver_BDA.iniでDefaultNetwork="4KBS/CS"と記述すると、ISDB-S3に対�
 UseSpecial="TBS" ;ここでTBS.dll読み込む
 
 Guid=
+
 FriendlyName0=
+
 Name="ISDB-S"
+
 DVBSystemType=1
+
 DefaultNetwork="4KBS/CS"
+
 SignalLevelCalcType="SSStrength"
+
 StrengthCoefficient=1000.0
+
 [TBS]
+
 SetTSID=1
+
 LNBPowerON=1
 
 
