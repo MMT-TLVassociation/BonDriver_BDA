@@ -34,13 +34,13 @@ class CBonTuner : public IBonDriver2
 {
 public:
 	////////////////////////////////////////
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^ & ƒfƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ & ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	////////////////////////////////////////
 	CBonTuner();
 	virtual ~CBonTuner();
 
 	////////////////////////////////////////
-	// IBonDriver ƒƒ“ƒoŠÖ”
+	// IBonDriver ãƒ¡ãƒ³ãƒé–¢æ•°
 	////////////////////////////////////////
 	const BOOL OpenTuner(void);
 	void CloseTuner(void);
@@ -57,7 +57,7 @@ public:
 	void PurgeTsStream(void);
 
 	////////////////////////////////////////
-	// IBonDriver2 ƒƒ“ƒoŠÖ”
+	// IBonDriver2 ãƒ¡ãƒ³ãƒé–¢æ•°
 	////////////////////////////////////////
 	LPCTSTR GetTunerName(void);
 
@@ -74,65 +74,65 @@ public:
 	void Release(void);
 	
 	////////////////////////////////////////
-	// Ã“Iƒƒ“ƒoŠÖ”
+	// é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 	////////////////////////////////////////
 
-	// •K—v‚ÈÃ“I•Ï”‰Šú‰»
+	// å¿…è¦ãªé™çš„å¤‰æ•°åˆæœŸåŒ–
 	static void Init(HMODULE hModule);
 
-	// Ã“I•Ï”‚Ì‰ğ•ú
+	// é™çš„å¤‰æ•°ã®è§£æ”¾
 	static void Finalize(void);
 
 	////////////////////////////////////////
-	// Ã“Iƒƒ“ƒo•Ï”
+	// é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
 	////////////////////////////////////////
 
-	// Dll‚Ìƒ‚ƒWƒ…[ƒ‹ƒnƒ“ƒhƒ‹
+	// Dllã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒãƒ³ãƒ‰ãƒ«
 	static HMODULE st_hModule;
 
-	// ì¬‚³‚ê‚½CBontunerƒCƒ“ƒXƒ^ƒ“ƒX‚Ìˆê——
+	// ä½œæˆã•ã‚ŒãŸCBontunerã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ä¸€è¦§
 	static std::list<CBonTuner*> st_InstanceList;
 
-	// st_InstanceList‘€ì—p
+	// st_InstanceListæ“ä½œç”¨
 	static CRITICAL_SECTION st_LockInstanceList;
 
 protected:
 	////////////////////////////////////////
-	// “à•”ƒƒ“ƒoŠÖ”
+	// å†…éƒ¨ãƒ¡ãƒ³ãƒé–¢æ•°
 	////////////////////////////////////////
 
-	// COMˆ—ê—pƒXƒŒƒbƒh
+	// COMå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰
 	static DWORD WINAPI COMProcThread(LPVOID lpParameter);
 
-	// Decodeˆ—ê—pƒXƒŒƒbƒh
+	// Decodeå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰
 	static DWORD WINAPI DecodeProcThread(LPVOID lpParameter);
 
-	// TsWriter ƒR[ƒ‹ƒoƒbƒNŠÖ”
+	// TsWriter ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	static int CALLBACK RecvProc(void* pParam, BYTE* pbData, size_t size);
 
-	// ƒf[ƒ^óMƒXƒ^[ƒgE’â~
+	// ãƒ‡ãƒ¼ã‚¿å—ä¿¡ã‚¹ã‚¿ãƒ¼ãƒˆãƒ»åœæ­¢
 	void StartRecv(void);
 	void StopRecv(void);
 
-	// ini ƒtƒ@ƒCƒ‹“Ç
+	// ini ãƒ•ã‚¡ã‚¤ãƒ«èª­è¾¼
 	void ReadIniFile(void);
 
-	// M†ó‘Ô‚ğæ“¾
+	// ä¿¡å·çŠ¶æ…‹ã‚’å–å¾—
 	void GetSignalState(int* pnStrength, int* pnQuality, int* pnLock);
 
-	// ƒ`ƒƒƒ“ƒlƒ‹Ø‘Ö
+	// ãƒãƒ£ãƒ³ãƒãƒ«åˆ‡æ›¿
 	BOOL LockChannel(const TuningParam *pTuningParam, BOOL bLockTwice);
 
-	// ƒ`ƒ…[ƒiŒÅ—LDll‚Ìƒ[ƒh
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰Dllã®ãƒ­ãƒ¼ãƒ‰
 	HRESULT CheckAndInitTunerDependDll(IBaseFilter * pTunerDevice, std::wstring tunerGUID, std::wstring tunerFriendlyName);
 
-	// ƒ`ƒ…[ƒiŒÅ—LDll‚Å‚ÌƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒXŠm”F
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰Dllã§ã®ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ç¢ºèª
 	HRESULT CheckCapture(std::wstring tunerGUID, std::wstring tunerFriendlyName, std::wstring captureGUID, std::wstring captureFriendlyName);
 		
-	// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚Ìƒ[ƒh
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã®ãƒ­ãƒ¼ãƒ‰
 	void LoadTunerDependCode(std::wstring tunerGUID, std::wstring tunerFriendlyName, std::wstring captureGUID, std::wstring captureFriendlyName);
 
-	// ƒ`ƒ…[ƒiŒÅ—LŠÖ”‚ÆDll‚Ì‰ğ•ú
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•°ã¨Dllã®è§£æ”¾
 	void ReleaseTunerDependCode(void);
 
 	// GraphBuilder
@@ -150,10 +150,10 @@ protected:
 	HRESULT LoadNetworkProvider(void);
 	void UnloadNetworkProvider(void);
 
-	// ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚Ì“Ç‚İƒŠƒXƒgæ“¾
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã®èª­è¾¼ã¿ãƒªã‚¹ãƒˆå–å¾—
 	HRESULT InitDSFilterEnum(void);
 
-	// ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒƒfƒoƒCƒX‚ğŠÜ‚ß‚Ä‚·‚×‚Ä‚ÌƒtƒBƒ‹ƒ^ƒOƒ‰ƒt‚ğƒ[ƒh‚µ‚ÄRun‚ğ‚İ‚é
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ãƒ‡ãƒã‚¤ã‚¹ã‚’å«ã‚ã¦ã™ã¹ã¦ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚°ãƒ©ãƒ•ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¦Runã‚’è©¦ã¿ã‚‹
 	HRESULT LoadAndConnectDevice(void);
 
 	// TunerDevice
@@ -174,21 +174,21 @@ protected:
 	HRESULT LoadAndConnectTif(void);
 	void UnloadTif(void);
 
-	// TsWriter/Demultiplexer/TIF‚ğLoad&Connect‚µRun‚·‚é
+	// TsWriter/Demultiplexer/TIFã‚’Load&Connectã—Runã™ã‚‹
 	HRESULT LoadAndConnectMiscFilters(IBaseFilter* pTunerDevice, IBaseFilter* pCaptureDevice);
 
-	// ƒ`ƒ…[ƒiM†ó‘Ôæ“¾—pƒCƒ“ƒ^[ƒtƒF[ƒX
+	// ãƒãƒ¥ãƒ¼ãƒŠä¿¡å·çŠ¶æ…‹å–å¾—ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
 	HRESULT LoadTunerSignalStatisticsTunerNode(void);
 	HRESULT LoadTunerSignalStatisticsDemodNode(void);
 	void UnloadTunerSignalStatistics(void);
 
-	// Pin ‚ÌÚ‘±
+	// Pin ã®æ¥ç¶š
 	HRESULT Connect(IBaseFilter* pFrom, IBaseFilter* pTo);
 
-	// ‘S‚Ä‚Ì Pin ‚ğØ’f‚·‚é
+	// å…¨ã¦ã® Pin ã‚’åˆ‡æ–­ã™ã‚‹
 	void DisconnectAll(IBaseFilter* pFilter);
 
-	// CCOMˆ—ê—pƒXƒŒƒbƒh‚©‚çŒÄ‚Ño‚³‚ê‚éŠÖ”
+	// CCOMå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹é–¢æ•°
 	const BOOL _OpenTuner(void);
 	void _CloseTuner(void);
 	const BOOL _SetChannel(const DWORD dwSpace, const DWORD dwChannel);
@@ -200,11 +200,11 @@ protected:
 
 protected:
 	////////////////////////////////////////
-	// ƒƒ“ƒo•Ï”
+	// ãƒ¡ãƒ³ãƒå¤‰æ•°
 	////////////////////////////////////////
 
 	////////////////////////////////////////
-	// COMˆ—ê—pƒXƒŒƒbƒh—p
+	// COMå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ç”¨
 	////////////////////////////////////////
 
 	enum enumCOMRequest {
@@ -236,25 +236,25 @@ protected:
 	};
 
 	struct COMProc {
-		HANDLE hThread;					// ƒXƒŒƒbƒhƒnƒ“ƒhƒ‹
-		HANDLE hReqEvent;				// COMProcƒXƒŒƒbƒh‚Ö‚ÌƒRƒ}ƒ“ƒhÀs—v‹
-		HANDLE hEndEvent;				// COMProcƒXƒŒƒbƒh‚©‚ç‚ÌƒRƒ}ƒ“ƒhŠ®—¹’Ê’m
-		CRITICAL_SECTION csLock;		// ”r‘¼—p
-		enumCOMRequest nRequest;		// ƒŠƒNƒGƒXƒg
-		COMReqParm uParam;				// ƒpƒ‰ƒ[ƒ^
-		COMReqRetVal uRetVal;			// –ß‚è’l
-		DWORD dwTick;					// Œ»İ‚ÌTickCount
-		DWORD dwTickLastCheck;			// ÅŒã‚ÉˆÙíŠÄ‹‚ÌŠm”F‚ğs‚Á‚½TickCount
-		DWORD dwTickSignalLockErr;		// SignalLock‚ÌˆÙí”­¶TickCount
-		DWORD dwTickBitRateErr;			// BitRate‚ÌˆÙí”­¶TckCount
-		BOOL bSignalLockErr;			// SignalLock‚ÌˆÙí”­¶’†Flag
-		BOOL bBitRateErr;				// BitRate‚ÌˆÙí”­¶’†Flag
-		BOOL bDoReLockChannel;			// ƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒNÄÀs’†
-		BOOL bDoReOpenTuner;			// ƒ`ƒ…[ƒi[ÄƒI[ƒvƒ“’†
-		unsigned int nReLockFailCount;	// Re-LockChannel¸”s‰ñ”
-		DWORD dwReOpenSpace;			// ƒ`ƒ…[ƒi[ÄƒI[ƒvƒ“‚ÌƒJƒŒƒ“ƒgƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†‘Ş”ğ
-		DWORD dwReOpenChannel;			// ƒ`ƒ…[ƒi[ÄƒI[ƒvƒ“‚ÌƒJƒŒƒ“ƒgƒ`ƒƒƒ“ƒlƒ‹”Ô†‘Ş”ğ
-		HANDLE hTerminateRequest;		// ƒXƒŒƒbƒhI—¹—v‹
+		HANDLE hThread;					// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒãƒ³ãƒ‰ãƒ«
+		HANDLE hReqEvent;				// COMProcã‚¹ãƒ¬ãƒƒãƒ‰ã¸ã®ã‚³ãƒãƒ³ãƒ‰å®Ÿè¡Œè¦æ±‚
+		HANDLE hEndEvent;				// COMProcã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ã®ã‚³ãƒãƒ³ãƒ‰å®Œäº†é€šçŸ¥
+		CRITICAL_SECTION csLock;		// æ’ä»–ç”¨
+		enumCOMRequest nRequest;		// ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
+		COMReqParm uParam;				// ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+		COMReqRetVal uRetVal;			// æˆ»ã‚Šå€¤
+		DWORD dwTick;					// ç¾åœ¨ã®TickCount
+		DWORD dwTickLastCheck;			// æœ€å¾Œã«ç•°å¸¸ç›£è¦–ã®ç¢ºèªã‚’è¡Œã£ãŸTickCount
+		DWORD dwTickSignalLockErr;		// SignalLockã®ç•°å¸¸ç™ºç”ŸTickCount
+		DWORD dwTickBitRateErr;			// BitRateã®ç•°å¸¸ç™ºç”ŸTckCount
+		BOOL bSignalLockErr;			// SignalLockã®ç•°å¸¸ç™ºç”Ÿä¸­Flag
+		BOOL bBitRateErr;				// BitRateã®ç•°å¸¸ç™ºç”Ÿä¸­Flag
+		BOOL bDoReLockChannel;			// ãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯å†å®Ÿè¡Œä¸­
+		BOOL bDoReOpenTuner;			// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼å†ã‚ªãƒ¼ãƒ—ãƒ³ä¸­
+		unsigned int nReLockFailCount;	// Re-LockChannelå¤±æ•—å›æ•°
+		DWORD dwReOpenSpace;			// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼å†ã‚ªãƒ¼ãƒ—ãƒ³æ™‚ã®ã‚«ãƒ¬ãƒ³ãƒˆãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·é€€é¿
+		DWORD dwReOpenChannel;			// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼å†ã‚ªãƒ¼ãƒ—ãƒ³æ™‚ã®ã‚«ãƒ¬ãƒ³ãƒˆãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·é€€é¿
+		HANDLE hTerminateRequest;		// ã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†è¦æ±‚
 		
 		COMProc(void)
 			: hThread(NULL),
@@ -306,19 +306,19 @@ protected:
 		inline BOOL CheckSignalLockErr(BOOL state, DWORD threshold)
 		{
 			if (state) {
-				//³í
+				//æ­£å¸¸
 				bSignalLockErr = FALSE;
 			} else {
-				// ˆÙí
+				// ç•°å¸¸
 				if (!bSignalLockErr) {
-					// ¡‰ñ”­¶
+					// ä»Šå›ç™ºç”Ÿ
 					bSignalLockErr = TRUE;
 					dwTickSignalLockErr = dwTick;
 				}
 				else {
-					// ‘O‰ñˆÈ‘O‚É”­¶‚µ‚Ä‚¢‚½
+					// å‰å›ä»¥å‰ã«ç™ºç”Ÿã—ã¦ã„ãŸ
 					if ((dwTick - dwTickSignalLockErr) > threshold) {
-						// İ’èŠÔˆÈãŒo‰ß‚µ‚Ä‚¢‚é
+						// è¨­å®šæ™‚é–“ä»¥ä¸ŠçµŒéã—ã¦ã„ã‚‹
 						ResetWatchDog();
 						return TRUE;
 					}
@@ -330,20 +330,20 @@ protected:
 		inline BOOL CheckBitRateErr(BOOL state, DWORD threshold)
 		{
 			if (state) {
-				//³í
+				//æ­£å¸¸
 				bSignalLockErr = FALSE;
 			}
 			else {
-				// ˆÙí
+				// ç•°å¸¸
 				if (!bBitRateErr) {
-					// ¡‰ñ”­¶
+					// ä»Šå›ç™ºç”Ÿ
 					bBitRateErr = TRUE;
 					dwTickBitRateErr = dwTick;
 				}
 				else {
-					// ‘O‰ñˆÈ‘O‚É”­¶‚µ‚Ä‚¢‚½
+					// å‰å›ä»¥å‰ã«ç™ºç”Ÿã—ã¦ã„ãŸ
 					if ((dwTick - dwTickBitRateErr) > threshold) {
-						// İ’èŠÔˆÈãŒo‰ß‚µ‚Ä‚¢‚é
+						// è¨­å®šæ™‚é–“ä»¥ä¸ŠçµŒéã—ã¦ã„ã‚‹
 						ResetWatchDog();
 						return TRUE;
 					}
@@ -396,12 +396,12 @@ protected:
 	COMProc m_aCOMProc;
 
 	////////////////////////////////////////
-	// Decodeˆ—ê—pƒXƒŒƒbƒh—p
+	// Decodeå‡¦ç†å°‚ç”¨ã‚¹ãƒ¬ãƒƒãƒ‰ç”¨
 	////////////////////////////////////////
 
 	struct DecodeProc {
-		HANDLE hThread;					// ƒXƒŒƒbƒhƒnƒ“ƒhƒ‹
-		HANDLE hTerminateRequest;		// ƒXƒŒƒbƒhI—¹—v‹
+		HANDLE hThread;					// ã‚¹ãƒ¬ãƒƒãƒ‰ãƒãƒ³ãƒ‰ãƒ«
+		HANDLE hTerminateRequest;		// ã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†è¦æ±‚
 		DecodeProc(void)
 			: hThread(NULL),
 			hTerminateRequest(NULL)
@@ -416,13 +416,13 @@ protected:
 	DecodeProc m_aDecodeProc;
 
 	////////////////////////////////////////
-	// ƒ`ƒ…[ƒiƒpƒ‰ƒ[ƒ^ŠÖŒW
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿é–¢ä¿‚
 	////////////////////////////////////////
 
-	// INIƒtƒ@ƒCƒ‹‚Åw’è‚Å‚«‚éGUID/FriendlyNameÅ‘å”
+	// INIãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã§ãã‚‹GUID/FriendlyNameæœ€å¤§æ•°
 	static constexpr unsigned int MAX_GUID = 100U;
 
-	// ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒŒŸõ‚Ég—p‚·‚éGUID•¶š—ñ‚ÆFriendlyName•¶š—ñ‚Ì‘g‡‚¹
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£æ¤œç´¢ã«ä½¿ç”¨ã™ã‚‹GUIDæ–‡å­—åˆ—ã¨FriendlyNameæ–‡å­—åˆ—ã®çµ„åˆã›
 	struct TunerSearchData {
 		std::wstring TunerGUID;
 		std::wstring TunerFriendlyName;
@@ -440,14 +440,14 @@ protected:
 		}
 	};
 
-	// INI ƒtƒ@ƒCƒ‹‚Åw’è‚·‚éƒ`ƒ…[ƒiƒpƒ‰ƒ[ƒ^
+	// INI ãƒ•ã‚¡ã‚¤ãƒ«ã§æŒ‡å®šã™ã‚‹ãƒãƒ¥ãƒ¼ãƒŠãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	struct TunerParam {
 		std::map<unsigned int, TunerSearchData> Tuner;
-												// Tuner‚ÆCapture‚ÌGUID/FriendlyNamew’è
-		BOOL bNotExistCaptureDevice;			// TunerƒfƒoƒCƒX‚Ì‚İ‚ÅCaptureƒfƒoƒCƒX‚ª‘¶İ‚µ‚È‚¢ê‡TRUE
-		BOOL bCheckDeviceInstancePath;			// Tuner‚ÆCapture‚ÌƒfƒoƒCƒXƒCƒ“ƒXƒ^ƒ“ƒXƒpƒX‚ªˆê’v‚µ‚Ä‚¢‚é‚©‚ÌŠm”F‚ğs‚¤‚©‚Ç‚¤‚©
-		std::basic_string<TCHAR> sTunerName;	// GetTunerName‚Å•Ô‚·–¼‘O
-		std::wstring sDLLBaseName;				// ŒÅ—LDLL
+												// Tunerã¨Captureã®GUID/FriendlyNameæŒ‡å®š
+		BOOL bNotExistCaptureDevice;			// Tunerãƒ‡ãƒã‚¤ã‚¹ã®ã¿ã§Captureãƒ‡ãƒã‚¤ã‚¹ãŒå­˜åœ¨ã—ãªã„å ´åˆTRUE
+		BOOL bCheckDeviceInstancePath;			// Tunerã¨Captureã®ãƒ‡ãƒã‚¤ã‚¹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒ‘ã‚¹ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹ã®ç¢ºèªã‚’è¡Œã†ã‹ã©ã†ã‹
+		std::basic_string<TCHAR> sTunerName;	// GetTunerNameã§è¿”ã™åå‰
+		std::wstring sDLLBaseName;				// å›ºæœ‰DLL
 		TunerParam(void)
 			: bNotExistCaptureDevice(TRUE),
 			  bCheckDeviceInstancePath(TRUE)
@@ -460,161 +460,161 @@ protected:
 	};
 	TunerParam m_aTunerParam;
 
-	// ToneM†Ø‘Ö‚ÌWaitŠÔ
+	// Toneä¿¡å·åˆ‡æ›¿æ™‚ã®Waitæ™‚é–“
 	unsigned int m_nToneWait;
 
-	// CHØ‘ÖŒã‚ÌLockŠm”FŠÔ
+	// CHåˆ‡æ›¿å¾Œã®Lockç¢ºèªæ™‚é–“
 	unsigned int m_nLockWait;
 
-	// CHØ‘ÖŒã‚ÌLockŠm”FDelayŠÔ
+	// CHåˆ‡æ›¿å¾Œã®Lockç¢ºèªDelayæ™‚é–“
 	unsigned int m_nLockWaitDelay;
 
-	// CHØ‘ÖŒã‚ÌLockŠm”FRetry‰ñ”
+	// CHåˆ‡æ›¿å¾Œã®Lockç¢ºèªRetryå›æ•°
 	unsigned int m_nLockWaitRetry;
 
-	// CHØ‘Ö“®ì‚ğ‹­§“I‚É2“xs‚¤‚©‚Ç‚¤‚©
+	// CHåˆ‡æ›¿å‹•ä½œã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†ã‹ã©ã†ã‹
 	BOOL m_bLockTwice;
 
-	// CHØ‘Ö“®ì‚ğ‹­§“I‚É2“xs‚¤ê‡‚ÌDelayŠÔ(msec)
+	// CHåˆ‡æ›¿å‹•ä½œã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†å ´åˆã®Delayæ™‚é–“(msec)
 	unsigned int m_nLockTwiceDelay;
 
-	// SignalLocked‚ÌŠÄ‹ŠÔ(msec) 0‚ÅŠÄ‹‚µ‚È‚¢
+	// SignalLockedã®ç›£è¦–æ™‚é–“(msec) 0ã§ç›£è¦–ã—ãªã„
 	unsigned int m_nWatchDogSignalLocked;
 
-	// BitRate‚ÌŠÄ‹ŠÔ(msec) 0‚ÅŠÄ‹‚µ‚È‚¢
+	// BitRateã®ç›£è¦–æ™‚é–“(msec) 0ã§ç›£è¦–ã—ãªã„
 	unsigned int m_nWatchDogBitRate;
 
-	// ˆÙíŒŸ’mAƒ`ƒ…[ƒi‚ÌÄƒI[ƒvƒ“‚ğ‚İ‚é‚Ü‚Å‚ÌCHØ‘Ö“®ìs‰ñ”
+	// ç•°å¸¸æ¤œçŸ¥æ™‚ã€ãƒãƒ¥ãƒ¼ãƒŠã®å†ã‚ªãƒ¼ãƒ—ãƒ³ã‚’è©¦ã¿ã‚‹ã¾ã§ã®CHåˆ‡æ›¿å‹•ä½œè©¦è¡Œå›æ•°
 	unsigned int m_nReOpenWhenGiveUpReLock;
 
-	// ƒ`ƒ…[ƒi‚ÌÄƒI[ƒvƒ“‚ğ‚İ‚éê‡‚É•Ê‚Ìƒ`ƒ…[ƒi‚ğ—Dæ‚µ‚ÄŒŸõ‚·‚é‚©‚Ç‚¤‚©
+	// ãƒãƒ¥ãƒ¼ãƒŠã®å†ã‚ªãƒ¼ãƒ—ãƒ³ã‚’è©¦ã¿ã‚‹å ´åˆã«åˆ¥ã®ãƒãƒ¥ãƒ¼ãƒŠã‚’å„ªå…ˆã—ã¦æ¤œç´¢ã™ã‚‹ã‹ã©ã†ã‹
 	BOOL m_bTryAnotherTuner;
 
-	// CHØ‘Ö‚É¸”s‚µ‚½ê‡‚ÉAˆÙíŒŸ’m“¯—lƒoƒbƒNƒOƒ‰ƒ“ƒh‚ÅCHØ‘Ö“®ì‚ğs‚¤‚©‚Ç‚¤‚©
+	// CHåˆ‡æ›¿ã«å¤±æ•—ã—ãŸå ´åˆã«ã€ç•°å¸¸æ¤œçŸ¥æ™‚åŒæ§˜ãƒãƒƒã‚¯ã‚°ãƒ©ãƒ³ãƒ‰ã§CHåˆ‡æ›¿å‹•ä½œã‚’è¡Œã†ã‹ã©ã†ã‹
 	BOOL m_bBackgroundChannelLock;
 
-	// SignalLevel Zo•û–@
+	// SignalLevel ç®—å‡ºæ–¹æ³•
 	enum enumSignalLevelCalcType {
 		eSignalLevelCalcTypeSSMin = 0,
-		eSignalLevelCalcTypeSSStrength = 0,			// RF Tuner Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½Strength’l € StrengthCoefficient { StrengthBias
-		eSignalLevelCalcTypeSSQuality = 1,			// RF Tuner Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½Quality’l € QualityCoefficient { QualityBias
-		eSignalLevelCalcTypeSSMul = 2,				// RF Tuner Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½(Strength’l € StrengthCoefficient { StrengthBias) ~ (Quality’l € QualityCoefficient { QualityBias)
-		eSignalLevelCalcTypeSSAdd = 3,				// RF Tuner Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½(Strength’l € StrengthCoefficient { StrengthBias) { (Quality’l € QualityCoefficient { QualityBias)
-		eSignalLevelCalcTypeSSFormula = 9,			// RF Tuner Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½Strength/Quality’l‚ğSignalLevelCalcFormula‚Éİ’è‚µ‚½ƒ†[ƒU[’è‹`”®‚ÅZo
+		eSignalLevelCalcTypeSSStrength = 0,			// RF Tuner Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸStrengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias
+		eSignalLevelCalcTypeSSQuality = 1,			// RF Tuner Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸQualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias
+		eSignalLevelCalcTypeSSMul = 2,				// RF Tuner Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸ(Strengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias) Ã— (Qualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias)
+		eSignalLevelCalcTypeSSAdd = 3,				// RF Tuner Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸ(Strengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias) ï¼‹ (Qualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias)
+		eSignalLevelCalcTypeSSFormula = 9,			// RF Tuner Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸStrength/Qualityå€¤ã‚’SignalLevelCalcFormulaã«è¨­å®šã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©æ•°å¼ã§ç®—å‡º
 		eSignalLevelCalcTypeSSMax = 9,
 		eSignalLevelCalcTypeTunerMin = 10,
-		eSignalLevelCalcTypeTunerStrength = 10,		// ITuner::get_SignalStrength‚Åæ“¾‚µ‚½Strength’l € StrengthCoefficient { StrengthBias
-		eSignalLevelCalcTypeTunerQuality = 11,		// ITuner::get_SignalStrength‚Åæ“¾‚µ‚½Quality’l € QualityCoefficient { QualityBias
-		eSignalLevelCalcTypeTunerMul = 12,			// ITuner::get_SignalStrength‚Åæ“¾‚µ‚½(Strength’l € StrengthCoefficient { StrengthBias) ~ (Quality’l € QualityCoefficient { QualityBias)
-		eSignalLevelCalcTypeTunerAdd = 13,			// ITuner::get_SignalStrength‚Åæ“¾‚µ‚½(Strength’l € StrengthCoefficient { StrengthBias) { (Quality’l € QualityCoefficient { QualityBias)
-		eSignalLevelCalcTypeTunerFormula = 19,		// ITuner::get_SignalStrength‚Åæ“¾‚µ‚½Strength/Quality’l‚ğSignalLevelCalcFormula‚Éİ’è‚µ‚½ƒ†[ƒU[’è‹`”®‚ÅZo
+		eSignalLevelCalcTypeTunerStrength = 10,		// ITuner::get_SignalStrengthã§å–å¾—ã—ãŸStrengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias
+		eSignalLevelCalcTypeTunerQuality = 11,		// ITuner::get_SignalStrengthã§å–å¾—ã—ãŸQualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias
+		eSignalLevelCalcTypeTunerMul = 12,			// ITuner::get_SignalStrengthã§å–å¾—ã—ãŸ(Strengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias) Ã— (Qualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias)
+		eSignalLevelCalcTypeTunerAdd = 13,			// ITuner::get_SignalStrengthã§å–å¾—ã—ãŸ(Strengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias) ï¼‹ (Qualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias)
+		eSignalLevelCalcTypeTunerFormula = 19,		// ITuner::get_SignalStrengthã§å–å¾—ã—ãŸStrength/Qualityå€¤ã‚’SignalLevelCalcFormulaã«è¨­å®šã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©æ•°å¼ã§ç®—å‡º
 		eSignalLevelCalcTypeTunerMax = 19,
 		eSignalLevelCalcTypeDemodSSMin = 20,
-		eSignalLevelCalcTypeDemodSSStrength = 20,	// Demodulator Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½Strength’l € StrengthCoefficient { StrengthBias
-		eSignalLevelCalcTypeDemodSSQuality = 21,	// Demodulator Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½Quality’l € QualityCoefficient { QualityBias
-		eSignalLevelCalcTypeDemodSSMul = 22,		// Demodulator Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½(Strength’l € StrengthCoefficient { StrengthBias) ~ (Quality’l € QualityCoefficient { QualityBias)
-		eSignalLevelCalcTypeDemodSSAdd = 23,		// Demodulator Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½(Strength’l € StrengthCoefficient { StrengthBias) { (Quality’l € QualityCoefficient { QualityBias)
-		eSignalLevelCalcTypeDemodSSFormula = 29,	// Demodulator Node‚ÌIBDA_SignalStatistics‚©‚çæ“¾‚µ‚½Strength/Quality’l‚ğSignalLevelCalcFormula‚Éİ’è‚µ‚½ƒ†[ƒU[’è‹`”®‚ÅZo
+		eSignalLevelCalcTypeDemodSSStrength = 20,	// Demodulator Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸStrengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias
+		eSignalLevelCalcTypeDemodSSQuality = 21,	// Demodulator Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸQualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias
+		eSignalLevelCalcTypeDemodSSMul = 22,		// Demodulator Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸ(Strengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias) Ã— (Qualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias)
+		eSignalLevelCalcTypeDemodSSAdd = 23,		// Demodulator Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸ(Strengthå€¤ Ã· StrengthCoefficient ï¼‹ StrengthBias) ï¼‹ (Qualityå€¤ Ã· QualityCoefficient ï¼‹ QualityBias)
+		eSignalLevelCalcTypeDemodSSFormula = 29,	// Demodulator Nodeã®IBDA_SignalStatisticsã‹ã‚‰å–å¾—ã—ãŸStrength/Qualityå€¤ã‚’SignalLevelCalcFormulaã«è¨­å®šã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©æ•°å¼ã§ç®—å‡º
 		eSignalLevelCalcTypeDemodSSMax = 29,
-		eSignalLevelCalcTypeBR = 100,				// ƒrƒbƒgƒŒ[ƒg’l(Mibps)
+		eSignalLevelCalcTypeBR = 100,				// ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆå€¤(Mibps)
 	};
 	enumSignalLevelCalcType m_nSignalLevelCalcType;
-	BOOL m_bSignalLevelGetTypeSS;			// SignalLevel Zo‚É RF Tuner Node ‚Ì IBDA_SignalStatistics ‚ğg—p‚·‚é
-	BOOL m_bSignalLevelGetTypeTuner;		// SignalLevel Zo‚É ITuner ‚ğg—p‚·‚é
-	BOOL m_bSignalLevelGetTypeDemodSS;		// SignalLevel Zo‚É Demodulator Node ‚Ì IBDA_SignalStatistics ‚ğg—p‚·‚é
-	BOOL m_bSignalLevelGetTypeBR;			// SignalLevel Zo‚É ƒrƒbƒgƒŒ[ƒg’l‚ğg—p‚·‚é
-	BOOL m_bSignalLevelNeedStrength;		// SignalLevel Zo‚É SignalStrength ’l‚ğg—p‚·‚é
-	BOOL m_bSignalLevelNeedQuality;			// SignalLevel Zo‚É SignalQuality ’l‚ğg—p‚·‚é
+	BOOL m_bSignalLevelGetTypeSS;			// SignalLevel ç®—å‡ºã« RF Tuner Node ã® IBDA_SignalStatistics ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLevelGetTypeTuner;		// SignalLevel ç®—å‡ºã« ITuner ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLevelGetTypeDemodSS;		// SignalLevel ç®—å‡ºã« Demodulator Node ã® IBDA_SignalStatistics ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLevelGetTypeBR;			// SignalLevel ç®—å‡ºã« ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆå€¤ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLevelNeedStrength;		// SignalLevel ç®—å‡ºã« SignalStrength å€¤ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLevelNeedQuality;			// SignalLevel ç®—å‡ºã« SignalQuality å€¤ã‚’ä½¿ç”¨ã™ã‚‹
 
-	// Strength ’l•â³ŒW”
+	// Strength å€¤è£œæ­£ä¿‚æ•°
 	double m_fStrengthCoefficient;
 
-	// Quality ’l•â³ŒW”
+	// Quality å€¤è£œæ­£ä¿‚æ•°
 	double m_fQualityCoefficient;
 
-	// Strength ’l•â³ƒoƒCƒAƒX
+	// Strength å€¤è£œæ­£ãƒã‚¤ã‚¢ã‚¹
 	double m_fStrengthBias;
 
-	// Quality ’l•â³ƒoƒCƒAƒX
+	// Quality å€¤è£œæ­£ãƒã‚¤ã‚¢ã‚¹
 	double m_fQualityBias;
 
-	// SignalLevelZo—pƒ†[ƒU[’è‹`”®
+	// SignalLevelç®—å‡ºç”¨ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©æ•°å¼
 	std::wstring m_sSignalLevelCalcFormula;
 
-	// SignalLevelZo—p
+	// SignalLevelç®—å‡ºç”¨
 	mu::Parser m_muParser;	// muparser
-	double m_fStrength;		// muparser—pStrength’lQÆ•Ï”
-	double m_fQuality;		// muparser—pQuality’lQÆ•Ï”
+	double m_fStrength;		// muparserç”¨Strengthå€¤å‚ç…§å¤‰æ•°
+	double m_fQuality;		// muparserç”¨Qualityå€¤å‚ç…§å¤‰æ•°
 
-	// ƒ`ƒ…[ƒjƒ“ƒOó‘Ô‚Ì”»’f•û–@
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°çŠ¶æ…‹ã®åˆ¤æ–­æ–¹æ³•
 	enum enumSignalLockedJudgeType {
-		eSignalLockedJudgeTypeAlways = 0,	// í‚Éƒ`ƒ…[ƒjƒ“ƒO‚É¬Œ÷‚µ‚Ä‚¢‚éó‘Ô‚Æ‚µ‚Ä”»’f‚·‚é
-		eSignalLockedJudgeTypeSS = 1,		// RF Tuner Node ‚Ì IBDA_SignalStatistics::get_SignalLocked‚Åæ“¾‚µ‚½’l‚Å”»’f‚·‚é
-		eSignalLockedJudgeTypeTuner = 2,	// ITuner::get_SignalStrength‚Åæ“¾‚µ‚½’l‚Å”»’f‚·‚é
-		eSignalLockedJudgeTypeDemodSS = 3,	// Demodulator Node ‚Ì IBDA_SignalStatistics::get_SignalLocked‚Åæ“¾‚µ‚½’l‚Å”»’f‚·‚é
+		eSignalLockedJudgeTypeAlways = 0,	// å¸¸ã«ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã«æˆåŠŸã—ã¦ã„ã‚‹çŠ¶æ…‹ã¨ã—ã¦åˆ¤æ–­ã™ã‚‹
+		eSignalLockedJudgeTypeSS = 1,		// RF Tuner Node ã® IBDA_SignalStatistics::get_SignalLockedã§å–å¾—ã—ãŸå€¤ã§åˆ¤æ–­ã™ã‚‹
+		eSignalLockedJudgeTypeTuner = 2,	// ITuner::get_SignalStrengthã§å–å¾—ã—ãŸå€¤ã§åˆ¤æ–­ã™ã‚‹
+		eSignalLockedJudgeTypeDemodSS = 3,	// Demodulator Node ã® IBDA_SignalStatistics::get_SignalLockedã§å–å¾—ã—ãŸå€¤ã§åˆ¤æ–­ã™ã‚‹
 	};
 	enumSignalLockedJudgeType m_nSignalLockedJudgeType;
-	BOOL m_bSignalLockedJudgeTypeSS;		// ƒ`ƒ…[ƒjƒ“ƒOó‘Ô‚Ì”»’f‚É IBDA_SignalStatistics ‚ğg—p‚·‚é
-	BOOL m_bSignalLockedJudgeTypeTuner;		// ƒ`ƒ…[ƒjƒ“ƒOó‘Ô‚Ì”»’f‚É ITuner ‚ğg—p‚·‚é
-	BOOL m_bSignalLockedJudgeTypeDemodSS;	// ƒ`ƒ…[ƒjƒ“ƒOó‘Ô‚Ì”»’f‚É Demodulator Node ‚Ì IBDA_SignalStatistics ‚ğg—p‚·‚é
+	BOOL m_bSignalLockedJudgeTypeSS;		// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°çŠ¶æ…‹ã®åˆ¤æ–­ã« IBDA_SignalStatistics ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLockedJudgeTypeTuner;		// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°çŠ¶æ…‹ã®åˆ¤æ–­ã« ITuner ã‚’ä½¿ç”¨ã™ã‚‹
+	BOOL m_bSignalLockedJudgeTypeDemodSS;	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°çŠ¶æ…‹ã®åˆ¤æ–­ã« Demodulator Node ã® IBDA_SignalStatistics ã‚’ä½¿ç”¨ã™ã‚‹
 
 	////////////////////////////////////////
-	// BonDriver ƒpƒ‰ƒ[ƒ^ŠÖŒW
+	// BonDriver ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿é–¢ä¿‚
 	////////////////////////////////////////
 
-	// ƒoƒbƒtƒ@1ŒÂ‚ ‚½‚è‚ÌƒTƒCƒY
+	// ãƒãƒƒãƒ•ã‚¡1å€‹ã‚ãŸã‚Šã®ã‚µã‚¤ã‚º
 	size_t m_nBuffSize;
 
-	// Å‘åƒoƒbƒtƒ@”
+	// æœ€å¤§ãƒãƒƒãƒ•ã‚¡æ•°
 	size_t m_nMaxBuffCount;
 
-	// m_hOnDecodeEvent‚ğƒZƒbƒg‚·‚éƒf[ƒ^ƒoƒbƒtƒ@ŒÂ”
+	// m_hOnDecodeEventã‚’ã‚»ãƒƒãƒˆã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡å€‹æ•°
 	unsigned int m_nWaitTsCount;
 
-	// WaitTsStream‚ÅÅ’áŒÀ‘Ò‹@‚·‚éŠÔ
+	// WaitTsStreamã§æœ€ä½é™å¾…æ©Ÿã™ã‚‹æ™‚é–“
 	unsigned int m_nWaitTsSleep;
 
-	// SetChannel()‚Åƒ`ƒƒƒ“ƒlƒ‹ƒƒbƒN‚É¸”s‚µ‚½ê‡‚Å‚àFALSE‚ğ•Ô‚³‚È‚¢‚æ‚¤‚É‚·‚é‚©‚Ç‚¤‚©
+	// SetChannel()ã§ãƒãƒ£ãƒ³ãƒãƒ«ãƒ­ãƒƒã‚¯ã«å¤±æ•—ã—ãŸå ´åˆã§ã‚‚FALSEã‚’è¿”ã•ãªã„ã‚ˆã†ã«ã™ã‚‹ã‹ã©ã†ã‹
 	BOOL m_bAlwaysAnswerLocked;
 
-	// COMProcThread‚ÌƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// COMProcThreadã®ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	int m_nThreadPriorityCOM;
 
-	// DecodeProcThread‚ÌƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// DecodeProcThreadã®ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	int m_nThreadPriorityDecode;
 
-	// ƒXƒgƒŠ[ƒ€ƒXƒŒƒbƒhƒvƒ‰ƒCƒIƒŠƒeƒB
+	// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£
 	int m_nThreadPriorityStream;
 
-	// timeBeginPeriod()‚Åİ’è‚·‚éWindows‚ÌÅ¬ƒ^ƒCƒ}•ª‰ğ”\(msec)
+	// timeBeginPeriod()ã§è¨­å®šã™ã‚‹Windowsã®æœ€å°ã‚¿ã‚¤ãƒåˆ†è§£èƒ½(msec)
 	unsigned int m_nPeriodicTimer;
 
 	////////////////////////////////////////
-	// ƒ`ƒƒƒ“ƒlƒ‹ƒpƒ‰ƒ[ƒ^
+	// ãƒãƒ£ãƒ³ãƒãƒ«ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	////////////////////////////////////////
 
-	// ƒ`ƒƒƒ“ƒlƒ‹ƒf[ƒ^
+	// ãƒãƒ£ãƒ³ãƒãƒ«ãƒ‡ãƒ¼ã‚¿
 	struct ChData {
-		std::basic_string<TCHAR> sServiceName;	// EnumChannelName‚Å•Ô‚·ƒ`ƒƒƒ“ƒlƒ‹–¼
-		unsigned int Satellite;			// ‰q¯óMİ’è”Ô†
-		unsigned int Polarisation;		// •Î”gí—Ş”Ô† (0 .. –¢w’è, 1 .. H, 2 .. V, 3 .. L, 4 .. R)
-		unsigned int ModulationType;	// •Ï’²•û®İ’è”Ô†
-		long Frequency;					// ü”g”(KHz)
+		std::basic_string<TCHAR> sServiceName;	// EnumChannelNameã§è¿”ã™ãƒãƒ£ãƒ³ãƒãƒ«å
+		unsigned int Satellite;			// è¡›æ˜Ÿå—ä¿¡è¨­å®šç•ªå·
+		unsigned int Polarisation;		// åæ³¢ç¨®é¡ç•ªå· (0 .. æœªæŒ‡å®š, 1 .. H, 2 .. V, 3 .. L, 4 .. R)
+		unsigned int ModulationType;	// å¤‰èª¿æ–¹å¼è¨­å®šç•ªå·
+		long Frequency;					// å‘¨æ³¢æ•°(KHz)
 		union {
-			long SID;					// ƒT[ƒrƒXID
-			long PhysicalChannel;		// ATSC / Digital Cable—p
+			long SID;					// ã‚µãƒ¼ãƒ“ã‚¹ID
+			long PhysicalChannel;		// ATSC / Digital Cableç”¨
 		};
 		union {
-			long TSID;					// ƒgƒ‰ƒ“ƒXƒ|[ƒgƒXƒgƒŠ[ƒ€ID
-			long Channel;				// ATSC / Digital Cable—p
+			long TSID;					// ãƒˆãƒ©ãƒ³ã‚¹ãƒãƒ¼ãƒˆã‚¹ãƒˆãƒªãƒ¼ãƒ ID
+			long Channel;				// ATSC / Digital Cableç”¨
 		};
 		union {
-			long ONID;					// ƒIƒŠƒWƒiƒ‹ƒlƒbƒgƒ[ƒNID
-			long MinorChannel;			// ATSC / Digital Cable—p
+			long ONID;					// ã‚ªãƒªã‚¸ãƒŠãƒ«ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ID
+			long MinorChannel;			// ATSC / Digital Cableç”¨
 		};
-		long MajorChannel;				// Digital Cable—p
-		long SourceID;					// Digital Cable—p
-		BOOL LockTwiceTarget;			// CHØ‘Ö“®ì‚ğ‹­§“I‚É2“xs‚¤‘ÎÛ
+		long MajorChannel;				// Digital Cableç”¨
+		long SourceID;					// Digital Cableç”¨
+		BOOL LockTwiceTarget;			// CHåˆ‡æ›¿å‹•ä½œã‚’å¼·åˆ¶çš„ã«2åº¦è¡Œã†å¯¾è±¡
 		ChData(void)
 			: Satellite(0),
 			  Polarisation(0),
@@ -630,14 +630,14 @@ protected:
 		};
 	};
 
-	// ƒ`ƒ…[ƒjƒ“ƒO‹óŠÔƒf[ƒ^
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ç©ºé–“ãƒ‡ãƒ¼ã‚¿
 	struct TuningSpaceData {
-		std::basic_string<TCHAR> sTuningSpaceName;		// EnumTuningSpace‚Å•Ô‚·Tuning Space–¼
-		long FrequencyOffset;							// ü”g”ƒIƒtƒZƒbƒg’l
-		unsigned int DVBSystemTypeNumber;				// TuningSpace‚Ìí—Ş”Ô†
-		unsigned int TSMFMode;							// TSMF‚Ìˆ—ƒ‚[ƒh
-		std::map<unsigned int, ChData> Channels;		// ƒ`ƒƒƒ“ƒlƒ‹”Ô†‚Æƒ`ƒƒƒ“ƒlƒ‹ƒf[ƒ^
-		DWORD dwNumChannel;								// ƒ`ƒƒƒ“ƒlƒ‹”
+		std::basic_string<TCHAR> sTuningSpaceName;		// EnumTuningSpaceã§è¿”ã™Tuning Spaceå
+		long FrequencyOffset;							// å‘¨æ³¢æ•°ã‚ªãƒ•ã‚»ãƒƒãƒˆå€¤
+		unsigned int DVBSystemTypeNumber;				// TuningSpaceã®ç¨®é¡ç•ªå·
+		unsigned int TSMFMode;							// TSMFã®å‡¦ç†ãƒ¢ãƒ¼ãƒ‰
+		std::map<unsigned int, ChData> Channels;		// ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·ã¨ãƒãƒ£ãƒ³ãƒãƒ«ãƒ‡ãƒ¼ã‚¿
+		DWORD dwNumChannel;								// ãƒãƒ£ãƒ³ãƒãƒ«æ•°
 		TuningSpaceData(void)
 			: FrequencyOffset(0),
 			  dwNumChannel(0)
@@ -649,10 +649,10 @@ protected:
 		};
 	};
 
-	// ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒXˆê——
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ä¸€è¦§
 	struct TuningData {
-		std::map<unsigned int, TuningSpaceData> Spaces;		// ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†‚Æƒf[ƒ^
-		DWORD dwNumSpace;									// ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”
+		std::map<unsigned int, TuningSpaceData> Spaces;		// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·ã¨ãƒ‡ãƒ¼ã‚¿
+		DWORD dwNumSpace;									// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹æ•°
 		TuningData(void)
 			: dwNumSpace(0)
 		{
@@ -665,13 +665,13 @@ protected:
 	TuningData m_TuningData;
 
 	////////////////////////////////////////
-	// ‰q¯óMƒpƒ‰ƒ[ƒ^
+	// è¡›æ˜Ÿå—ä¿¡ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	////////////////////////////////////////
 
-	// iniƒtƒ@ƒCƒ‹‚Åó•t‚¯‚é•Î”gí—Ş”
+	// iniãƒ•ã‚¡ã‚¤ãƒ«ã§å—ä»˜ã‘ã‚‹åæ³¢ç¨®é¡æ•°
 	static constexpr unsigned int POLARISATION_SIZE = 5U;
 
-	// CBonTuner‚Åg—p‚·‚é•Î”gí—Ş”Ô†‚ÆPolarisationŒ^‚ÌMapping
+	// CBonTunerã§ä½¿ç”¨ã™ã‚‹åæ³¢ç¨®é¡ç•ªå·ã¨Polarisationå‹ã®Mapping
 	static constexpr Polarisation PolarisationMapping[POLARISATION_SIZE] = {
 		BDA_POLARISATION_NOT_SET,
 		BDA_POLARISATION_LINEAR_H,
@@ -680,7 +680,7 @@ protected:
 		BDA_POLARISATION_CIRCULAR_R
 	};
 
-	// •Î”gí—Ş–ˆ‚Ìiniƒtƒ@ƒCƒ‹‚Å‚Ì‹L†
+	// åæ³¢ç¨®é¡æ¯ã®iniãƒ•ã‚¡ã‚¤ãƒ«ã§ã®è¨˜å·
 	static constexpr WCHAR PolarisationChar[POLARISATION_SIZE] = {
 		L' ',
 		L'H',
@@ -689,75 +689,75 @@ protected:
 		L'R'
 	};
 
-	// iniƒtƒ@ƒCƒ‹‚Åİ’è‚Å‚«‚éÅ‘å‰q¯” + 1
+	// iniãƒ•ã‚¡ã‚¤ãƒ«ã§è¨­å®šã§ãã‚‹æœ€å¤§è¡›æ˜Ÿæ•° + 1
 	static constexpr unsigned int MAX_SATELLITE = 10U;
 
-	// ‰q¯óMİ’èƒf[ƒ^
+	// è¡›æ˜Ÿå—ä¿¡è¨­å®šãƒ‡ãƒ¼ã‚¿
 	struct Satellite {
-		AntennaParam Polarisation[POLARISATION_SIZE];	// •Î”gí—Ş–ˆ‚ÌƒAƒ“ƒeƒiİ’è
+		AntennaParam Polarisation[POLARISATION_SIZE];	// åæ³¢ç¨®é¡æ¯ã®ã‚¢ãƒ³ãƒ†ãƒŠè¨­å®š
 	};
 	Satellite m_aSatellite[MAX_SATELLITE];
 
-	// ƒ`ƒƒƒ“ƒlƒ‹–¼‚Ì©“®¶¬‚Ég—p‚·‚é‰q¯‚Ì–¼Ì
+	// ãƒãƒ£ãƒ³ãƒãƒ«åã®è‡ªå‹•ç”Ÿæˆã«ä½¿ç”¨ã™ã‚‹è¡›æ˜Ÿã®åç§°
 	std::wstring m_sSatelliteName[MAX_SATELLITE];
 
 	////////////////////////////////////////
-	// •Ï’²•û®ƒpƒ‰ƒ[ƒ^
+	// å¤‰èª¿æ–¹å¼ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	////////////////////////////////////////
 
-	// iniƒtƒ@ƒCƒ‹‚Åİ’è‚Å‚«‚éÅ‘å•Ï’²•û®”
-	static constexpr unsigned int MAX_MODULATION = 10U;
+	// iniãƒ•ã‚¡ã‚¤ãƒ«ã§è¨­å®šã§ãã‚‹æœ€å¤§å¤‰èª¿æ–¹å¼æ•°
+	static constexpr unsigned int MAX_MODULATION = 11U;
 
-	// •Ï’²•û®İ’èƒf[ƒ^
+	// å¤‰èª¿æ–¹å¼è¨­å®šãƒ‡ãƒ¼ã‚¿
 	ModulationMethod m_aModulationType[MAX_MODULATION];
 
-	// ƒ`ƒƒƒ“ƒlƒ‹–¼‚Ì©“®¶¬‚Ég—p‚·‚é•Ï’²•û®‚Ì–¼Ì
+	// ãƒãƒ£ãƒ³ãƒãƒ«åã®è‡ªå‹•ç”Ÿæˆã«ä½¿ç”¨ã™ã‚‹å¤‰èª¿æ–¹å¼ã®åç§°
 	std::wstring m_sModulationName[MAX_MODULATION];
 
 	////////////////////////////////////////
-	// BonDriver ŠÖ˜A
+	// BonDriver é–¢é€£
 	////////////////////////////////////////
 
-	// iniƒtƒ@ƒCƒ‹‚ÌPath
+	// iniãƒ•ã‚¡ã‚¤ãƒ«ã®Path
 	std::wstring m_sIniFilePath;
 
-	// óMƒCƒxƒ“ƒg
+	// å—ä¿¡ã‚¤ãƒ™ãƒ³ãƒˆ
 	HANDLE m_hOnStreamEvent;
 
-	// ƒfƒR[ƒhƒCƒxƒ“ƒg
+	// ãƒ‡ã‚³ãƒ¼ãƒ‰ã‚¤ãƒ™ãƒ³ãƒˆ
 	HANDLE m_hOnDecodeEvent;
 
-	// óMTSƒf[ƒ^ƒoƒbƒtƒ@
+	// å—ä¿¡TSãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡
 	TS_BUFF m_TsBuff;
 
-	// Decodeˆ—‚ÌI‚í‚Á‚½TSƒf[ƒ^ƒoƒbƒtƒ@
+	// Decodeå‡¦ç†ã®çµ‚ã‚ã£ãŸTSãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡
 	TS_BUFF m_DecodedTsBuff;
 
-	// GetTsStream‚ÅQÆ‚³‚ê‚éƒoƒbƒtƒ@
+	// GetTsStreamã§å‚ç…§ã•ã‚Œã‚‹ãƒãƒƒãƒ•ã‚¡
 	TS_DATA* m_LastBuff;
 
-	// ƒf[ƒ^óM’†
+	// ãƒ‡ãƒ¼ã‚¿å—ä¿¡ä¸­
 	BOOL m_bRecvStarted;
 
-	// ƒvƒƒZƒXƒnƒ“ƒhƒ‹
+	// ãƒ—ãƒ­ã‚»ã‚¹ãƒãƒ³ãƒ‰ãƒ«
 	HANDLE m_hProcess;
 
-	// ƒXƒgƒŠ[ƒ€ƒXƒŒƒbƒh‚Ìƒnƒ“ƒhƒ‹
+	// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒãƒ³ãƒ‰ãƒ«
 	HANDLE m_hStreamThread;
 
-	// ƒXƒgƒŠ[ƒ€ƒXƒŒƒbƒhƒnƒ“ƒhƒ‹’Ê’mƒtƒ‰ƒO
+	// ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰ãƒãƒ³ãƒ‰ãƒ«é€šçŸ¥ãƒ•ãƒ©ã‚°
 	BOOL m_bIsSetStreamThread;
 
-	// ƒrƒbƒgƒŒ[ƒgŒvZ—p
+	// ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆè¨ˆç®—ç”¨
 	class BitRate {
 	private:
-		DWORD Rate1sec;					// 1•bŠÔ‚ÌƒŒ[ƒg‰ÁZ—p (bytes/sec)
-		DWORD RateLast[5];				// ’¼‹ß5•bŠÔ‚ÌƒŒ[ƒg (bytes/sec)
-		DWORD DataCount;				// ’¼‹ß5•bŠÔ‚Ìƒf[ƒ^ŒÂ” (0`5)
-		double Rate;					// •½‹ÏƒrƒbƒgƒŒ[ƒg (Mibps)
-		DWORD LastTick;					// ‘O‰ñ‚ÌTickCount’l
-		CRITICAL_SECTION csRate1Sec;	// nRate1sec ”r‘¼—p
-		CRITICAL_SECTION csRateLast;	// nRateLast ”r‘¼—p
+		DWORD Rate1sec;					// 1ç§’é–“ã®ãƒ¬ãƒ¼ãƒˆåŠ ç®—ç”¨ (bytes/sec)
+		DWORD RateLast[5];				// ç›´è¿‘5ç§’é–“ã®ãƒ¬ãƒ¼ãƒˆ (bytes/sec)
+		DWORD DataCount;				// ç›´è¿‘5ç§’é–“ã®ãƒ‡ãƒ¼ã‚¿å€‹æ•° (0ï½5)
+		double Rate;					// å¹³å‡ãƒ“ãƒƒãƒˆãƒ¬ãƒ¼ãƒˆ (Mibps)
+		DWORD LastTick;					// å‰å›ã®TickCountå€¤
+		CRITICAL_SECTION csRate1Sec;	// nRate1sec æ’ä»–ç”¨
+		CRITICAL_SECTION csRateLast;	// nRateLast æ’ä»–ç”¨
 
 	public:
 		BitRate(void)
@@ -832,37 +832,37 @@ protected:
 	};
 	BitRate m_BitRate;
 
-	// TSNFˆ——p
+	// TSNFå‡¦ç†ç”¨
 	CTSMFParser m_TSMFParser;
 
 	////////////////////////////////////////
-	// ƒ`ƒ…[ƒiŠÖ˜A
+	// ãƒãƒ¥ãƒ¼ãƒŠé–¢é€£
 	////////////////////////////////////////
 
-	// ƒ`ƒ…[ƒiƒfƒoƒCƒX”r‘¼ˆ——p
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ‡ãƒã‚¤ã‚¹æ’ä»–å‡¦ç†ç”¨
 	HANDLE m_hSemaphore;
 
 	// Graph
-	CComPtr<IGraphBuilder> m_pIGraphBuilder;	// Filter Graph Manager ‚Ì IGraphBuilder interface
-	CComPtr<IMediaControl> m_pIMediaControl;	// Filter Graph Manager ‚Ì IMediaControl interface
-	CComPtr<IBaseFilter> m_pNetworkProvider;	// NetworkProvider ‚Ì IBaseFilter interface
-	CComPtr<ITuner> m_pITuner;					// NetworkProvider ‚Ì ITuner interface
-	CComPtr<IBaseFilter> m_pTunerDevice;		// Tuner Device ‚Ì IBaseFilter interface
-	CComPtr<IBaseFilter> m_pCaptureDevice;		// Capture Device ‚Ì IBaseFilter interface
-	CComPtr<IBaseFilter> m_pTsWriter;			// CTsWriter ‚Ì IBaseFilter interface
-	CComPtr<ITsWriter> m_pITsWriter;			// CTsWriter ‚Ì ITsWriter interface
-	CComPtr<IBaseFilter> m_pDemux;				// MPEG2 Demultiplexer ‚Ì IBaseFilter interface
-	CComPtr<IBaseFilter> m_pTif;				// MPEG2 Transport Information Filter ‚Ì IBaseFilter interface
+	CComPtr<IGraphBuilder> m_pIGraphBuilder;	// Filter Graph Manager ã® IGraphBuilder interface
+	CComPtr<IMediaControl> m_pIMediaControl;	// Filter Graph Manager ã® IMediaControl interface
+	CComPtr<IBaseFilter> m_pNetworkProvider;	// NetworkProvider ã® IBaseFilter interface
+	CComPtr<ITuner> m_pITuner;					// NetworkProvider ã® ITuner interface
+	CComPtr<IBaseFilter> m_pTunerDevice;		// Tuner Device ã® IBaseFilter interface
+	CComPtr<IBaseFilter> m_pCaptureDevice;		// Capture Device ã® IBaseFilter interface
+	CComPtr<IBaseFilter> m_pTsWriter;			// CTsWriter ã® IBaseFilter interface
+	CComPtr<ITsWriter> m_pITsWriter;			// CTsWriter ã® ITsWriter interface
+	CComPtr<IBaseFilter> m_pDemux;				// MPEG2 Demultiplexer ã® IBaseFilter interface
+	CComPtr<IBaseFilter> m_pTif;				// MPEG2 Transport Information Filter ã® IBaseFilter interface
 
-	// ƒ`ƒ…[ƒiM†ó‘Ôæ“¾—pƒCƒ“ƒ^[ƒtƒF[ƒX
+	// ãƒãƒ¥ãƒ¼ãƒŠä¿¡å·çŠ¶æ…‹å–å¾—ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
 	CComPtr<IBDA_SignalStatistics> m_pIBDA_SignalStatisticsTunerNode;
 	CComPtr<IBDA_SignalStatistics> m_pIBDA_SignalStatisticsDemodNode;
 
-	// DSƒtƒBƒ‹ƒ^[—ñ‹“ CDSFilterEnum
+	// DSãƒ•ã‚£ãƒ«ã‚¿ãƒ¼åˆ—æŒ™ CDSFilterEnum
 	CDSFilterEnum *m_pDSFilterEnumTuner;
 	CDSFilterEnum *m_pDSFilterEnumCapture;
 
-	// DSƒtƒBƒ‹ƒ^[‚Ìî•ñ
+	// DSãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã®æƒ…å ±
 	struct DSListData {
 		std::wstring GUID;
 		std::wstring FriendlyName;
@@ -875,7 +875,7 @@ protected:
 		}
 	};
 
-	// ƒ[ƒh‚·‚×‚«ƒ`ƒ…[ƒiEƒLƒƒƒvƒ`ƒƒ‚ÌƒŠƒXƒg
+	// ãƒ­ãƒ¼ãƒ‰ã™ã¹ããƒãƒ¥ãƒ¼ãƒŠãƒ»ã‚­ãƒ£ãƒ—ãƒãƒ£ã®ãƒªã‚¹ãƒˆ
 	struct TunerCaptureList {
 		DSListData Tuner;
 		std::vector<DSListData> CaptureList;
@@ -890,14 +890,14 @@ protected:
 	};
 	std::list<TunerCaptureList> m_UsableTunerCaptureList;
 
-	// ƒ`ƒ…[ƒi[‚Ìg—p‚·‚éTuningSpace‚Ìí—Ş
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã®ä½¿ç”¨ã™ã‚‹TuningSpaceã®ç¨®é¡
 	enum enumTunerType {
 		eTunerTypeNone = -1,
 		eTunerTypeDVBS = 1,				// DBV-S/DVB-S2
 		eTunerTypeDVBT = 2,				// DVB-T
 		eTunerTypeDVBC = 3,				// DVB-C
 		eTunerTypeDVBT2 = 4,			// DVB-T2
-		eTunerTypeISDBS = 11,			// ISDB-S
+		eTunerTypeISDBS = 11,			// ISDB-S/S3
 		eTunerTypeISDBT = 12,			// ISDB-T
 		eTunerTypeISDBC = 13,			// ISDB-C
 		eTunerTypeATSC_Antenna = 21,	// ATSC
@@ -905,9 +905,9 @@ protected:
 		eTunerTypeDigitalCable = 23,	// Digital Cable
 	};
 
-	// g—p‚·‚éTuningSpace ƒIƒuƒWƒFƒNƒg
+	// ä½¿ç”¨ã™ã‚‹TuningSpace ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	enum enumTuningSpace {
-		eTuningSpaceAuto = -1,			// DVBSystemType‚Ì’l‚É‚æ‚Á‚Ä©“®‘I‘ğ
+		eTuningSpaceAuto = -1,			// DVBSystemTypeã®å€¤ã«ã‚ˆã£ã¦è‡ªå‹•é¸æŠ
 		eTuningSpaceDVB = 1,			// DVBTuningSpace
 		eTuningSpaceDVBS = 2,			// DVBSTuningSpace
 		eTuningSpaceAnalogTV = 21,		// AnalogTVTuningSpace
@@ -915,9 +915,9 @@ protected:
 		eTuningSpaceDigitalCable = 23,	// DigitalCableTuningSpace
 	};
 
-	// g—p‚·‚éLocator ƒIƒuƒWƒFƒNƒg
+	// ä½¿ç”¨ã™ã‚‹Locator ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	enum enumLocator {
-		eLocatorAuto = -1,				// DVBSystemType‚Ì’l‚É‚æ‚Á‚Ä©“®‘I‘ğ
+		eLocatorAuto = -1,				// DVBSystemTypeã®å€¤ã«ã‚ˆã£ã¦è‡ªå‹•é¸æŠ
 		eLocatorDVBT = 1,				// DVBTLocator
 		eLocatorDVBT2 = 2,				// DVBTLocator2
 		eLocatorDVBS = 3,				// DVBSLocator
@@ -927,9 +927,9 @@ protected:
 		eLocatorDigitalCable = 22,		// DigitalCableLocator
 	};
 
-	// ITuningSpace‚Éİ’è‚·‚éNetworkType
+	// ITuningSpaceã«è¨­å®šã™ã‚‹NetworkType
 	enum enumNetworkType {
-		eNetworkTypeAuto = -1,			// DVBSystemType‚Ì’l‚É‚æ‚Á‚Ä©“®‘I‘ğ
+		eNetworkTypeAuto = -1,			// DVBSystemTypeã®å€¤ã«ã‚ˆã£ã¦è‡ªå‹•é¸æŠ
 		eNetworkTypeDVBT = 1,			// STATIC_DVB_TERRESTRIAL_TV_NETWORK_TYPE
 		eNetworkTypeDVBS = 2,			// STATIC_DVB_SATELLITE_TV_NETWORK_TYPE
 		eNetworkTypeDVBC = 3,			// STATIC_DVB_CABLE_TV_NETWORK_TYPE
@@ -943,9 +943,9 @@ protected:
 		eNetworkTypeEchoStar = 103,		// STATIC_ECHOSTAR_SATELLITE_TV_NETWORK_TYPE
 	};
 
-	// IDVBTuningSpace‚Éİ’è‚·‚éSystemType
+	// IDVBTuningSpaceã«è¨­å®šã™ã‚‹SystemType
 	enum enumDVBSystemType {
-		eDVBSystemTypeAuto = -1,								// DVBSystemType‚Ì’l‚É‚æ‚Á‚Ä©“®‘I‘ğ
+		eDVBSystemTypeAuto = -1,								// DVBSystemTypeã®å€¤ã«ã‚ˆã£ã¦è‡ªå‹•é¸æŠ
 		eDVBSystemTypeDVBC = DVBSystemType::DVB_Cable,			// DVB_Cable
 		eDVBSystemTypeDVBT = DVBSystemType::DVB_Terrestrial,	// DVB_Terrestrial
 		eDVBSystemTypeDVBS = DVBSystemType::DVB_Satellite,		// DVB_Satellite
@@ -953,22 +953,22 @@ protected:
 		eDVBSystemTypeISDBS = DVBSystemType::ISDB_Satellite,	// ISDB_Satellite
 	};
 
-	// IAnalogTVTuningSpace‚Éİ’è‚·‚éInputType
+	// IAnalogTVTuningSpaceã«è¨­å®šã™ã‚‹InputType
 	enum enumTunerInputType {
-		eTunerInputTypeAuto = -1,										// DVBSystemType‚Ì’l‚É‚æ‚Á‚Ä©“®‘I‘ğ
+		eTunerInputTypeAuto = -1,										// DVBSystemTypeã®å€¤ã«ã‚ˆã£ã¦è‡ªå‹•é¸æŠ
 		eTunerInputTypeCable = tagTunerInputType::TunerInputCable,		// TunerInputCable
 		eTunerInputTypeAntenna = tagTunerInputType::TunerInputAntenna,	// TunerInputAntenna
 	};
 
-	// ƒ`ƒ…[ƒi[‚Ìg—p‚·‚éTuningSpace‚Ìí—Şƒf[ƒ^
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã®ä½¿ç”¨ã™ã‚‹TuningSpaceã®ç¨®é¡ãƒ‡ãƒ¼ã‚¿
 	struct DVBSystemTypeData {
-		enumTunerType nDVBSystemType;						// ƒ`ƒ…[ƒi[‚Ìg—p‚·‚éTuningSpace‚Ìí—Ş
-		enumTuningSpace nTuningSpace;						// g—p‚·‚éTuningSpace ƒIƒuƒWƒFƒNƒg
-		enumLocator nLocator;								// g—p‚·‚éLocator ƒIƒuƒWƒFƒNƒg
-		enumNetworkType nITuningSpaceNetworkType;			// ITuningSpace‚Éİ’è‚·‚éNetworkType
-		enumDVBSystemType nIDVBTuningSpaceSystemType;		// IDVBTuningSpace‚Éİ’è‚·‚éSystemType
-		enumTunerInputType nIAnalogTVTuningSpaceInputType;	// IAnalogTVTuningSpace‚Éİ’è‚·‚éInputType
-		CComPtr<ITuningSpace> pITuningSpace;				// Tuning Space ‚Ì ITuningSpace interface
+		enumTunerType nDVBSystemType;						// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã®ä½¿ç”¨ã™ã‚‹TuningSpaceã®ç¨®é¡
+		enumTuningSpace nTuningSpace;						// ä½¿ç”¨ã™ã‚‹TuningSpace ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		enumLocator nLocator;								// ä½¿ç”¨ã™ã‚‹Locator ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		enumNetworkType nITuningSpaceNetworkType;			// ITuningSpaceã«è¨­å®šã™ã‚‹NetworkType
+		enumDVBSystemType nIDVBTuningSpaceSystemType;		// IDVBTuningSpaceã«è¨­å®šã™ã‚‹SystemType
+		enumTunerInputType nIAnalogTVTuningSpaceInputType;	// IAnalogTVTuningSpaceã«è¨­å®šã™ã‚‹InputType
+		CComPtr<ITuningSpace> pITuningSpace;				// Tuning Space ã® ITuningSpace interface
 		DVBSystemTypeData(void)
 			: nDVBSystemType(eTunerTypeNone),
 			  nTuningSpace(eTuningSpaceAuto),
@@ -984,10 +984,10 @@ protected:
 		}
 	};
 
-	// TuningSpace‚Ìí—Şƒf[ƒ^ƒx[ƒX
+	// TuningSpaceã®ç¨®é¡ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹
 	struct DVBSystemTypeDB {
-		std::map<unsigned int, DVBSystemTypeData> SystemType;	// TuningSpace‚Ìí—Ş”Ô†‚ÆTuningSpace‚Ìí—Şƒf[ƒ^
-		unsigned int nNumType;									// TuningSpace‚Ìí—Ş”
+		std::map<unsigned int, DVBSystemTypeData> SystemType;	// TuningSpaceã®ç¨®é¡ç•ªå·ã¨TuningSpaceã®ç¨®é¡ãƒ‡ãƒ¼ã‚¿
+		unsigned int nNumType;									// TuningSpaceã®ç¨®é¡æ•°
 		DVBSystemTypeDB(void)
 			: nNumType(0)
 		{
@@ -1014,12 +1014,12 @@ protected:
 	};
 	DVBSystemTypeDB m_DVBSystemTypeDB;
 
-	// iniƒtƒ@ƒCƒ‹‚Å’è‹`‚Å‚«‚éÅ‘åTuningSpace‚Ìí—Şƒf[ƒ^”
+	// iniãƒ•ã‚¡ã‚¤ãƒ«ã§å®šç¾©ã§ãã‚‹æœ€å¤§TuningSpaceã®ç¨®é¡ãƒ‡ãƒ¼ã‚¿æ•°
 	static constexpr unsigned int MAX_DVB_SYSTEM_TYPE = 10U;
 
-	// ƒ`ƒ…[ƒi[‚Ég—p‚·‚éNetworkProvider 
+	// ãƒãƒ¥ãƒ¼ãƒŠãƒ¼ã«ä½¿ç”¨ã™ã‚‹NetworkProvider 
 	enum enumNetworkProvider {
-		eNetworkProviderAuto = 0,		// DVBSystemType‚Ì’l‚É‚æ‚Á‚Ä©“®‘I‘ğ
+		eNetworkProviderAuto = 0,		// DVBSystemTypeã®å€¤ã«ã‚ˆã£ã¦è‡ªå‹•é¸æŠ
 		eNetworkProviderGeneric = 1,	// Microsoft Network Provider
 		eNetworkProviderDVBS = 2,		// Microsoft DVB-S Network Provider
 		eNetworkProviderDVBT = 3,		// Microsoft DVB-T Network Provider
@@ -1028,65 +1028,66 @@ protected:
 	};
 	enumNetworkProvider m_nNetworkProvider;
 
-	// ‰q¯óMƒpƒ‰ƒ[ƒ^/•Ï’²•û®ƒpƒ‰ƒ[ƒ^‚ÌƒfƒtƒHƒ‹ƒg’l
+	// è¡›æ˜Ÿå—ä¿¡ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿/å¤‰èª¿æ–¹å¼ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
 	enum enumDefaultNetwork {
-		eDefaultNetworkNone = 0,		// İ’è‚µ‚È‚¢
+		eDefaultNetworkNone = 0,		// è¨­å®šã—ãªã„
 		eDefaultNetworkSPHD = 1,		// SPHD
 		eDefaultNetworkBSCS = 2,		// BS/CS110
 		eDefaultNetworkUHF = 3,			// UHF/CATV
-		eDefaultNetworkDual = 4,		// Dual Mode (BS/CS110‚ÆUHF/CATV)
+		eDefaultNetworkDual = 4,		// Dual Mode (BS/CS110ã¨UHF/CATV)
+		eDefaultNetwork4KBSCS = 5,		// 4K BS/CS
 	};
 	enumDefaultNetwork m_nDefaultNetwork;
 
 	// Tuner is opened
 	BOOL m_bOpened;
 
-	// SetChannel()‚ğ‚İ‚½ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†
+	// SetChannel()ã‚’è©¦ã¿ãŸãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·
 	DWORD m_dwTargetSpace;
 
-	// ƒJƒŒƒ“ƒgƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†
+	// ã‚«ãƒ¬ãƒ³ãƒˆãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·
 	DWORD m_dwCurSpace;
 
-	// ƒ`ƒ…[ƒjƒ“ƒOƒXƒy[ƒX”Ô†•s–¾
+	// ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ã‚¹ãƒšãƒ¼ã‚¹ç•ªå·ä¸æ˜
 	static constexpr DWORD SPACE_INVALID = 0xFFFFFFFFUL;
 
-	// SetChannel()‚ğ‚İ‚½ƒ`ƒƒƒ“ƒlƒ‹”Ô†
+	// SetChannel()ã‚’è©¦ã¿ãŸãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
 	DWORD m_dwTargetChannel;
 
-	// ƒJƒŒƒ“ƒgƒ`ƒƒƒ“ƒlƒ‹”Ô†
+	// ã‚«ãƒ¬ãƒ³ãƒˆãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·
 	DWORD m_dwCurChannel;
 
-	// ƒ`ƒƒƒ“ƒlƒ‹”Ô†•s–¾
+	// ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·ä¸æ˜
 	static constexpr DWORD CHANNEL_INVALID = 0xFFFFFFFFUL;
 
-	// Œ»İ‚Ìƒg[ƒ“Ø‘Öó‘Ô
+	// ç¾åœ¨ã®ãƒˆãƒ¼ãƒ³åˆ‡æ›¿çŠ¶æ…‹
 	long m_nCurTone; // current tone signal state
 
-	// ƒg[ƒ“Ø‘Öó‘Ô•s–¾
+	// ãƒˆãƒ¼ãƒ³åˆ‡æ›¿çŠ¶æ…‹ä¸æ˜
 	static constexpr long TONE_UNKNOWN = -1L;
 
-	// TSMFˆ—‚ª•K—v
+	// TSMFå‡¦ç†ãŒå¿…è¦
 	BOOL m_bIsEnabledTSMF;
 
-	// ÅŒã‚ÉLockChannel‚ğs‚Á‚½‚Ìƒ`ƒ…[ƒjƒ“ƒOƒpƒ‰ƒ[ƒ^
+	// æœ€å¾Œã«LockChannelã‚’è¡Œã£ãŸæ™‚ã®ãƒãƒ¥ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	TuningParam m_LastTuningParam;
 
 	// TunerSpecial DLL module handle
 	HMODULE m_hModuleTunerSpecials;
 
-	// ƒ`ƒ…[ƒiŒÅ—LŠÖ” IBdaSpecials
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰é–¢æ•° IBdaSpecials
 	IBdaSpecials *m_pIBdaSpecials;
 	IBdaSpecials2b5 *m_pIBdaSpecials2;
 
-	// ƒ`ƒ…[ƒiŒÅ—L‚ÌŠÖ”‚ª•K—v‚©‚Ç‚¤‚©‚ğ©“®”»•Ê‚·‚éDB
-	// GUID ‚ğƒL[‚É DLL –¼‚ğ“¾‚é
+	// ãƒãƒ¥ãƒ¼ãƒŠå›ºæœ‰ã®é–¢æ•°ãŒå¿…è¦ã‹ã©ã†ã‹ã‚’è‡ªå‹•åˆ¤åˆ¥ã™ã‚‹DB
+	// GUID ã‚’ã‚­ãƒ¼ã« DLL åã‚’å¾—ã‚‹
 	struct TUNER_SPECIAL_DLL {
 		const WCHAR * const sTunerGUID;
 		const WCHAR * const sDLLBaseName;
 	};
 	static constexpr TUNER_SPECIAL_DLL aTunerSpecialData[] = {
-		// ‚±‚±‚ÍƒvƒƒOƒ‰ƒ}‚µ‚©‚¢‚¶‚ç‚È‚¢‚Æv‚¤‚Ì‚ÅAƒvƒƒOƒ‰ƒ€’†‚ÅGUID ‚ğ¬•¶š‚É³‹K‰»‚µ‚È‚¢‚Ì‚ÅA
-		// ’Ç‰Á‚·‚éê‡‚ÍAGUID‚Í¬•¶š‚Å‘‚¢‚Ä‚­‚¾‚³‚¢
+		// ã“ã“ã¯ãƒ—ãƒ­ã‚°ãƒ©ãƒã—ã‹ã„ã˜ã‚‰ãªã„ã¨æ€ã†ã®ã§ã€ãƒ—ãƒ­ã‚°ãƒ©ãƒ ä¸­ã§GUID ã‚’å°æ–‡å­—ã«æ­£è¦åŒ–ã—ãªã„ã®ã§ã€
+		// è¿½åŠ ã™ã‚‹å ´åˆã¯ã€GUIDã¯å°æ–‡å­—ã§æ›¸ã„ã¦ãã ã•ã„
 
 		/* TBS6980A */
 		{ L"{e9ead02c-8b8c-4d9b-97a2-2ec0324360b1}", L"TBS" },
@@ -1095,7 +1096,7 @@ protected:
 		{ L"{ed63ec0b-a040-4c59-bc9a-59b328a3f852}", L"TBS" },
 
 		/* Prof 7300, 7301, TBS 8920 */
-		{ L"{91b0cc87-9905-4d65-a0d1-5861c6f22cbf}", L"TBS" },	// 7301 ‚ÍŒÅ—LŠÖ”‚Å‚È‚­‚Ä‚àOK‚¾‚Á‚½
+		{ L"{91b0cc87-9905-4d65-a0d1-5861c6f22cbf}", L"TBS" },	// 7301 ã¯å›ºæœ‰é–¢æ•°ã§ãªãã¦ã‚‚OKã ã£ãŸ
 
 		/* TBS 6920 */
 		{ L"{ed63ec0b-a040-4c59-bc9a-59b328a3f852}", L"TBS" },
@@ -1110,12 +1111,12 @@ protected:
 		{ L"{5a714cad-60f9-4124-b922-8a0557b8840e}", L"DVBWorld" },
 
 		/* DVBWorld 2005 */
-		{ L"{ede18552-45e6-469f-93b5-27e94296de38}", L"DVBWorld" }, // 2005 ‚ÍŒÅ—LŠÖ”‚Í•K—v‚È‚¢‚©‚à
+		{ L"{ede18552-45e6-469f-93b5-27e94296de38}", L"DVBWorld" }, // 2005 ã¯å›ºæœ‰é–¢æ•°ã¯å¿…è¦ãªã„ã‹ã‚‚
 
 		{ L"", L"" }, // terminator
 	};
 
-	// ƒ`ƒƒƒ“ƒlƒ‹–¼©“®¶¬ inline ŠÖ”
+	// ãƒãƒ£ãƒ³ãƒãƒ«åè‡ªå‹•ç”Ÿæˆ inline é–¢æ•°
 	inline std::basic_string<TCHAR> MakeChannelName(const CBonTuner::ChData* const pChData)
 	{
 		std::basic_string<TCHAR> format;
