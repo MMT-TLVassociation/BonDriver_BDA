@@ -2,8 +2,6 @@
 ##凡銅鑼の野望 ～Genericの章～
 
 BonDriver_BDA.iniでDefaultNetwork="4KBS/CS"と記述すると、ISDB-S3に対応します。
-チューナーはTBS6812/PT4K。
-
 
 [Tuner]
 
@@ -70,3 +68,4 @@ CH016=1,12671.000,L,0,BS01/TS0,0x1,0xC150
 
 CH017=1,12711.000,L,0,BS01/TS0,0x1,0xC170
 
+CH018=1,11938.460,L,0,BS01/TS0,0x1,0xB0C0
